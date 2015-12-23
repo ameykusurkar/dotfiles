@@ -8,6 +8,10 @@ set shiftwidth=4
 set ruler
 set encoding=utf-8
 
+""""" MAPPINGS
+
+nnoremap <Enter> o<Esc>
+
 """"" AIRLINE SETTINGS
 
 set laststatus=2

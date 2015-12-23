@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cp ~/.vimrc .vimrc
+echo 'Copied vimrc to current directory'
+

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cp .vimrc ~/.vimrc
+echo 'Exported vimrc to home directory'
+
