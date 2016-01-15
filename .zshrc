@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/ameykusurkar/.oh-my-zsh
+export ZSH=/homes/avk13/.oh-my-zsh
 
 DEFAULT_USER=ameykusurkar
 
@@ -66,6 +66,7 @@ plugins=(git zsh-syntax-highlighting)
 
 # User configuration
 
+# export PATH="/usr/local/maple/bin:/vol/lab/satsolvers/bin:/vol/lab/secondyear/bin:/vol/lab/bin:/vol/lab/bin/Linux/amd64:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/games:/vol/lab/secondyear/bin:/vol/lab/bin:/vol/lab/bin/Linux/x86_64:/vol/lab/satsolvers/bin/"
 export PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
