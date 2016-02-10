@@ -1,6 +1,5 @@
 #!/bin/bash
 
 cp ~/.vimrc .vimrc
-cp ~/.zshrc .zshrc
 echo 'Copied vimrc to current directory'
 

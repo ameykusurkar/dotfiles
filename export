@@ -1,6 +1,5 @@
 #!/bin/bash
 
 cp .vimrc ~/.vimrc
-cp .zshrc ~/.zshrc
 echo 'Exported vimrc to home directory'
 
