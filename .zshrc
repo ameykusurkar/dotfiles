@@ -97,3 +97,4 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias sshdoc="ssh avk13@shell2.doc.ic.ac.uk"
+alias sicstus="rlwrap sicstus"

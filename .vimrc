@@ -1,14 +1,15 @@
 syntax on
 
 set t_Co=256
-"" colorscheme jellybeans
 
 colorscheme solarized
 set background=dark
 
 set number
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
 set ruler
 set encoding=utf-8
 set noshowmode
@@ -32,5 +33,6 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-fugitive'
+Plug 'wikitopian/hardmode'
 
 call plug#end()
