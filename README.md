@@ -1,3 +1,3 @@
 dotfiles
 ========
-.vimrc
+File names with '.' in front of them.
