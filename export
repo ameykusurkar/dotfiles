@@ -1,5 +1,6 @@
 #!/bin/bash
 
 cp .vimrc ~/.vimrc
-echo 'Exported vimrc to home directory'
+cp .aliases ~/.aliases
+echo 'Exported vimrc and aliases to home directory'
 

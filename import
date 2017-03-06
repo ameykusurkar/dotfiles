@@ -1,5 +1,7 @@
 #!/bin/bash
 
 cp ~/.vimrc .vimrc
-echo 'Copied vimrc to current directory'
+cp ~/.aliases .aliases
+
+echo 'Copied vimrc and aliases to current directory'
 

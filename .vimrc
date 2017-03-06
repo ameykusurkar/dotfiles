@@ -2,9 +2,10 @@ syntax on
 
 set t_Co=256
 
-colorscheme solarized
+colorscheme jellybeans
 set background=dark
 
+"set relativenumber
 set number
 set tabstop=2
 set softtabstop=2
@@ -34,5 +35,26 @@ call plug#begin('~/.vim/plugged')
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-fugitive'
 Plug 'wikitopian/hardmode'
+Plug 'leafgarland/typescript-vim'
+Plug 'scrooloose/nerdtree'
+Plug 'gregsexton/MatchTag'
 
 call plug#end()
+
+
+set hidden
+set hlsearch       "highlight searches
+set backspace=2
+set tabpagemax=100
+
+set foldmethod=manual
+
+"key mapping for opening lines without entering insert mode
+nmap <Enter> o<Esc>
+nmap <C-J> ddp
+nmap <C-K> kddpk
+
+nnoremap <C-N> :bnext<CR>
+nnoremap <C-P> :bprev<CR>
+
+iabbrev </ </<C-X><C-O>
