@@ -6,6 +6,11 @@ alias als='vim -c "$" ~/.aliases'
 alias vimrc='vim ~/.vimrc'
 alias zshrc='vim ~/.zshrc'
 
+# Combine commit -am and push command
+function gcamp() {
+  gcam $@ && gp;
+}
+
 # Prompts with the files you are trying to delete
 function rmc() {
   ls $@;

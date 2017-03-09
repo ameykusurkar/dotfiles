@@ -38,6 +38,7 @@ Plug 'wikitopian/hardmode'
 Plug 'leafgarland/typescript-vim'
 Plug 'scrooloose/nerdtree'
 Plug 'gregsexton/MatchTag'
+Plug 'jimenezrick/vimerl'
 
 call plug#end()
 
