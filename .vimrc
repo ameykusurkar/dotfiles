@@ -39,9 +39,35 @@ Plug 'leafgarland/typescript-vim'
 Plug 'scrooloose/nerdtree'
 Plug 'gregsexton/MatchTag'
 Plug 'jimenezrick/vimerl'
+Plug 'junegunn/fzf'
+Plug 'airblade/vim-gitgutter'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'christoomey/vim-tmux-runner'
+Plug 'vim-ruby/vim-ruby'
 
 call plug#end()
 
+""""" SYNASTIC SETTINGS
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"""""
+
+set nocompatible      " We're running Vim, not Vi!
+syntax on             " Enable syntax highlighting
+filetype on           " Enable filetype detection
+filetype indent on    " Enable filetype-specific indenting
+filetype plugin on    " Enable filetype-specific plugins
+
+"""""
 
 set hidden
 set hlsearch       "highlight searches
@@ -59,3 +85,5 @@ nnoremap <C-N> :bnext<CR>
 nnoremap <C-P> :bprev<CR>
 
 iabbrev </ </<C-X><C-O>
+
+nmap <C-G> :FZF<Enter>

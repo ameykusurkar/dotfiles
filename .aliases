@@ -6,6 +6,11 @@ alias als='vim -c "$" ~/.aliases'
 alias vimrc='vim ~/.vimrc'
 alias zshrc='vim ~/.zshrc'
 
+# Find alias commands
+function algrep() {
+  alias | grep $@
+}
+
 # Combine commit -am and push command
 function gcamp() {
   gcam $@ && gp;
