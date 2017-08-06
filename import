@@ -4,4 +4,3 @@ cp ~/.vimrc .vimrc
 cp ~/.aliases .aliases
 
 echo 'Copied vimrc and aliases to current directory'
-
