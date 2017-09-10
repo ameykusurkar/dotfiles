@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/homes/avk13/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 DEFAULT_USER=ameykusurkar
 
@@ -66,7 +66,6 @@ plugins=(git zsh-syntax-highlighting)
 
 # User configuration
 
-# export PATH="/usr/local/maple/bin:/vol/lab/satsolvers/bin:/vol/lab/secondyear/bin:/vol/lab/bin:/vol/lab/bin/Linux/amd64:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/games:/vol/lab/secondyear/bin:/vol/lab/bin:/vol/lab/bin/Linux/x86_64:/vol/lab/satsolvers/bin/"
 export PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -96,5 +95,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias sshdoc="ssh avk13@shell2.doc.ic.ac.uk"
-alias sicstus="rlwrap sicstus"
+source ~/.aliases
+[ -f ~/.private-env ] && source ~/.private-env
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

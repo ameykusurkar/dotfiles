@@ -1,8 +1,12 @@
 DIR=$(HOME)/dotfiles
 
-all: vim
+all: vim zsh
 
 vim:
 	ln -svf $(DIR)/vim/vimrc ~/.vimrc
 
-.PHONY: vim
+zsh:
+	ln -svf $(DIR)/zsh/zshrc ~/.zshrc
+	ln -svf $(DIR)/zsh/aliases ~/.aliases
+
+.PHONY: vim zsh
