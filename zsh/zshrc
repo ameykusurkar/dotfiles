@@ -1,5 +1,5 @@
 export ZSH=$HOME/.oh-my-zsh
-export ZSH_CUSTOM=$HOME/.zsh_custom
+export ZSH_CUSTOM=$HOME/dotfiles/zsh/zsh_custom
 export EDITOR='vim'
 
 ##### THEME #####

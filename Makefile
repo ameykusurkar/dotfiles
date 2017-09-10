@@ -5,9 +5,11 @@ all: vim zsh
 vim:
 	ln -svf $(DIR)/vim/vimrc ~/.vimrc
 
-zsh:
+zsh: oh_my_zsh
 	ln -svf $(DIR)/zsh/zshrc ~/.zshrc
 	ln -svf $(DIR)/zsh/aliases ~/.aliases
-	ln -svf $(DIR)/zsh/zsh_custom ~/.zsh_custom
+
+oh_my_zsh: $(HOME)/.oh-my-zsh
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 .PHONY: vim zsh
