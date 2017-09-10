@@ -79,6 +79,8 @@ set backspace=2
 set tabpagemax=100
 
 set foldmethod=indent
+set foldlevelstart=99
+nnoremap <Space> za
 
 "key mapping for opening lines without entering insert mode
 nmap <Enter> o<Esc>
