@@ -33,18 +33,22 @@ let g:airline_powerline_fonts = 1
 call plug#begin('~/.vim/plugged')
 
 Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'
 Plug 'wikitopian/hardmode'
 Plug 'leafgarland/typescript-vim'
 Plug 'scrooloose/nerdtree'
 Plug 'gregsexton/MatchTag'
 Plug 'jimenezrick/vimerl'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'airblade/vim-gitgutter'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-endwise'
+Plug 'vim-syntastic/syntastic'
+Plug 'rking/ag.vim'
 
 call plug#end()
 
@@ -74,7 +78,7 @@ set hlsearch       "highlight searches
 set backspace=2
 set tabpagemax=100
 
-set foldmethod=manual
+set foldmethod=indent
 
 "key mapping for opening lines without entering insert mode
 nmap <Enter> o<Esc>
