@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# A barebones version of oh-my-zsh's install script. The reason I'm not
+# using their script is that it calls `env zsh`, which opens a new shell
+# and stops the rest of the Makefile from executing.
+git clone https://www.github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+
+TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
+if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
+  chsh -s $(grep /zsh$ /etc/shells | tail -1)
+fi
