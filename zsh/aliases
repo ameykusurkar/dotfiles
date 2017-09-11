@@ -5,15 +5,11 @@ alias localip='ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '\''{print $2}
 alias als='vim -c "$" ~/.aliases'
 alias vimrc='vim ~/.vimrc'
 alias zshrc='vim ~/.zshrc'
+alias grbim="git rebase -i master"
 
 # Find alias commands
 function algrep() {
   alias | grep $@
-}
-
-# Combine commit -am and push command
-function gcamp() {
-  gcam $@ && gp;
 }
 
 # Prompts with the files you are trying to delete
