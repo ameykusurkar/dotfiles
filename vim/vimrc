@@ -28,7 +28,6 @@ set shiftround     " Round indent to multiple of shiftwidth
 """"" APPEARANCE
 
 set t_Co=256
-set background=dark
 colorscheme jellybeans
 
 set noshowmode  " Don't show mode in status bar, as Airline does it
