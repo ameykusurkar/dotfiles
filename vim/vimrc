@@ -1,32 +1,75 @@
+set nocompatible " We're running Vim, not Vi!
+
+""""" GENERAL
+
 syntax on
-
-set t_Co=256
-
-colorscheme jellybeans
-set background=dark
-
-"set relativenumber
 set number
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set expandtab
 set ruler
 set encoding=utf-8
-set noshowmode
+set mouse=a     " Allow scrolling and pane selection in all modes
+set backspace=2 " Allow backspace over indent, eol, start
+set hidden      " Modified buffers are 'hidden' instead of unloaded
 
-""""" MAPPINGS
+filetype on
+filetype indent on
+filetype plugin on
 
-nnoremap <Enter> o<Esc>
+let mapleader=","
 
-""""" AIRLINE SETTINGS
+""""" INDENTATION
 
+set tabstop=2      " Width of TAB character
+set softtabstop=2  " Width of <TAB> key
+set shiftwidth=2   " Width for formatting (>, =)
+set expandtab      " Convert tabs to spaces
+set smarttab       " Use shiftwidth when inserting a tab in front of a line
+set shiftround     " Round indent to multiple of shiftwidth
+
+""""" APPEARANCE
+
+set t_Co=256
+set background=dark
+colorscheme jellybeans
+
+set noshowmode  " Don't show mode in status bar, as Airline does it
 set laststatus=2
 let g:airline_theme='murmur'
 let g:airline#extensions#hunks#enabled=0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#branch#enabled = 1
 let g:airline_powerline_fonts = 1
+
+""""" SEARCH
+
+set hlsearch "highlight searches
+
+" Ignores case unless search has uppercase chars
+set ignorecase
+set smartcase
+
+""""" FOLDING
+
+" Toggle fold
+nnoremap <Space> za
+
+set foldmethod=indent
+set foldlevelstart=99 " Unfold everything when opening file
+
+""""" MISCELLANEOUS MAPPINGS
+
+" Uppercase word
+nnoremap <leader>u gUiw
+
+" Move lines up/down
+nnoremap <C-J> ddp
+nnoremap <C-K> kddpk
+
+" Cycle though buffers
+nnoremap <C-N> :bnext<CR>
+nnoremap <C-P> :bprev<CR>
+
+nnoremap <CR> o<Esc>
+nnoremap <C-G> :FZF<CR>
 
 """"" PLUGINS
 
@@ -52,7 +95,7 @@ Plug 'rking/ag.vim'
 
 call plug#end()
 
-""""" SYNASTIC SETTINGS
+""""" SYNTASTIC
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -62,34 +105,3 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
-"""""
-
-set nocompatible      " We're running Vim, not Vi!
-syntax on             " Enable syntax highlighting
-filetype on           " Enable filetype detection
-filetype indent on    " Enable filetype-specific indenting
-filetype plugin on    " Enable filetype-specific plugins
-
-"""""
-
-set hidden
-set hlsearch       "highlight searches
-set backspace=2
-set tabpagemax=100
-
-set foldmethod=indent
-set foldlevelstart=99
-nnoremap <Space> za
-
-"key mapping for opening lines without entering insert mode
-nmap <Enter> o<Esc>
-nmap <C-J> ddp
-nmap <C-K> kddpk
-
-nnoremap <C-N> :bnext<CR>
-nnoremap <C-P> :bprev<CR>
-
-iabbrev </ </<C-X><C-O>
-
-nmap <C-G> :FZF<Enter>
