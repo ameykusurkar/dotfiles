@@ -32,3 +32,12 @@ function rmc() {
     echo "\nPhew, good decision.";
   fi
 }
+
+# A simple `watch` function, but with colour
+function watch2() {
+  while true; do
+    clear
+    eval $1
+    sleep 2
+  done
+}
