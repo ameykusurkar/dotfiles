@@ -3,6 +3,7 @@ DIR=$(HOME)/dotfiles
 all: vim zsh
 
 vim:
+	ln -svfh $(DIR)/vim ~/.vim
 	ln -svf $(DIR)/vim/vimrc ~/.vimrc
 
 zsh: $(HOME)/.oh-my-zsh
