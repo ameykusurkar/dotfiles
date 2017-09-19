@@ -91,6 +91,7 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-endwise'
 Plug 'vim-syntastic/syntastic'
 Plug 'rking/ag.vim'
+Plug 'tpope/vim-commentary'
 
 call plug#end()
 
