@@ -92,6 +92,7 @@ Plug 'tpope/vim-endwise'
 Plug 'vim-syntastic/syntastic'
 Plug 'rking/ag.vim'
 Plug 'tpope/vim-commentary'
+Plug 'jgdavey/vim-blockle'
 
 call plug#end()
 
