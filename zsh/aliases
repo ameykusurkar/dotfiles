@@ -41,3 +41,8 @@ function watch2() {
     sleep 2
   done
 }
+
+# Recursively finds the number of files in $1
+function nfiles() {
+  find $1 -type f | wc -l
+}
