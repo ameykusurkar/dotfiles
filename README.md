@@ -1,5 +1,5 @@
 # dotfiles
-File names with `.` in front of them.
+File names prefixed with `.`
 
 ## Installation
 ```shell
