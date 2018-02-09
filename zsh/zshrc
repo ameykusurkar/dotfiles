@@ -29,6 +29,8 @@ plugins=(git zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
 source ~/.aliases
+
+# Machine-specific config
 [ -f ~/.private-env ] && source ~/.private-env
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -2,9 +2,10 @@
 alias sshdoc="ssh avk13@shell2.doc.ic.ac.uk"
 alias sicstus="rlwrap /usr/local/sicstus4.3.2/bin/sicstus"
 alias localip='ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '\''{print $2}'\'''
-alias als='vim -c "$" ~/.aliases'
-alias vimrc='vim ~/.vimrc'
-alias zshrc='vim ~/.zshrc'
+alias als="vim ~/.aliases"
+alias vimrc="vim ~/.vimrc"
+alias zshrc="vim ~/.zshrc"
+alias penv="vim ~/.private-env"
 alias grbim="git rebase -i master"
 
 # Get battery % on mac
