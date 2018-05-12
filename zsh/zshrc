@@ -4,6 +4,7 @@ export EDITOR='vim'
 export VISUAL='vim'
 
 PATH=""
+PATH="$PATH:/usr/local/opt/python/libexec/bin"
 PATH="$PATH:/usr/local/bin"
 PATH="$PATH:/usr/bin"
 PATH="$PATH:/bin"
