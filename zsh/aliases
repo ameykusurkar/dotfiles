@@ -47,3 +47,12 @@ function watch2() {
 function nfiles() {
   find $1 -type f | wc -l
 }
+
+function gclone() {
+  if [ $# -eq 1 ]
+  then
+    git clone git@github.com:ameykusurkar/$1.git
+  else
+    git clone git@github.com:$1/$2.git
+  fi
+}
