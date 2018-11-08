@@ -9,6 +9,7 @@ set encoding=utf-8
 set mouse=a     " Allow scrolling and pane selection in all modes
 set backspace=2 " Allow backspace over indent, eol, start
 set hidden      " Modified buffers are 'hidden' instead of unloaded
+set directory=$DOTFILES/vim/swapfiles// " Change swapfile location
 
 filetype on
 filetype indent on

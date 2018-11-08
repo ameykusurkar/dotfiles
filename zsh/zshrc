@@ -1,5 +1,6 @@
+export DOTFILES=$HOME/dotfiles
 export ZSH=$HOME/.oh-my-zsh
-export ZSH_CUSTOM=$HOME/dotfiles/zsh/zsh_custom
+export ZSH_CUSTOM=$DOTFILES/zsh/zsh_custom
 export EDITOR='vim'
 export VISUAL='vim'
 
