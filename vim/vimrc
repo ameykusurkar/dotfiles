@@ -81,7 +81,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'wikitopian/hardmode'
 Plug 'leafgarland/typescript-vim'
 Plug 'scrooloose/nerdtree'
-Plug 'gregsexton/MatchTag'
+Plug 'Valloric/MatchTagAlways'
 Plug 'jimenezrick/vimerl'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'airblade/vim-gitgutter'
