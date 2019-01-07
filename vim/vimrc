@@ -90,25 +90,13 @@ Plug 'mxw/vim-jsx'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-endwise'
-Plug 'vim-syntastic/syntastic'
+Plug 'w0rp/ale'
 Plug 'rking/ag.vim'
 Plug 'tpope/vim-commentary'
 Plug 'jgdavey/vim-blockle'
 Plug 'nathanaelkane/vim-indent-guides'
 
 call plug#end()
-
-""""" SYNTASTIC
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 
 """"" VIM INDENT GUIDES
 
