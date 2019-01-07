@@ -6,6 +6,8 @@ export VISUAL='vim'
 
 PATH=""
 PATH="$PATH:/usr/local/opt/python/libexec/bin"
+PATH="$PATH:/usr/local/lib/ruby/gems/2.6.0/bin"
+PATH="$PATH:/usr/local/opt/ruby/bin"
 PATH="$PATH:/usr/local/bin"
 PATH="$PATH:/usr/bin"
 PATH="$PATH:/bin"
