@@ -93,7 +93,7 @@ Plug 'tpope/vim-endwise'
 Plug 'w0rp/ale'
 Plug 'rking/ag.vim'
 Plug 'tpope/vim-commentary'
-Plug 'jgdavey/vim-blockle'
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'nathanaelkane/vim-indent-guides'
 
 call plug#end()
