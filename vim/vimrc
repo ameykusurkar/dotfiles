@@ -70,6 +70,13 @@ nnoremap <C-P> :bprev<CR>
 
 nnoremap <CR> o<Esc>
 nnoremap <C-G> :FZF<CR>
+nnoremap <leader>g :OpenGithub<CR>
+
+nnoremap <leader>tn :TestNearest<CR>
+
+nnoremap <leader>s :source ~/.vimrc<CR>
+
+nnoremap <leader>v :belowright 15sp ~/.vimrc<CR>
 
 """"" PLUGINS
 
@@ -95,6 +102,8 @@ Plug 'rking/ag.vim'
 Plug 'tpope/vim-commentary'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'k0kubun/vim-open-github'
+Plug 'janko-m/vim-test'
 
 call plug#end()
 
