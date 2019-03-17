@@ -74,7 +74,6 @@ nnoremap <C-N> :bnext<CR>
 nnoremap <C-P> :bprev<CR>
 
 nnoremap <CR> o<Esc>
-nnoremap <C-G> :FZF<CR>
 nnoremap <leader>g :OpenGithub<CR>
 
 nnoremap <leader>tn :TestNearest<CR>
@@ -82,6 +81,9 @@ nnoremap <leader>tn :TestNearest<CR>
 nnoremap <leader>s :source ~/.vimrc<CR>
 
 nnoremap <leader>v :belowright 15sp ~/.vimrc<CR>
+
+nnoremap <tab> :FZF<CR>
+inoremap <tab> <C-P>
 
 """"" PLUGINS
 
