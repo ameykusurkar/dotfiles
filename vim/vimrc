@@ -73,6 +73,8 @@ nnoremap <C-K> kddpk
 nnoremap <C-N> :bnext<CR>
 nnoremap <C-P> :bprev<CR>
 
+nnoremap <C-G> :FZF<CR>
+
 nnoremap <CR> o<Esc>
 nnoremap <leader>g :OpenGithub<CR>
 
@@ -82,7 +84,8 @@ nnoremap <leader>s :source ~/.vimrc<CR>
 
 nnoremap <leader>v :belowright 15sp ~/.vimrc<CR>
 
-nnoremap <tab> :FZF<CR>
+nnoremap <leader>a *:AgFromSearch<CR>
+
 inoremap <tab> <C-P>
 
 """"" PLUGINS
