@@ -116,9 +116,12 @@ Plug 'k0kubun/vim-open-github'
 Plug 'janko-m/vim-test'
 Plug 'tjammer/blayu.vim'
 Plug 'mhartington/oceanic-next'
+Plug 'tpope/vim-dispatch'
 
 call plug#end()
 
 """"" VIM INDENT GUIDES
 
 let g:indent_guides_guide_size=1
+
+let test#strategy = "dispatch"
