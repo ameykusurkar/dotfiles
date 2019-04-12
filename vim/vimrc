@@ -120,8 +120,10 @@ Plug 'tpope/vim-dispatch'
 
 call plug#end()
 
-""""" VIM INDENT GUIDES
+""""" PLUGIN SETTINGS
 
 let g:indent_guides_guide_size=1
+
+let g:ale_fixers = {'ruby': ['rubocop']}
 
 let test#strategy = "dispatch"

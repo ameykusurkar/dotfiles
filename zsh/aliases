@@ -13,6 +13,11 @@ alias bell="echo \"\a\""
 # Get battery % on mac
 alias batt='pmset -g batt'
 
+# Copy a file to clipboard
+function copy() {
+  cat $@ | pbcopy
+}
+
 # Find alias commands
 function algrep() {
   alias | grep $@
