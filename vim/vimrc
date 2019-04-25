@@ -88,6 +88,7 @@ nnoremap <leader>a *:AgFromSearch<CR>
 
 inoremap <tab> <C-P>
 
+nnoremap <leader>b orequire "pry"; binding.pry<ESC>
 """"" PLUGINS
 
 call plug#begin('~/.vim/plugged')
