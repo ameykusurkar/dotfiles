@@ -10,6 +10,7 @@ set mouse=a     " Allow scrolling and pane selection in all modes
 set backspace=2 " Allow backspace over indent, eol, start
 set hidden      " Modified buffers are 'hidden' instead of unloaded
 set directory=$DOTFILES/vim/swapfiles// " Change swapfile location
+set cursorline  " Highlights the line that the cursor is on
 
 filetype on
 filetype indent on
