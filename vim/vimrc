@@ -35,7 +35,6 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 set termguicolors
 set t_Co=256
-colorscheme jellybeans
 
 set noshowmode  " Don't show mode in status bar, as Airline does it
 set laststatus=2
@@ -87,6 +86,8 @@ nnoremap <leader>v :belowright 15sp ~/.vimrc<CR>
 
 nnoremap <leader>a *:AgFromSearch<CR>
 
+nnoremap <leader>n :NERDTree<CR>
+
 inoremap <tab> <C-P>
 
 nnoremap <leader>b orequire "pry"; binding.pry<ESC>
@@ -119,8 +120,11 @@ Plug 'janko-m/vim-test'
 Plug 'tjammer/blayu.vim'
 Plug 'mhartington/oceanic-next'
 Plug 'tpope/vim-dispatch'
+Plug 'Rigellute/rigel'
 
 call plug#end()
+
+colorscheme rigel
 
 """"" PLUGIN SETTINGS
 
