@@ -121,6 +121,7 @@ Plug 'tjammer/blayu.vim'
 Plug 'mhartington/oceanic-next'
 Plug 'tpope/vim-dispatch'
 Plug 'Rigellute/rigel'
+Plug 'cespare/vim-toml'
 
 call plug#end()
 

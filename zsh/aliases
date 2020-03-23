@@ -8,6 +8,7 @@ alias penv="vim ~/.private-env"
 alias sz="source ~/.zshrc"
 alias rmswap="rmc ./**/.*.sw*"
 alias bell="echo \"\a\""
+alias crr="cargo run --release"
 
 alias grbim="git rebase -i master"
 alias gcaa="git commit -a --amend"
