@@ -91,6 +91,8 @@ nnoremap <leader>n :NERDTree<CR>
 inoremap <tab> <C-P>
 
 nnoremap <leader>b orequire "pry"; binding.pry<ESC>
+nnoremap <leader>f :ALEFirst<CR>
+
 """"" PLUGINS
 
 call plug#begin('~/.vim/plugged')
