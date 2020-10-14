@@ -1,6 +1,6 @@
 #!/bin/zsh
 alias sicstus="rlwrap /usr/local/sicstus4.3.2/bin/sicstus"
-alias localip='ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '\''{print $2}'\'''
+alias localip='ipconfig getifaddr en0'
 alias als="vim ~/.aliases"
 alias vimrc="vim ~/.vimrc"
 alias zshrc="vim ~/.zshrc"
