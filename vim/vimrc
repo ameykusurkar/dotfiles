@@ -112,7 +112,7 @@ Plug 'mxw/vim-jsx'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-endwise'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'rking/ag.vim'
 Plug 'tpope/vim-commentary'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -136,3 +136,4 @@ let g:indent_guides_guide_size=1
 let g:ale_fixers = {'ruby': ['rubocop']}
 
 let test#strategy = "dispatch"
+autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/
