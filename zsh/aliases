@@ -10,7 +10,7 @@ alias rmswap="rmc ./**/.*.sw*"
 alias bell="echo \"\a\""
 alias crr="cargo run --release"
 
-alias grbim="git rebase -i $(git_main_branch)"
+alias grbim='git rebase -i $(git_main_branch)'
 alias gcaa="git commit -a --amend"
 
 # Get battery % on mac
