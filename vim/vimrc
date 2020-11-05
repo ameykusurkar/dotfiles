@@ -134,6 +134,7 @@ colorscheme rigel
 let g:indent_guides_guide_size=1
 
 let g:ale_fixers = {'ruby': ['rubocop']}
+let g:ale_ruby_rubocop_executable='bundle'
 
 let test#strategy = "dispatch"
 autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/

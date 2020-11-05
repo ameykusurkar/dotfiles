@@ -5,7 +5,6 @@ export EDITOR='vim'
 export VISUAL='vim'
 
 PATH=""
-PATH="$PATH:/usr/local/opt/python/libexec/bin"
 PATH="$PATH:/usr/local/lib/ruby/gems/2.6.0/bin"
 PATH="$PATH:/usr/local/opt/ruby/bin"
 PATH="$PATH:/usr/local/bin"
@@ -47,3 +46,5 @@ export NVM_DIR="$HOME/.nvm"
 
 # autojump
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+
+. /usr/local/opt/asdf/asdf.sh
