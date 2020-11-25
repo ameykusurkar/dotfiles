@@ -36,13 +36,21 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 set t_Co=256
 
-set noshowmode  " Don't show mode in status bar, as Airline does it
+set noshowmode  " Don't show mode in status bar, as lightline does it
 set laststatus=2
-let g:airline_theme='murmur'
-let g:airline#extensions#hunks#enabled=0
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#branch#enabled = 1
-let g:airline_powerline_fonts = 1
+let g:lightline = {
+      \ 'colorscheme': 'rigel',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'gitbranch', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ 'component': {
+      \   'lineinfo': "%{line('.') . '/' . line('$') . ':' . col('.')}",
+      \ },
+      \ }
 
 """"" SEARCH
 
@@ -97,8 +105,7 @@ nnoremap <leader>f :ALEFirst<CR>
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'bling/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'wikitopian/hardmode'
 Plug 'leafgarland/typescript-vim'
