@@ -11,7 +11,7 @@ set backspace=2 " Allow backspace over indent, eol, start
 set hidden      " Modified buffers are 'hidden' instead of unloaded
 set directory=$DOTFILES/vim/swapfiles// " Change swapfile location
 set cursorline  " Highlights the line that the cursor is on
-set timeoutlen=50 " How long vim waits mid key sequence before timing out
+set timeoutlen=300 " How long vim waits mid key sequence before timing out
 
 filetype on
 filetype indent on
