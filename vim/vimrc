@@ -132,7 +132,7 @@ Plug 'mhartington/oceanic-next'
 Plug 'tpope/vim-dispatch'
 Plug 'Rigellute/rigel'
 Plug 'cespare/vim-toml'
-Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox'
 
 call plug#end()
 
