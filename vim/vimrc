@@ -34,12 +34,11 @@ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 set termguicolors
-set t_Co=256
 
 set noshowmode  " Don't show mode in status bar, as lightline does it
 set laststatus=2
 let g:lightline = {
-      \ 'colorscheme': 'rigel',
+      \ 'colorscheme': 'gruvbox',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'gitbranch', 'filename', 'modified' ] ]
@@ -51,6 +50,8 @@ let g:lightline = {
       \   'lineinfo': "%{line('.') . '/' . line('$') . ':' . col('.')}",
       \ },
       \ }
+
+let g:gruvbox_contrast_dark = 'hard'
 
 """"" SEARCH
 
@@ -131,10 +132,11 @@ Plug 'mhartington/oceanic-next'
 Plug 'tpope/vim-dispatch'
 Plug 'Rigellute/rigel'
 Plug 'cespare/vim-toml'
+Plug 'morhetz/gruvbox'
 
 call plug#end()
 
-colorscheme rigel
+colorscheme gruvbox
 
 """"" PLUGIN SETTINGS
 
