@@ -12,7 +12,7 @@ vim-linux:
 	ln -svf $(DIR)/vim/vimrc ~/.vimrc
 
 vim-plug:
-	vim +PlugInstall +:qa
+	vim +PlugInstall +PlugClean +:qa
 	mkdir -p $(DIR)/vim/swapfiles
 
 zsh: $(HOME)/.oh-my-zsh
