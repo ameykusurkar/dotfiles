@@ -84,7 +84,7 @@ nnoremap <C-K> kddpk
 nnoremap <C-N> :bnext<CR>
 nnoremap <C-P> :bprev<CR>
 
-nnoremap <C-G> :FZF<CR>
+nnoremap <C-G> :Files<CR>
 
 nnoremap <CR> o<Esc>
 nnoremap <leader>g :OpenGithub<CR>
@@ -95,7 +95,7 @@ nnoremap <leader>s :source ~/.vimrc<CR>
 
 nnoremap <leader>v :belowright 15sp ~/.vimrc<CR>
 
-nnoremap <leader>a *:AgFromSearch<CR>
+nnoremap <leader>a :Ag<CR>
 
 nnoremap <leader>n :NERDTree<CR>
 
@@ -123,7 +123,6 @@ Plug 'christoomey/vim-tmux-runner'
 Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-endwise'
 Plug 'dense-analysis/ale'
-Plug 'rking/ag.vim'
 Plug 'tpope/vim-commentary'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'nathanaelkane/vim-indent-guides'
