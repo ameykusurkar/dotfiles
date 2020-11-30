@@ -39,7 +39,7 @@ set termguicolors
 set noshowmode  " Don't show mode in status bar, as lightline does it
 set laststatus=2
 let g:lightline = {
-      \ 'colorscheme': 'gruvbox',
+      \ 'colorscheme': 'seoul256',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'gitbranch', 'filename', 'modified' ] ]
@@ -53,7 +53,6 @@ let g:lightline = {
       \ },
       \ }
 
-let g:gruvbox_contrast_dark = 'hard'
 set background=dark
 
 """"" SEARCH
@@ -135,11 +134,11 @@ Plug 'mhartington/oceanic-next'
 Plug 'tpope/vim-dispatch'
 Plug 'Rigellute/rigel'
 Plug 'cespare/vim-toml'
-Plug 'gruvbox-community/gruvbox'
+Plug 'chriskempson/base16-vim'
 
 call plug#end()
 
-colorscheme gruvbox
+colorscheme base16-gruvbox-dark-hard
 
 """"" PLUGIN SETTINGS
 
