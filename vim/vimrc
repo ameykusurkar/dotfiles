@@ -135,6 +135,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'Rigellute/rigel'
 Plug 'cespare/vim-toml'
 Plug 'chriskempson/base16-vim'
+Plug 'junegunn/fzf.vim'
 
 call plug#end()
 
