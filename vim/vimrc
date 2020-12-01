@@ -135,6 +135,7 @@ Plug 'Rigellute/rigel'
 Plug 'cespare/vim-toml'
 Plug 'chriskempson/base16-vim'
 Plug 'junegunn/fzf.vim'
+Plug 'google/vim-jsonnet'
 
 call plug#end()
 
