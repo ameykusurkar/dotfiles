@@ -101,8 +101,12 @@ nnoremap <leader>n :NERDTree<CR>
 
 inoremap <tab> <C-P>
 
-nnoremap <leader>b orequire "pry"; binding.pry<ESC>
-nnoremap <leader>f :ALEFirst<CR>
+nnoremap <leader>fi :ALEFix<CR>
+nnoremap <leader>ff :ALEFirst<CR>
+nnoremap <leader>fn :ALENext<CR>
+
+autocmd FileType ruby nnoremap <buffer> <leader>b orequire "pry"; binding.pry<ESC>
+autocmd FileType python nnoremap <buffer> <leader>b oimport pdb; pdb.set_trace()<ESC>
 
 """"" PLUGINS
 
@@ -145,7 +149,7 @@ colorscheme base16-gruvbox-dark-hard
 
 let g:indent_guides_guide_size=1
 
-let g:ale_fixers = {'ruby': ['rubocop']}
+let g:ale_fixers = {'ruby': ['rubocop'], 'go': ['goimports']}
 let g:ale_ruby_rubocop_executable='bundle'
 
 let test#strategy = "dispatch"
