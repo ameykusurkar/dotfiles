@@ -99,7 +99,7 @@ nnoremap <leader>a :Ag<CR>
 
 nnoremap <leader>n :NERDTree<CR>
 
-inoremap <tab> <C-P>
+inoremap <tab> <C-N>
 
 nnoremap <leader>fi :ALEFix<CR>
 nnoremap <leader>ff :ALEFirst<CR>
