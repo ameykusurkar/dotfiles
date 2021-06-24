@@ -30,6 +30,8 @@ BULLETTRAIN_EXEC_TIME_FG=black
 
 plugins=(git zsh-syntax-highlighting)
 
+ZSH_DISABLE_COMPFIX=true
+
 source $ZSH/oh-my-zsh.sh
 
 source ~/.aliases
