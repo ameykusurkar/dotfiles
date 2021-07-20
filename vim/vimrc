@@ -87,7 +87,7 @@ nnoremap <C-P> :bprev<CR>
 nnoremap <C-G> :Files<CR>
 
 nnoremap <CR> o<Esc>
-nnoremap <leader>g :OpenGithub<CR>
+nnoremap <leader>g :OpenGithubFile<CR>
 
 nnoremap <leader>tn :TestNearest<CR>
 
@@ -130,7 +130,8 @@ Plug 'dense-analysis/ale'
 Plug 'tpope/vim-commentary'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'k0kubun/vim-open-github'
+Plug 'tyru/open-browser.vim'
+Plug 'tyru/open-browser-github.vim'
 Plug 'janko-m/vim-test'
 Plug 'tjammer/blayu.vim'
 Plug 'mhartington/oceanic-next'
