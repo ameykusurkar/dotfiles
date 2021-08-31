@@ -87,7 +87,8 @@ nnoremap <C-P> :bprev<CR>
 nnoremap <C-G> :Files<CR>
 
 nnoremap <CR> o<Esc>
-nnoremap <leader>g :OpenGithubFile<CR>
+nnoremap <leader>g V:OpenGithubFile<CR>
+vnoremap <leader>g :OpenGithubFile<CR>
 
 nnoremap <leader>tn :TestNearest<CR>
 
