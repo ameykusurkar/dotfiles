@@ -90,7 +90,7 @@ nnoremap <CR> o<Esc>
 nnoremap <leader>g V:OpenGithubFile<CR>
 vnoremap <leader>g :OpenGithubFile<CR>
 
-nnoremap <leader>b :Git blame<CR>
+nnoremap <leader>m :Git blame<CR>
 
 nnoremap <leader>tn :TestNearest<CR>
 
