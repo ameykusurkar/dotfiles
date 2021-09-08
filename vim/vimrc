@@ -145,6 +145,7 @@ Plug 'chriskempson/base16-vim'
 Plug 'junegunn/fzf.vim'
 Plug 'google/vim-jsonnet'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'plasticboy/vim-markdown'
 
 call plug#end()
 
@@ -156,7 +157,7 @@ let g:indent_guides_guide_size=1
 
 let g:ale_fixers = {'ruby': ['rubocop'], 'go': ['goimports'], 'rust': ['rustfmt'], 'javascript': ['prettier'], 'css': ['stylelint']}
 let g:ale_ruby_rubocop_executable='bundle'
-let g:ale_linters = {'rust': ['cargo', 'rustc']}
+let g:ale_linters = {'rust': ['cargo']}
 let g:ale_rust_rustc_options = '' " Default option requires nightly
 
 let test#strategy = "dispatch"
