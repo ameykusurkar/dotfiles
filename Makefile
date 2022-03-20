@@ -11,9 +11,12 @@ vim-linux:
 	ln -svf $(DIR)/vim ~/.vim
 	ln -svf $(DIR)/vim/vimrc ~/.vimrc
 
-vim-plug:
+vim-plug: $(HOME)/.vim/autoload/plug.vim
 	vim +PlugInstall +PlugClean +:qa
-	mkdir -p $(DIR)/vim/swapfiles
+
+$(HOME)/.vim/autoload/plug.vim:
+	curl -fLo $@ --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 zsh: $(HOME)/.oh-my-zsh
 	ln -svf $(DIR)/zsh/zshrc ~/.zshrc
