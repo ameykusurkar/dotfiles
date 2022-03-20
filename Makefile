@@ -13,6 +13,7 @@ vim-linux:
 
 vim-plug: $(HOME)/.vim/autoload/plug.vim
 	vim +PlugInstall +PlugClean +:qa
+	mkdir -p $(DIR)/vim/swapfiles
 
 $(HOME)/.vim/autoload/plug.vim:
 	curl -fLo $@ --create-dirs \
