@@ -12,6 +12,7 @@ PATH="$PATH:/bin"
 PATH="$PATH:/usr/sbin"
 PATH="$PATH:/sbin"
 PATH="$PATH:$HOME/.cargo/bin"
+PATH="$PATH:$HOME/.local/bin"
 PATH="$PATH:$GOPATH/bin"
 export PATH
 
@@ -53,3 +54,4 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="/usr/local/opt/openjdk/bin:$PATH"
 
 export PATH="$HOME/.poetry/bin:$PATH"
+[ -f "/Users/ameykusurkar/.ghcup/env" ] && source "/Users/ameykusurkar/.ghcup/env" # ghcup-env
