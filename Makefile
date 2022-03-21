@@ -24,6 +24,12 @@ zsh: $(HOME)/.oh-my-zsh
 	ln -svf $(DIR)/zsh/aliases ~/.aliases
 	git submodule update --init --recursive
 
+fish:
+	ln -svf $(DIR)/fish/config.fish ~/.config/fish/config.fish
+
+omf:
+	curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+
 $(HOME)/.oh-my-zsh:
 	$(DIR)/scripts/install-oh-my-zsh
 
@@ -40,4 +46,4 @@ teardown-zsh:
 	rm -f ~/.aliases
 	rm -rf ~/.oh-my-zsh
 
-.PHONY: vim zsh
+.PHONY: vim zsh fish omf

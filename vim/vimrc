@@ -147,6 +147,7 @@ Plug 'google/vim-jsonnet'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'plasticboy/vim-markdown'
 Plug 'neovimhaskell/haskell-vim'
+Plug 'dag/vim-fish'
 
 call plug#end()
 
