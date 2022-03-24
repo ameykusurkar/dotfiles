@@ -1,5 +1,4 @@
 set -gx DOTFILES $HOME/dotfiles
-set -gx OMF_CONFIG $DOTFILES/omf
 set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
 
 abbr -a gd git diff
