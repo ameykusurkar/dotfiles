@@ -24,7 +24,5 @@ abbr -a penv vim ~/.private-env.fish
 
 [ -f ~/.private-env.fish ]; and source ~/.private-env.fish
 
-source /opt/asdf-vm/asdf.fish
-
 # Needs to be the last line of the config
 starship init fish | source
