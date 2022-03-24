@@ -11,6 +11,11 @@ abbr -a gc git commit
 abbr -a gcam git commit -a -m
 abbr -a glg git log --stat
 abbr -a gcaa git commit -a --amend
+abbr -a gco git checkout
+abbr -a gcb git checkout -b
+abbr -a grbi git rebase -i
+abbr -a grba git rebase --abort
+abbr -a grbc git rebase --continue
 
 abbr -a sfish source ~/.config/fish/config.fish
 
