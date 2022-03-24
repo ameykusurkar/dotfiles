@@ -1,22 +1,9 @@
 add_newline = false
 
-[line_break]
-disabled = true
-
-[aws]
-disabled = true
-
-[python]
-disabled = true
-
-[ruby]
-disabled = true
-
-[rust]
-disabled = true
-
-[nodejs]
-disabled = true
-
-[golang]
-disabled = true
+aws.disabled = true
+golang.disabled = true
+line_break.disabled = true
+nodejs.disabled = true
+python.disabled = true
+ruby.disabled = true
+rust.disabled = true
