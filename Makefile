@@ -26,9 +26,7 @@ zsh: $(HOME)/.oh-my-zsh
 
 fish:
 	ln -svf $(DIR)/fish/config.fish ~/.config/fish/config.fish
-
-omf:
-	curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+	ln -svf $(DIR)/fish/fish_plugins ~/.config/fish/fish_plugins
 
 $(HOME)/.oh-my-zsh:
 	$(DIR)/scripts/install-oh-my-zsh
