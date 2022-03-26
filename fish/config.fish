@@ -1,6 +1,11 @@
 set -gx DOTFILES $HOME/dotfiles
 set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
 set -gx EDITOR vim
+set -gx VISUAL $EDITOR
+set -gx GOPATH (go env GOPATH)
+
+fish_add_path -g $HOME/.cargo/bin
+fish_add_path -g $GOPATH/bin
 
 abbr -a gd git diff
 abbr -a ga git add
@@ -34,6 +39,11 @@ abbr -a penvz vim ~/.private-env
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 
 [ -f ~/.private-env.fish ]; and source ~/.private-env.fish
+
+source /usr/local/opt/asdf/libexec/asdf.fish
+
+# Set the greeting to be empty
+set fish_greeting
 
 # Needs to be the last line of the config
 starship init fish | source
