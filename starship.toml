@@ -9,3 +9,23 @@ nodejs.disabled = true
 python.disabled = true
 ruby.disabled = true
 rust.disabled = true
+
+[git_branch]
+style = "bold white"
+
+[git_status]
+ahead = "[⇡](bold purple)"
+behind = "[⇣](bold purple)"
+diverged = "[⇕](bold purple)"
+modified = "[!](bold yellow)"
+stashed = "[$](bold red)"
+staged = "[+](bold green)"
+renamed = "[»](bold blue)"
+deleted = "[✘](bold red)"
+untracked = "[?](bold yellow)"
+style = "grey"
+
+[git_metrics]
+disabled = false
+added_style = "green"
+deleted_style = "red"
