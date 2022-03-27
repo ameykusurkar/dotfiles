@@ -40,8 +40,6 @@ abbr -a penvz vim ~/.private-env
 
 [ -f ~/.private-env.fish ]; and source ~/.private-env.fish
 
-source /usr/local/opt/asdf/libexec/asdf.fish
-
 # Set the greeting to be empty
 set fish_greeting
 
