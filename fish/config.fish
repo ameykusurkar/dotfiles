@@ -36,6 +36,8 @@ abbr -a penv vim ~/.private-env.fish
 abbr -a zshrc vim ~/.zshrc
 abbr -a penvz vim ~/.private-env
 
+abbr -a k kubectl
+
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 
 [ -f ~/.private-env.fish ]; and source ~/.private-env.fish
