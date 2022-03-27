@@ -38,6 +38,9 @@ abbr -a penvz vim ~/.private-env
 
 abbr -a k kubectl
 
+abbr -a crr cargo run --release
+abbr -a cbr cargo build --release
+
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 
 [ -f ~/.private-env.fish ]; and source ~/.private-env.fish
