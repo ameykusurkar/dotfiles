@@ -11,6 +11,9 @@ python.disabled = true
 ruby.disabled = true
 rust.disabled = true
 
+[cmd_duration]
+style = "bold purple"
+
 [git_branch]
 style = "bold white"
 
