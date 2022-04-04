@@ -22,6 +22,8 @@ abbr -a grba git rebase --abort
 abbr -a grbc git rebase --continue
 abbr -a grbi git rebase -i
 abbr -a gst git status
+abbr -a gcm "git checkout (basename (git symbolic-ref --short refs/remotes/origin/HEAD))"
+abbr -a grbim "git rebase -i (basename (git symbolic-ref --short refs/remotes/origin/HEAD))"
 
 abbr -a be bundle exec
 abbr -a dcopa 'git diff origin/master --name-only --relative --diff-filter=ACMRTUXB | grep ".*.rb\$" | xargs bundle exec rubocop -a'
