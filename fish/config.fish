@@ -6,6 +6,8 @@ set -gx GOPATH (go env GOPATH)
 
 fish_add_path -g $HOME/.cargo/bin
 fish_add_path -g $GOPATH/bin
+fish_add_path -g /usr/local/opt/openjdk/bin
+fish_add_path -g $HOME/.poetry/bin
 
 abbr -a ga git add
 abbr -a gb git branch
@@ -26,6 +28,7 @@ abbr -a gcm "git checkout (basename (git symbolic-ref --short refs/remotes/origi
 abbr -a grbim "git rebase -i (basename (git symbolic-ref --short refs/remotes/origin/HEAD))"
 
 abbr -a be bundle exec
+abbr -a berc bundle exec rails console
 abbr -a dcopa 'git diff origin/master --name-only --relative --diff-filter=ACMRTUXB | grep ".*.rb\$" | xargs bundle exec rubocop -a'
 
 abbr -a sfish source ~/.config/fish/config.fish
@@ -53,3 +56,5 @@ set fish_greeting
 
 # Needs to be the last line of the config
 starship init fish | source
+
+source /usr/local/opt/asdf/libexec/asdf.fish
