@@ -4,6 +4,7 @@ set -gx EDITOR vim
 set -gx VISUAL $EDITOR
 set -gx GOPATH (go env GOPATH)
 
+fish_add_path -g /usr/local/go/bin
 fish_add_path -g $HOME/.cargo/bin
 fish_add_path -g $GOPATH/bin
 fish_add_path -g /usr/local/opt/openjdk/bin
