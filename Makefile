@@ -19,6 +19,9 @@ $(HOME)/.vim/autoload/plug.vim:
 	curl -fLo $@ --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+nvim:
+	ln -svf $(DIR)/nvim/init.vim ~/.config/nvim/init.vim
+
 zsh: $(HOME)/.oh-my-zsh
 	ln -svf $(DIR)/zsh/zshrc ~/.zshrc
 	ln -svf $(DIR)/zsh/aliases ~/.aliases
@@ -43,4 +46,4 @@ teardown-zsh:
 	rm -f ~/.aliases
 	rm -rf ~/.oh-my-zsh
 
-.PHONY: vim zsh fish omf
+.PHONY: vim zsh fish omf nvim
