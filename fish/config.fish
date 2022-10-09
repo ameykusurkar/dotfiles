@@ -1,10 +1,12 @@
+# go binary needs to be available to set GOPATH
+fish_add_path -g /usr/local/go/bin
+
 set -gx DOTFILES $HOME/dotfiles
 set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
 set -gx EDITOR vim
 set -gx VISUAL $EDITOR
 set -gx GOPATH (go env GOPATH)
 
-fish_add_path -g /usr/local/go/bin
 fish_add_path -g $HOME/.cargo/bin
 fish_add_path -g $GOPATH/bin
 fish_add_path -g /usr/local/opt/openjdk/bin
@@ -39,6 +41,7 @@ abbr -a vstar vim $STARSHIP_CONFIG
 
 abbr -a vimrc vim ~/.vimrc
 abbr -a penv vim ~/.private-env.fish
+abbr -a nvc nvim ~/.config/nvim/init.vim
 
 abbr -a zshrc vim ~/.zshrc
 abbr -a penvz vim ~/.private-env
