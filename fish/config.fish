@@ -41,7 +41,7 @@ abbr -a vstar vim $STARSHIP_CONFIG
 
 abbr -a vimrc vim ~/.vimrc
 abbr -a penv vim ~/.private-env.fish
-abbr -a nvc nvim ~/.config/nvim/init.vim
+abbr -a nvc nvim ~/dotfiles/nvim/init.vim
 
 abbr -a zshrc vim ~/.zshrc
 abbr -a penvz vim ~/.private-env

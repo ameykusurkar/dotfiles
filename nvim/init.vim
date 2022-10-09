@@ -38,11 +38,19 @@ call plug#begin()
 Plug 'itchyny/lightline.vim' " Status line appearance
 Plug 'chriskempson/base16-vim' " Colorschemes
 
-" Git
-Plug 'tpope/vim-fugitive'
-" Plug 'airblade/vim-gitgutter'
+Plug 'dag/vim-fish' " Syntax highlighting for fish scripts
+Plug 'tpope/vim-commentary' " Comment stuff out
+" Plug 'tpope/vim-fugitive' " Git plugin
+Plug 'lewis6991/gitsigns.nvim' " Git plugin
 
-" Plug 'scrooloose/nerdtree'
+" Open files in github
+Plug 'tyru/open-browser.vim'
+Plug 'tyru/open-browser-github.vim'
+
+
+"""" Consider alternatives
+Plug 'scrooloose/nerdtree'
+
 " Plug 'wikitopian/hardmode'
 " Plug 'leafgarland/typescript-vim'
 " Plug 'Valloric/MatchTagAlways'
@@ -54,11 +62,8 @@ Plug 'tpope/vim-fugitive'
 " Plug 'vim-ruby/vim-ruby'
 " Plug 'tpope/vim-endwise'
 " Plug 'dense-analysis/ale'
-" Plug 'tpope/vim-commentary'
 " Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'nathanaelkane/vim-indent-guides'
-" Plug 'tyru/open-browser.vim'
-" Plug 'tyru/open-browser-github.vim'
 " Plug 'janko-m/vim-test'
 " Plug 'tjammer/blayu.vim'
 " Plug 'mhartington/oceanic-next'
@@ -70,7 +75,6 @@ Plug 'tpope/vim-fugitive'
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'plasticboy/vim-markdown'
 " Plug 'neovimhaskell/haskell-vim'
-" Plug 'dag/vim-fish'
 
 call plug#end()
 
@@ -122,7 +126,7 @@ nnoremap ; :nohlsearch<CR>
 " set foldmethod=indent
 " set foldlevelstart=99 " Unfold everything when opening file
 
-""""" MISCELLANEOUS MAPPINGS (TODO)
+""""" MISCELLANEOUS MAPPINGS
 
 nnoremap <leader>s :source ~/.config/nvim/init.vim<CR>
 
@@ -137,16 +141,16 @@ nnoremap <C-K> kddpk
 " add the starting characters) 
 nnoremap <CR> o<Esc>D
 
-" " Cycle though buffers
-" nnoremap <C-N> :bnext<CR>
-" nnoremap <C-P> :bprev<CR>
+" Cycle though buffers
+nnoremap <C-N> :bnext<CR>
+nnoremap <C-P> :bprev<CR>
 
 " nnoremap <C-G> :Files<CR>
 
-" nnoremap <leader>g V:OpenGithubFile<CR>
-" vnoremap <leader>g :OpenGithubFile<CR>
+nnoremap <leader>g V:OpenGithubFile<CR>
+vnoremap <leader>g :OpenGithubFile<CR>
 
-" nnoremap <leader>m :Git blame<CR>
+nnoremap <leader>m :Git blame<CR>
 
 " nnoremap <leader>tn :TestNearest<CR>
 
@@ -154,7 +158,7 @@ nnoremap <CR> o<Esc>D
 
 " nnoremap <leader>a :Ag<CR>
 
-" nnoremap <leader>n :NERDTree<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
 
 " inoremap <tab> <C-N>
 
@@ -165,7 +169,9 @@ nnoremap <CR> o<Esc>D
 " autocmd FileType ruby nnoremap <buffer> <leader>b orequire "pry"; binding.pry<ESC>
 " autocmd FileType python nnoremap <buffer> <leader>b oimport pdb; pdb.set_trace()<ESC>
 
-" """"" PLUGIN SETTINGS
+""""" PLUGIN SETTINGS
+
+lua require('gitsigns').setup()
 
 " let g:indent_guides_guide_size=1
 
