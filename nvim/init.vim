@@ -154,7 +154,8 @@ nnoremap <C-P> :bprev<CR>
 nnoremap <leader>g V:OpenGithubFile<CR>
 vnoremap <leader>g :OpenGithubFile<CR>
 
-nnoremap <leader>m :Git blame<CR>
+" nnoremap <leader>m :Git blame<CR>
+nnoremap <leader>m <cmd>lua require('gitsigns').blame_line({full=true})<CR>
 
 nnoremap <leader>n :NERDTreeToggle<CR>
 
