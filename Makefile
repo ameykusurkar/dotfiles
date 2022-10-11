@@ -21,6 +21,7 @@ $(HOME)/.vim/autoload/plug.vim:
 
 nvim:
 	ln -svf $(DIR)/nvim/init.vim ~/.config/nvim/init.vim
+	ln -svf $(DIR)/nvim/support.lua ~/.config/nvim/support.lua
 
 zsh: $(HOME)/.oh-my-zsh
 	ln -svf $(DIR)/zsh/zshrc ~/.zshrc

@@ -47,7 +47,6 @@ Plug 'lewis6991/gitsigns.nvim' " Git plugin
 Plug 'tyru/open-browser.vim'
 Plug 'tyru/open-browser-github.vim'
 
-
 """" Consider alternatives
 Plug 'scrooloose/nerdtree'
 
@@ -65,10 +64,7 @@ Plug 'scrooloose/nerdtree'
 " Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'janko-m/vim-test'
-" Plug 'tjammer/blayu.vim'
-" Plug 'mhartington/oceanic-next'
 " Plug 'tpope/vim-dispatch'
-" Plug 'Rigellute/rigel'
 " Plug 'cespare/vim-toml'
 " Plug 'junegunn/fzf.vim'
 " Plug 'google/vim-jsonnet'
@@ -152,13 +148,13 @@ vnoremap <leader>g :OpenGithubFile<CR>
 
 nnoremap <leader>m :Git blame<CR>
 
+nnoremap <leader>n :NERDTreeToggle<CR>
+
 " nnoremap <leader>tn :TestNearest<CR>
 
 " nnoremap <leader>v :belowright 15sp ~/.vimrc<CR>
 
 " nnoremap <leader>a :Ag<CR>
-
-nnoremap <leader>n :NERDTreeToggle<CR>
 
 " inoremap <tab> <C-N>
 
@@ -171,7 +167,7 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 
 """"" PLUGIN SETTINGS
 
-lua require('gitsigns').setup()
+luafile $HOME/.config/nvim/support.lua
 
 " let g:indent_guides_guide_size=1
 
