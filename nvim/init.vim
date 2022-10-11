@@ -34,14 +34,14 @@ set backspace=2 " Allow backspace over indent, eol, start
 
 call plug#begin()
 
-" Gotta look nice!
+"""" Appearance
 Plug 'itchyny/lightline.vim' " Status line appearance
 Plug 'chriskempson/base16-vim' " Colorschemes
 
-Plug 'dag/vim-fish' " Syntax highlighting for fish scripts
+"""" Productivity
 Plug 'tpope/vim-commentary' " Comment stuff out
-" Plug 'tpope/vim-fugitive' " Git plugin
 Plug 'lewis6991/gitsigns.nvim' " Git plugin
+" Plug 'AndrewRadev/splitjoin.vim'
 
 " Open files in github
 Plug 'tyru/open-browser.vim'
@@ -49,28 +49,36 @@ Plug 'tyru/open-browser-github.vim'
 
 """" Consider alternatives
 Plug 'scrooloose/nerdtree'
+" Plug 'Valloric/MatchTagAlways' " Syntax for HTML/XML tags
+" Plug 'tpope/vim-fugitive' " Git plugin
+" Plug 'tpope/vim-endwise'
 
-" Plug 'wikitopian/hardmode'
-" Plug 'leafgarland/typescript-vim'
-" Plug 'Valloric/MatchTagAlways'
-" Plug 'jimenezrick/vimerl'
+"""" Lint/LSP
+" Plug 'dense-analysis/ale'
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+"""" Navigation
+" Plug 'junegunn/fzf.vim'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+"""" Language
+Plug 'dag/vim-fish' " Syntax highlighting for fish scripts
+" Plug 'leafgarland/typescript-vim'
+" Plug 'jimenezrick/vimerl'
 " Plug 'pangloss/vim-javascript'
 " Plug 'mxw/vim-jsx'
-" Plug 'christoomey/vim-tmux-runner'
 " Plug 'vim-ruby/vim-ruby'
-" Plug 'tpope/vim-endwise'
-" Plug 'dense-analysis/ale'
-" Plug 'AndrewRadev/splitjoin.vim'
+" Plug 'google/vim-jsonnet'
+" Plug 'plasticboy/vim-markdown'
+" Plug 'neovimhaskell/haskell-vim'
+" Plug 'cespare/vim-toml'
+
+"""" Misc
+" Plug 'wikitopian/hardmode'
+" Plug 'christoomey/vim-tmux-runner'
 " Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'janko-m/vim-test'
 " Plug 'tpope/vim-dispatch'
-" Plug 'cespare/vim-toml'
-" Plug 'junegunn/fzf.vim'
-" Plug 'google/vim-jsonnet'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'plasticboy/vim-markdown'
-" Plug 'neovimhaskell/haskell-vim'
 
 call plug#end()
 
