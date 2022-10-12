@@ -25,18 +25,48 @@ end
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
+  --- Appearance
+  use 'itchyny/lightline.vim' -- Status line appearance
+  use 'chriskempson/base16-vim' -- Colorschemes
+
   --- Productivity
   use 'tpope/vim-commentary' -- Plug Comment stuff out
   use 'lewis6991/gitsigns.nvim' -- Git plugin
+  use 'tpope/vim-fugitive' -- Git plugin, TODO: Replace with gitsigns
+
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require("nvim-tree").setup()
+    end,
+  }
 end)
 
 ---- APPEARANCE ----
 
 vim.opt.termguicolors = true -- Enable 24-bit colors
 vim.opt.background = "dark"
+vim.api.nvim_command("colorscheme base16-gruvbox-dark-hard")
 
 vim.opt.showmode = false -- Don't show mode in status line, as lightline does it
 vim.opt.laststatus = 2 -- Always show status line
+vim.g.lightline = {
+  colorscheme = 'seoul256',
+  active = {
+    left = {
+      { 'mode', 'paste' },
+      { 'readonly', 'gitbranch', 'filename', 'modified' }
+    },
+  },
+  component_function = {
+    gitbranch = 'FugitiveHead',
+  },
+  component = {
+    lineinfo =  "%{line('.') . '/' . line('$') . ':' . col('.')}",
+    filename = "%{expand('%')}",
+  },
+}
 
 ---- SEARCH ----
 
@@ -53,6 +83,10 @@ nnoremap("<leader>s", ":source ~/.config/nvim/init.lua<CR>")
 
 -- Uppercase word
 nnoremap("<leader>u", "gUiw")
+
+nnoremap("<leader>n", ":NvimTreeToggle<CR>")
+
+nnoremap("<leader>m", ":lua require('gitsigns').blame_line({full=true})<CR>")
 
 -- Move lines up/down
 nnoremap("<C-J>", "ddp")

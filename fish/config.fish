@@ -62,3 +62,6 @@ set fish_greeting
 
 # Needs to be the last line of the config
 starship init fish | source
+
+# Generated for envman. Do not edit.
+test -s "$HOME/.config/envman/load.fish"; and source "$HOME/.config/envman/load.fish"
