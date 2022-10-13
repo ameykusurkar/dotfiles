@@ -9,6 +9,10 @@ function nnoremap(shortcut, command)
   vim.api.nvim_set_keymap( "n", shortcut, command, { noremap = true })
 end
 
+function vnoremap(shortcut, command)
+  vim.api.nvim_set_keymap( "v", shortcut, command, { noremap = true })
+end
+
 ---- INDENTATION ----
 vim.opt.tabstop = 2 -- Width of TAB character
 vim.opt.softtabstop = 2 -- Width of <TAB> key
@@ -31,6 +35,10 @@ require('packer').startup(function(use)
   use 'tpope/vim-commentary' -- Plug Comment stuff out
   use 'lewis6991/gitsigns.nvim' -- Git plugin
   use 'tpope/vim-fugitive' -- Git plugin, TODO: Replace with gitsigns
+
+  -- Open files in github
+  use 'tyru/open-browser.vim'
+  use 'tyru/open-browser-github.vim'
 
   use {
     'nvim-tree/nvim-tree.lua',
@@ -83,6 +91,9 @@ nnoremap("<leader>u", "gUiw")
 nnoremap("<leader>n", ":NvimTreeToggle<CR>")
 
 nnoremap("<leader>m", ":lua require('gitsigns').blame_line({full=true})<CR>")
+
+nnoremap("<leader>g", ":OpenGithubFile<CR>")
+vnoremap("<leader>g", ":OpenGithubFile<CR>")
 
 -- Move lines up/down
 nnoremap("<C-J>", "ddp")
