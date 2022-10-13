@@ -5,11 +5,11 @@ vim.opt.timeoutlen = 300 -- How long to wait mid key sequence before timing out
 
 vim.g.mapleader = ","
 
-function nnoremap(shortcut, command)
+local function nnoremap(shortcut, command)
   vim.api.nvim_set_keymap( "n", shortcut, command, { noremap = true })
 end
 
-function vnoremap(shortcut, command)
+local function vnoremap(shortcut, command)
   vim.api.nvim_set_keymap( "v", shortcut, command, { noremap = true })
 end
 
@@ -26,6 +26,9 @@ vim.opt.backspace = "indent,eol,start" -- Allow backspace over indent, eol, star
 ---- PLUGINS ----
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
+
+  --- LSP
+  use 'neovim/nvim-lspconfig'
 
   --- Appearance
   use 'itchyny/lightline.vim' -- Status line appearance
@@ -126,4 +129,24 @@ require('gitsigns').setup({
       return '<Ignore>'
     end, {expr=true})
   end
+})
+
+---- LSP ----
+local lspconfig = require('lspconfig')
+
+lspconfig.rust_analyzer.setup({})
+
+lspconfig.sumneko_lua.setup({
+  settings = {
+    Lua = {
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+    },
+  },
 })
