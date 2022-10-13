@@ -41,7 +41,7 @@ abbr -a vstar vim $STARSHIP_CONFIG
 
 abbr -a vimrc vim ~/.vimrc
 abbr -a penv vim ~/.private-env.fish
-abbr -a nvc nvim ~/dotfiles/nvim/init.vim
+abbr -a nvc nvim ~/dotfiles/nvim/init.lua
 
 abbr -a zshrc vim ~/.zshrc
 abbr -a penvz vim ~/.private-env
@@ -62,3 +62,6 @@ set fish_greeting
 
 # Needs to be the last line of the config
 starship init fish | source
+
+# Generated for envman. Do not edit.
+test -s "$HOME/.config/envman/load.fish"; and source "$HOME/.config/envman/load.fish"

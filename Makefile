@@ -20,8 +20,7 @@ $(HOME)/.vim/autoload/plug.vim:
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 nvim:
-	ln -svf $(DIR)/nvim/init.vim ~/.config/nvim/init.vim
-	ln -svf $(DIR)/nvim/support.lua ~/.config/nvim/support.lua
+	ln -svf $(DIR)/nvim/init.lua ~/.config/nvim/init.lua
 
 zsh: $(HOME)/.oh-my-zsh
 	ln -svf $(DIR)/zsh/zshrc ~/.zshrc
