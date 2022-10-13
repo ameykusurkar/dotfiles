@@ -1,8 +1,6 @@
 # dotfiles
 File names prefixed with `.`
 
-## Installation
-```shell
-make
-source ~/.zshrc
-```
+## Setup
+
+See [`Makefile`](Makefile) for details.
