@@ -1,13 +1,15 @@
 ---- GENERAL ----
-
 vim.opt.number = true -- Show line numbers
 vim.opt.cursorline = true -- Highlights the line that the cursor is on
 vim.opt.timeoutlen = 300 -- How long to wait mid key sequence before timing out
 
 vim.g.mapleader = ","
 
----- INDENTATION ----
+function nnoremap(shortcut, command)
+  vim.api.nvim_set_keymap( "n", shortcut, command, { noremap = true })
+end
 
+---- INDENTATION ----
 vim.opt.tabstop = 2 -- Width of TAB character
 vim.opt.softtabstop = 2 -- Width of <TAB> key
 vim.opt.shiftwidth = 2 -- Width for formatting (>, =)
@@ -16,10 +18,6 @@ vim.opt.smarttab = true -- Use shiftwidth when inserting a tab in front of a lin
 vim.opt.shiftround = true -- Round indent to multiple of shiftwidth
 
 vim.opt.backspace = "indent,eol,start" -- Allow backspace over indent, eol, start
-
-function nnoremap(shortcut, command)
-  vim.api.nvim_set_keymap( "n", shortcut, command, { noremap = true })
-end
 
 ---- PLUGINS ----
 require('packer').startup(function(use)
@@ -44,7 +42,6 @@ require('packer').startup(function(use)
 end)
 
 ---- APPEARANCE ----
-
 vim.opt.termguicolors = true -- Enable 24-bit colors
 vim.opt.background = "dark"
 vim.api.nvim_command("colorscheme base16-gruvbox-dark-hard")
@@ -60,6 +57,7 @@ vim.g.lightline = {
     },
   },
   component_function = {
+    -- TODO: Replace with gitsigns plugin if possible
     gitbranch = 'FugitiveHead',
   },
   component = {
@@ -69,7 +67,6 @@ vim.g.lightline = {
 }
 
 ---- SEARCH ----
-
 -- Ignore case unless search has uppercase chars
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -78,7 +75,6 @@ vim.opt.smartcase = true
 nnoremap(";", ":nohlsearch<CR>")
 
 ---- MISCELLANEOUS MAPPINGS ----
-
 nnoremap("<leader>s", ":source ~/.config/nvim/init.lua<CR>")
 
 -- Uppercase word
@@ -97,7 +93,6 @@ nnoremap("<C-K>", "kddpk")
 nnoremap("<CR>", "o<Esc>D")
 
 ---- GITSIGNS ----
-
 require('gitsigns').setup({
   on_attach = function(bufnr)
     local gs = package.loaded.gitsigns
