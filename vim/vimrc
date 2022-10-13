@@ -38,18 +38,22 @@ set termguicolors
 
 set noshowmode  " Don't show mode in status bar, as lightline does it
 set laststatus=2
+
+" Old because migrating to neovim
 let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'gitbranch', 'filename', 'modified' ] ]
+      \             [ 'readonly', 'gitbranch', 'filename', 'modified' ],
+      \             [ 'old' ] ]
       \ },
       \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
+      \   'gitbranch': 'FugitiveHead',
       \ },
       \ 'component': {
       \   'lineinfo': "%{line('.') . '/' . line('$') . ':' . col('.')}",
       \   'filename': "%{expand('%')}",
+      \   'old': 'OLD',
       \ },
       \ }
 
