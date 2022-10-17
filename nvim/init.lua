@@ -177,10 +177,16 @@ local lspconfig = require('lspconfig')
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-lspconfig.rust_analyzer.setup({ capabilities = capabilities })
+local on_attach = function(_, bufnr)
+  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+end
+
+lspconfig.rust_analyzer.setup({ capabilities = capabilities, on_attach = on_attach })
 
 lspconfig.sumneko_lua.setup({
   capabilities = capabilities,
+  on_attach = on_attach,
   settings = {
     Lua = {
       diagnostics = {
