@@ -6,11 +6,11 @@ vim.opt.timeoutlen = 300 -- How long to wait mid key sequence before timing out
 vim.g.mapleader = ","
 
 local function nnoremap(shortcut, command)
-  vim.api.nvim_set_keymap( "n", shortcut, command, { noremap = true })
+  vim.api.nvim_set_keymap("n", shortcut, command, { noremap = true })
 end
 
 local function vnoremap(shortcut, command)
-  vim.api.nvim_set_keymap( "v", shortcut, command, { noremap = true })
+  vim.api.nvim_set_keymap("v", shortcut, command, { noremap = true })
 end
 
 ---- INDENTATION ----
@@ -31,12 +31,12 @@ require('packer').startup(function(use)
   use 'neovim/nvim-lspconfig'
 
   --- Completion
-  use'hrsh7th/nvim-cmp' -- Main completion engine
-  use'hrsh7th/cmp-buffer' -- Source for neovim buffers
-  use'hrsh7th/cmp-path' -- Source for file paths
-  use'hrsh7th/cmp-nvim-lua' -- Source for neovim Lua API
-  use'hrsh7th/cmp-nvim-lsp' -- Source for built-in LSP
-  use'hrsh7th/cmp-vsnip' -- Source for vim-vsnip
+  use 'hrsh7th/nvim-cmp' -- Main completion engine
+  use 'hrsh7th/cmp-buffer' -- Source for neovim buffers
+  use 'hrsh7th/cmp-path' -- Source for file paths
+  use 'hrsh7th/cmp-nvim-lua' -- Source for neovim Lua API
+  use 'hrsh7th/cmp-nvim-lsp' -- Source for built-in LSP
+  use 'hrsh7th/cmp-vsnip' -- Source for vim-vsnip
 
   --- Snippets
   use 'hrsh7th/vim-vsnip'
@@ -83,7 +83,7 @@ vim.g.lightline = {
     gitbranch = 'FugitiveHead',
   },
   component = {
-    lineinfo =  "%{line('.') . '/' . line('$') . ':' . col('.')}",
+    lineinfo = "%{line('.') . '/' . line('$') . ':' . col('.')}",
     filename = "%{expand('%')}",
   },
 }
@@ -114,7 +114,7 @@ nnoremap("<C-J>", "ddp")
 nnoremap("<C-K>", "kddpk")
 
 -- Insert a clear newline (if inside a comment, the editor might automatically
--- add the starting characters) 
+-- add the starting characters)
 nnoremap("<CR>", "o<Esc>D")
 
 ---- GITSIGNS ----
@@ -132,13 +132,13 @@ require('gitsigns').setup({
       if vim.wo.diff then return ']c' end
       vim.schedule(function() gs.next_hunk() end)
       return '<Ignore>'
-    end, {expr=true})
+    end, { expr = true })
 
     map('n', '[c', function()
       if vim.wo.diff then return '[c' end
       vim.schedule(function() gs.prev_hunk() end)
       return '<Ignore>'
-    end, {expr=true})
+    end, { expr = true })
   end
 })
 
@@ -178,7 +178,7 @@ local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local on_attach = function(_, bufnr)
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 end
 
@@ -191,7 +191,7 @@ lspconfig.sumneko_lua.setup({
     Lua = {
       diagnostics = {
         -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
+        globals = { 'vim' },
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
