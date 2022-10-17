@@ -30,6 +30,17 @@ require('packer').startup(function(use)
   --- LSP
   use 'neovim/nvim-lspconfig'
 
+  --- Completion
+  use'hrsh7th/nvim-cmp' -- Main completion engine
+  use'hrsh7th/cmp-buffer' -- Source for neovim buffers
+  use'hrsh7th/cmp-path' -- Source for file paths
+  use'hrsh7th/cmp-nvim-lua' -- Source for neovim Lua API
+  use'hrsh7th/cmp-nvim-lsp' -- Source for built-in LSP
+  use'hrsh7th/cmp-vsnip' -- Source for vim-vsnip
+
+  --- Snippets
+  use 'hrsh7th/vim-vsnip'
+
   --- Appearance
   use 'itchyny/lightline.vim' -- Status line appearance
   use 'chriskempson/base16-vim' -- Colorschemes
@@ -131,12 +142,45 @@ require('gitsigns').setup({
   end
 })
 
+---- COMPLETION ----
+vim.opt.completeopt = "menu,menuone,noselect"
+
+local cmp = require('cmp')
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }),
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lua' },
+    { name = 'nvim_lsp' },
+    { name = 'path' },
+    { name = 'buffer', keyword_length = 3 },
+    { name = 'vsnip' },
+  }),
+  experimental = {
+    native_menu = false,
+    ghost_text = true,
+  },
+})
+
 ---- LSP ----
 local lspconfig = require('lspconfig')
 
-lspconfig.rust_analyzer.setup({})
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+lspconfig.rust_analyzer.setup({ capabilities = capabilities })
 
 lspconfig.sumneko_lua.setup({
+  capabilities = capabilities,
   settings = {
     Lua = {
       diagnostics = {
