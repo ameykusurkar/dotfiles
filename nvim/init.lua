@@ -40,6 +40,7 @@ require('packer').startup(function(use)
 
   --- Snippets
   use 'hrsh7th/vim-vsnip'
+  use 'rafamadriz/friendly-snippets'
 
   --- Appearance
   use 'itchyny/lightline.vim' -- Status line appearance
@@ -98,6 +99,7 @@ nnoremap(";", ":nohlsearch<CR>")
 
 ---- MISCELLANEOUS MAPPINGS ----
 nnoremap("<leader>s", ":source ~/.config/nvim/init.lua<CR>")
+nnoremap("<leader>v", ":sp ~/.config/nvim/init.lua<CR>")
 
 -- Uppercase word
 nnoremap("<leader>u", "gUiw")
@@ -162,9 +164,9 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lua' },
     { name = 'nvim_lsp' },
+    { name = 'vsnip' },
     { name = 'path' },
     { name = 'buffer', keyword_length = 3 },
-    { name = 'vsnip' },
   }),
   experimental = {
     native_menu = false,
@@ -183,6 +185,8 @@ local on_attach = function(_, bufnr)
 end
 
 lspconfig.rust_analyzer.setup({ capabilities = capabilities, on_attach = on_attach })
+
+lspconfig.solargraph.setup({ capabilities = capabilities, on_attach = on_attach })
 
 lspconfig.sumneko_lua.setup({
   capabilities = capabilities,
