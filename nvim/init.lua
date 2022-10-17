@@ -162,9 +162,10 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }),
   }),
   sources = cmp.config.sources({
+    -- This determines the order in which sources appear in suggestions
+    { name = 'vsnip' },
     { name = 'nvim_lua' },
     { name = 'nvim_lsp' },
-    { name = 'vsnip' },
     { name = 'path' },
     { name = 'buffer', keyword_length = 3 },
   }),
@@ -173,6 +174,9 @@ cmp.setup({
     ghost_text = true,
   },
 })
+
+---- SNIPPETS ----
+vim.api.nvim_command("imap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>'")
 
 ---- LSP ----
 local lspconfig = require('lspconfig')
