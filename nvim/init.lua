@@ -50,11 +50,11 @@ require('packer').startup(function(use)
   use 'tpope/vim-commentary' -- Plug Comment stuff out
   use 'lewis6991/gitsigns.nvim' -- Git plugin
   use 'tpope/vim-fugitive' -- Git plugin, TODO: Replace with gitsigns
-
-  -- Open files in github
-  use 'tyru/open-browser.vim'
-  use 'tyru/open-browser-github.vim'
-
+  use {
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.0',
+    requires = { { 'nvim-lua/plenary.nvim' } }
+  }
   use {
     'nvim-tree/nvim-tree.lua',
     requires = { 'nvim-tree/nvim-web-devicons' },
@@ -62,6 +62,14 @@ require('packer').startup(function(use)
       require("nvim-tree").setup()
     end,
   }
+  use {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+  }
+
+  -- Open files in github
+  use 'tyru/open-browser.vim'
+  use 'tyru/open-browser-github.vim'
 end)
 
 ---- APPEARANCE ----
@@ -110,6 +118,8 @@ nnoremap("<leader>m", ":lua require('gitsigns').blame_line({full=true})<CR>")
 
 nnoremap("<leader>g", ":OpenGithubFile<CR>")
 vnoremap("<leader>g", ":OpenGithubFile<CR>")
+
+nnoremap("<leader>fd", ":Telescope git_files<CR>")
 
 -- Move lines up/down
 nnoremap("<C-J>", "ddp")
@@ -185,7 +195,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local on_attach = function(_, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+  vim.keymap.set('n', '<leader>fi', function() vim.lsp.buf.format { async = true } end, bufopts)
 end
 
 lspconfig.rust_analyzer.setup({ capabilities = capabilities, on_attach = on_attach })
@@ -208,3 +218,12 @@ lspconfig.sumneko_lua.setup({
     },
   },
 })
+
+---- TELESCOPE ----
+require('telescope').setup({
+  defaults = {
+    prompt_prefix = "❯ ",
+    selection_caret = "❯ ",
+  },
+})
+require('telescope').load_extension('fzf')
