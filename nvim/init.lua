@@ -5,12 +5,12 @@ vim.opt.timeoutlen = 300 -- How long to wait mid key sequence before timing out
 
 vim.g.mapleader = ","
 
-function nnoremap(shortcut, command)
-  vim.api.nvim_set_keymap( "n", shortcut, command, { noremap = true })
+local function nnoremap(shortcut, command)
+  vim.api.nvim_set_keymap("n", shortcut, command, { noremap = true })
 end
 
-function vnoremap(shortcut, command)
-  vim.api.nvim_set_keymap( "v", shortcut, command, { noremap = true })
+local function vnoremap(shortcut, command)
+  vim.api.nvim_set_keymap("v", shortcut, command, { noremap = true })
 end
 
 ---- INDENTATION ----
@@ -26,6 +26,21 @@ vim.opt.backspace = "indent,eol,start" -- Allow backspace over indent, eol, star
 ---- PLUGINS ----
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
+
+  --- LSP
+  use 'neovim/nvim-lspconfig'
+
+  --- Completion
+  use 'hrsh7th/nvim-cmp' -- Main completion engine
+  use 'hrsh7th/cmp-buffer' -- Source for neovim buffers
+  use 'hrsh7th/cmp-path' -- Source for file paths
+  use 'hrsh7th/cmp-nvim-lua' -- Source for neovim Lua API
+  use 'hrsh7th/cmp-nvim-lsp' -- Source for built-in LSP
+  use 'hrsh7th/cmp-vsnip' -- Source for vim-vsnip
+
+  --- Snippets
+  use 'hrsh7th/vim-vsnip'
+  use 'rafamadriz/friendly-snippets'
 
   --- Appearance
   use 'itchyny/lightline.vim' -- Status line appearance
@@ -69,7 +84,7 @@ vim.g.lightline = {
     gitbranch = 'FugitiveHead',
   },
   component = {
-    lineinfo =  "%{line('.') . '/' . line('$') . ':' . col('.')}",
+    lineinfo = "%{line('.') . '/' . line('$') . ':' . col('.')}",
     filename = "%{expand('%')}",
   },
 }
@@ -84,6 +99,7 @@ nnoremap(";", ":nohlsearch<CR>")
 
 ---- MISCELLANEOUS MAPPINGS ----
 nnoremap("<leader>s", ":source ~/.config/nvim/init.lua<CR>")
+nnoremap("<leader>v", ":sp ~/.config/nvim/init.lua<CR>")
 
 -- Uppercase word
 nnoremap("<leader>u", "gUiw")
@@ -100,7 +116,7 @@ nnoremap("<C-J>", "ddp")
 nnoremap("<C-K>", "kddpk")
 
 -- Insert a clear newline (if inside a comment, the editor might automatically
--- add the starting characters) 
+-- add the starting characters)
 nnoremap("<CR>", "o<Esc>D")
 
 ---- GITSIGNS ----
@@ -118,12 +134,77 @@ require('gitsigns').setup({
       if vim.wo.diff then return ']c' end
       vim.schedule(function() gs.next_hunk() end)
       return '<Ignore>'
-    end, {expr=true})
+    end, { expr = true })
 
     map('n', '[c', function()
       if vim.wo.diff then return '[c' end
       vim.schedule(function() gs.prev_hunk() end)
       return '<Ignore>'
-    end, {expr=true})
+    end, { expr = true })
   end
+})
+
+---- COMPLETION ----
+vim.opt.completeopt = "menu,menuone,noselect"
+
+local cmp = require('cmp')
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }),
+  }),
+  sources = cmp.config.sources({
+    -- This determines the order in which sources appear in suggestions
+    { name = 'vsnip' },
+    { name = 'nvim_lua' },
+    { name = 'nvim_lsp' },
+    { name = 'path' },
+    { name = 'buffer', keyword_length = 3 },
+  }),
+  experimental = {
+    native_menu = false,
+    ghost_text = true,
+  },
+})
+
+---- SNIPPETS ----
+vim.api.nvim_command("imap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>'")
+
+---- LSP ----
+local lspconfig = require('lspconfig')
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+local on_attach = function(_, bufnr)
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
+  vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+end
+
+lspconfig.rust_analyzer.setup({ capabilities = capabilities, on_attach = on_attach })
+
+lspconfig.solargraph.setup({ capabilities = capabilities, on_attach = on_attach })
+
+lspconfig.sumneko_lua.setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    Lua = {
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = { 'vim' },
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+    },
+  },
 })
