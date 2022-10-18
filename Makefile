@@ -20,6 +20,7 @@ $(HOME)/.vim/autoload/plug.vim:
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 nvim:
+	mkdir -p ~/.config/nvim
 	ln -svf $(DIR)/nvim/init.lua ~/.config/nvim/init.lua
 
 zsh: $(HOME)/.oh-my-zsh
