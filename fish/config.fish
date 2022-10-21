@@ -3,7 +3,7 @@ fish_add_path -g /usr/local/go/bin
 
 set -gx DOTFILES $HOME/dotfiles
 set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
-set -gx EDITOR vim
+set -gx EDITOR nvim
 set -gx VISUAL $EDITOR
 set -gx GOPATH (go env GOPATH)
 
