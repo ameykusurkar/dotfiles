@@ -5,6 +5,7 @@ set -gx DOTFILES $HOME/dotfiles
 set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
 set -gx EDITOR nvim
 set -gx VISUAL $EDITOR
+set -gx GIT_EDITOR $EDITOR
 set -gx GOPATH (go env GOPATH)
 
 fish_add_path -g $HOME/.cargo/bin
@@ -36,11 +37,11 @@ abbr -a dcopa 'git diff origin/master --name-only --relative --diff-filter=ACMRT
 
 abbr -a sfish source ~/.config/fish/config.fish
 
-abbr -a vfish vim ~/.config/fish/config.fish
-abbr -a vstar vim $STARSHIP_CONFIG
+abbr -a vfish nvim ~/.config/fish/config.fish
+abbr -a vstar nvim $STARSHIP_CONFIG
 
 abbr -a vimrc vim ~/.vimrc
-abbr -a penv vim ~/.private-env.fish
+abbr -a penv nvim ~/.private-env.fish
 abbr -a nvc nvim ~/dotfiles/nvim/init.lua
 
 abbr -a zshrc vim ~/.zshrc

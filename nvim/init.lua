@@ -70,6 +70,9 @@ require('packer').startup(function(use)
   -- Open files in github
   use 'tyru/open-browser.vim'
   use 'tyru/open-browser-github.vim'
+
+  -- Languages
+  use 'dag/vim-fish'
 end)
 
 ---- APPEARANCE ----
