@@ -24,6 +24,9 @@ nvim:
 	ln -svf $(DIR)/nvim/init.lua ~/.config/nvim/init.lua
 	ln -svf $(DIR)/nvim/plugin/luasnip.lua ~/.config/nvim/plugin/luasnip.lua
 
+nvim-setup:
+	nvim +PackerInstall +PackerCompile
+
 zsh: $(HOME)/.oh-my-zsh
 	ln -svf $(DIR)/zsh/zshrc ~/.zshrc
 	ln -svf $(DIR)/zsh/aliases ~/.aliases
@@ -48,4 +51,4 @@ teardown-zsh:
 	rm -f ~/.aliases
 	rm -rf ~/.oh-my-zsh
 
-.PHONY: vim zsh fish omf nvim
+.PHONY: vim zsh fish omf nvim nvim-setup
