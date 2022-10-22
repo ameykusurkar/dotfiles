@@ -121,14 +121,14 @@ nnoremap("<leader>u", "gUiw")
 
 nnoremap("<leader>n", ":NvimTreeToggle<CR>")
 
-nnoremap("<leader>m", ":lua require('gitsigns').blame_line({full=true})<CR>")
+nnoremap("<leader>m", function() require('gitsigns').blame_line({ full = true }) end)
 
 nnoremap("<leader>g", ":OpenGithubFile<CR>")
 vnoremap("<leader>g", ":OpenGithubFile<CR>")
 
 nnoremap("<leader>fd", function() require('telescope.builtin').git_files() end)
 nnoremap("<leader>fb", function()
-  require('telescope.builtin').buffers(require('telescope.themes').get_dropdown({}))
+  require('telescope.builtin').buffers(require('telescope.themes').get_dropdown({ ignore_current_buffer = true }))
 end)
 
 -- Move lines up/down
@@ -196,9 +196,26 @@ cmp.setup({
 })
 
 ---- SNIPPETS ----
-vim.api.nvim_command("imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'")
+local luasnip = require("luasnip")
 
-vim.keymap.set("n", "<leader><leader>s", ":source ~/.config/nvim/plugin/luasnip.lua<CR>")
+vim.keymap.set({ "i", "s" }, "<c-j>", function()
+  if luasnip.expand_or_jumpable() then
+    luasnip.expand_or_jump()
+  end
+end, { silent = true })
+
+vim.keymap.set({ "i", "s" }, "<c-k>", function()
+  if luasnip.jumpable(-1) then
+    luasnip.jump(-1)
+  end
+end, { silent = true })
+
+-- Re-source snippets when iterating
+vim.keymap.set(
+  "n",
+  "<leader><leader>s",
+  ":lua require('luasnip').cleanup()<CR>:source ~/.config/nvim/plugin/luasnip.lua<CR>"
+)
 
 ---- LSP ----
 local lspconfig = require('lspconfig')
