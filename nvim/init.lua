@@ -6,11 +6,11 @@ vim.opt.timeoutlen = 300 -- How long to wait mid key sequence before timing out
 vim.g.mapleader = ","
 
 local function nnoremap(shortcut, command)
-  vim.api.nvim_set_keymap("n", shortcut, command, { noremap = true })
+  vim.keymap.set("n", shortcut, command, { noremap = true })
 end
 
 local function vnoremap(shortcut, command)
-  vim.api.nvim_set_keymap("v", shortcut, command, { noremap = true })
+  vim.keymap.set("v", shortcut, command, { noremap = true })
 end
 
 ---- INDENTATION ----
@@ -36,11 +36,11 @@ require('packer').startup(function(use)
   use 'hrsh7th/cmp-path' -- Source for file paths
   use 'hrsh7th/cmp-nvim-lua' -- Source for neovim Lua API
   use 'hrsh7th/cmp-nvim-lsp' -- Source for built-in LSP
-  use 'hrsh7th/cmp-vsnip' -- Source for vim-vsnip
+  use 'saadparwaiz1/cmp_luasnip' -- Source for LuaSnip
 
   --- Snippets
-  use 'hrsh7th/vim-vsnip'
-  use 'rafamadriz/friendly-snippets'
+  use { "L3MON4D3/LuaSnip", tag = "v1.*" }
+  -- use 'rafamadriz/friendly-snippets'
 
   --- Appearance
   use 'itchyny/lightline.vim' -- Status line appearance
@@ -126,7 +126,10 @@ nnoremap("<leader>m", ":lua require('gitsigns').blame_line({full=true})<CR>")
 nnoremap("<leader>g", ":OpenGithubFile<CR>")
 vnoremap("<leader>g", ":OpenGithubFile<CR>")
 
-nnoremap("<leader>fd", ":Telescope git_files<CR>")
+nnoremap("<leader>fd", function() require('telescope.builtin').git_files() end)
+nnoremap("<leader>fb", function()
+  require('telescope.builtin').buffers(require('telescope.themes').get_dropdown({}))
+end)
 
 -- Move lines up/down
 nnoremap("<C-J>", "ddp")
@@ -169,7 +172,7 @@ local cmp = require('cmp')
 cmp.setup({
   snippet = {
     expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body)
+      require('luasnip').lsp_expand(args.body)
     end,
   },
   mapping = cmp.mapping.preset.insert({
@@ -180,7 +183,7 @@ cmp.setup({
   }),
   sources = cmp.config.sources({
     -- This determines the order in which sources appear in suggestions
-    { name = 'vsnip' },
+    { name = 'luasnip' },
     { name = 'nvim_lua' },
     { name = 'nvim_lsp' },
     { name = 'path' },
@@ -193,7 +196,9 @@ cmp.setup({
 })
 
 ---- SNIPPETS ----
-vim.api.nvim_command("imap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>'")
+vim.api.nvim_command("imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'")
+
+vim.keymap.set("n", "<leader><leader>s", ":source ~/.config/nvim/plugin/luasnip.lua<CR>")
 
 ---- LSP ----
 local lspconfig = require('lspconfig')

@@ -21,6 +21,7 @@ abbr -a gcam git commit -a -m
 abbr -a gcb git checkout -b
 abbr -a gco git checkout
 abbr -a gd git diff
+abbr -a gds git diff --staged
 abbr -a gl git pull
 abbr -a glg git log --stat
 abbr -a gp git push
