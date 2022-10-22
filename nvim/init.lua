@@ -45,6 +45,10 @@ require('packer').startup(function(use)
   --- Appearance
   use 'itchyny/lightline.vim' -- Status line appearance
   use 'chriskempson/base16-vim' -- Colorschemes
+  use {
+    'j-hui/fidget.nvim',
+    config = function() require("fidget").setup() end,
+  }
 
   --- Productivity
   use 'tpope/vim-commentary' -- Plug Comment stuff out
