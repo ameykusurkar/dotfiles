@@ -20,8 +20,12 @@ $(HOME)/.vim/autoload/plug.vim:
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 nvim:
-	mkdir -p ~/.config/nvim
+	mkdir -p ~/.config/nvim/plugin
 	ln -svf $(DIR)/nvim/init.lua ~/.config/nvim/init.lua
+	ln -svf $(DIR)/nvim/plugin/luasnip.lua ~/.config/nvim/plugin/luasnip.lua
+
+nvim-setup:
+	nvim +PackerInstall +PackerCompile
 
 zsh: $(HOME)/.oh-my-zsh
 	ln -svf $(DIR)/zsh/zshrc ~/.zshrc
@@ -47,4 +51,4 @@ teardown-zsh:
 	rm -f ~/.aliases
 	rm -rf ~/.oh-my-zsh
 
-.PHONY: vim zsh fish omf nvim
+.PHONY: vim zsh fish omf nvim nvim-setup
