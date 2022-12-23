@@ -6,6 +6,8 @@ ls.add_snippets("lua", {
 
 ls.add_snippets("ruby", {
   ls.parser.parse_snippet("if", "if $1\n  $0\nend", {}),
+  ls.parser.parse_snippet("def", "def $1\n  $0\nend", {}),
+  ls.parser.parse_snippet("defs", "def self.$1\n  $0\nend", {}),
 
   ls.parser.parse_snippet("map", "map { |$1| $0 }", {}),
   ls.parser.parse_snippet("mapd", "map do |$1|\n  $0\nend", {}),
