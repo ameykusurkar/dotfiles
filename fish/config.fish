@@ -44,6 +44,7 @@ abbr -a vstar nvim $STARSHIP_CONFIG
 abbr -a vimrc vim ~/.vimrc
 abbr -a penv nvim ~/.private-env.fish
 abbr -a nvc nvim ~/dotfiles/nvim/init.lua
+abbr -a lsnips nvim ~/dotfiles/nvim/plugin/luasnip.lua
 
 abbr -a zshrc vim ~/.zshrc
 abbr -a penvz vim ~/.private-env
