@@ -234,6 +234,8 @@ end
 
 lspconfig.rust_analyzer.setup({ capabilities = capabilities, on_attach = on_attach })
 
+lspconfig.gopls.setup({ capabilities = capabilities, on_attach = on_attach })
+
 lspconfig.solargraph.setup({ capabilities = capabilities, on_attach = on_attach })
 
 lspconfig.sumneko_lua.setup({
