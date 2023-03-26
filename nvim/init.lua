@@ -77,6 +77,7 @@ require('packer').startup(function(use)
 
   -- Languages
   use 'dag/vim-fish'
+  use 'elixir-editors/vim-elixir'
 end)
 
 ---- APPEARANCE ----
@@ -236,9 +237,14 @@ lspconfig.rust_analyzer.setup({ capabilities = capabilities, on_attach = on_atta
 
 lspconfig.gopls.setup({ capabilities = capabilities, on_attach = on_attach })
 
+lspconfig.pyright.setup({ capabilities = capabilities, on_attach = on_attach })
+
 lspconfig.solargraph.setup({ capabilities = capabilities, on_attach = on_attach })
 
 lspconfig.hls.setup({ capabilities = capabilities, on_attach = on_attach })
+
+local path_to_elixirls = vim.fn.expand("~/elixir-ls/release/language_server.sh")
+lspconfig.elixirls.setup({ capabilities = capabilities, on_attach = on_attach, cmd = { path_to_elixirls } })
 
 lspconfig.sumneko_lua.setup({
   capabilities = capabilities,
