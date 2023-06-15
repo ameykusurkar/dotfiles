@@ -246,7 +246,7 @@ lspconfig.hls.setup({ capabilities = capabilities, on_attach = on_attach })
 local path_to_elixirls = vim.fn.expand("~/elixir-ls/release/language_server.sh")
 lspconfig.elixirls.setup({ capabilities = capabilities, on_attach = on_attach, cmd = { path_to_elixirls } })
 
-lspconfig.sumneko_lua.setup({
+lspconfig.lua_ls.setup({
   capabilities = capabilities,
   on_attach = on_attach,
   settings = {
