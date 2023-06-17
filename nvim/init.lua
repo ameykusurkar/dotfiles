@@ -128,6 +128,7 @@ nnoremap("<leader>g", ":OpenGithubFile<CR>")
 vnoremap("<leader>g", ":OpenGithubFile<CR>")
 
 nnoremap("<leader>fd", function() require('telescope.builtin').git_files() end)
+nnoremap("<leader>ff", function() require('telescope.builtin').live_grep() end)
 nnoremap("<leader>fb", function()
   require('telescope.builtin').buffers(require('telescope.themes').get_dropdown({ ignore_current_buffer = true }))
 end)
