@@ -25,6 +25,7 @@ abbr -a gds git diff --staged
 abbr -a gl git pull
 abbr -a glg git log --stat
 abbr -a gp git push
+abbr -a gpf git push --force-with-lease
 abbr -a grba git rebase --abort
 abbr -a grbc git rebase --continue
 abbr -a grbi git rebase -i
