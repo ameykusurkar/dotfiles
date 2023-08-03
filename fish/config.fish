@@ -38,6 +38,8 @@ abbr -a be bundle exec
 abbr -a berc bundle exec rails console
 abbr -a dcopa 'git diff origin/master --name-only --relative --diff-filter=ACMRTUXB | grep ".*.rb\$" | xargs bundle exec rubocop -a'
 
+abbr -a fzfp fzf --preview 'bat -f {}'
+
 abbr -a sfish source ~/.config/fish/config.fish
 
 abbr -a vfish nvim ~/.config/fish/config.fish
