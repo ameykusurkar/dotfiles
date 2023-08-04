@@ -1,7 +1,7 @@
 ---- GENERAL ----
-vim.opt.number = true -- Show line numbers
+vim.opt.number = true     -- Show line numbers
 vim.opt.cursorline = true -- Highlights the line that the cursor is on
-vim.opt.timeoutlen = 300 -- How long to wait mid key sequence before timing out
+vim.opt.timeoutlen = 300  -- How long to wait mid key sequence before timing out
 
 vim.g.mapleader = ","
 
@@ -14,12 +14,12 @@ local function vnoremap(shortcut, command)
 end
 
 ---- INDENTATION ----
-vim.opt.tabstop = 2 -- Width of TAB character
-vim.opt.softtabstop = 2 -- Width of <TAB> key
-vim.opt.shiftwidth = 2 -- Width for formatting (>, =)
-vim.opt.expandtab = true -- Convert tabs to spaces
-vim.opt.smarttab = true -- Use shiftwidth when inserting a tab in front of a line
-vim.opt.shiftround = true -- Round indent to multiple of shiftwidth
+vim.opt.tabstop = 2                    -- Width of TAB character
+vim.opt.softtabstop = 2                -- Width of <TAB> key
+vim.opt.shiftwidth = 2                 -- Width for formatting (>, =)
+vim.opt.expandtab = true               -- Convert tabs to spaces
+vim.opt.smarttab = true                -- Use shiftwidth when inserting a tab in front of a line
+vim.opt.shiftround = true              -- Round indent to multiple of shiftwidth
 
 vim.opt.backspace = "indent,eol,start" -- Allow backspace over indent, eol, start
 
@@ -29,13 +29,17 @@ require('packer').startup(function(use)
 
   --- LSP
   use 'neovim/nvim-lspconfig'
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
+  }
 
   --- Completion
-  use 'hrsh7th/nvim-cmp' -- Main completion engine
-  use 'hrsh7th/cmp-buffer' -- Source for neovim buffers
-  use 'hrsh7th/cmp-path' -- Source for file paths
-  use 'hrsh7th/cmp-nvim-lua' -- Source for neovim Lua API
-  use 'hrsh7th/cmp-nvim-lsp' -- Source for built-in LSP
+  use 'hrsh7th/nvim-cmp'         -- Main completion engine
+  use 'hrsh7th/cmp-buffer'       -- Source for neovim buffers
+  use 'hrsh7th/cmp-path'         -- Source for file paths
+  use 'hrsh7th/cmp-nvim-lua'     -- Source for neovim Lua API
+  use 'hrsh7th/cmp-nvim-lsp'     -- Source for built-in LSP
   use 'saadparwaiz1/cmp_luasnip' -- Source for LuaSnip
 
   --- Snippets
@@ -43,7 +47,7 @@ require('packer').startup(function(use)
   -- use 'rafamadriz/friendly-snippets'
 
   --- Appearance
-  use 'itchyny/lightline.vim' -- Status line appearance
+  use 'itchyny/lightline.vim'   -- Status line appearance
   use 'chriskempson/base16-vim' -- Colorschemes
   use {
     'j-hui/fidget.nvim',
@@ -51,9 +55,9 @@ require('packer').startup(function(use)
   }
 
   --- Productivity
-  use 'tpope/vim-commentary' -- Plug Comment stuff out
+  use 'tpope/vim-commentary'    -- Plug Comment stuff out
   use 'lewis6991/gitsigns.nvim' -- Git plugin
-  use 'tpope/vim-fugitive' -- Git plugin, TODO: Replace with gitsigns
+  use 'tpope/vim-fugitive'      -- Git plugin, TODO: Replace with gitsigns
   use {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.0',
@@ -68,7 +72,8 @@ require('packer').startup(function(use)
   }
   use {
     'nvim-telescope/telescope-fzf-native.nvim',
-    run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+    run =
+    'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
   }
 
   -- Open files in github
@@ -86,12 +91,12 @@ vim.opt.background = "dark"
 vim.api.nvim_command("colorscheme base16-gruvbox-dark-hard")
 
 vim.opt.showmode = false -- Don't show mode in status line, as lightline does it
-vim.opt.laststatus = 2 -- Always show status line
+vim.opt.laststatus = 2   -- Always show status line
 vim.g.lightline = {
   colorscheme = 'seoul256',
   active = {
     left = {
-      { 'mode', 'paste' },
+      { 'mode',     'paste' },
       { 'readonly', 'gitbranch', 'filename', 'modified' }
     },
   },
@@ -185,7 +190,7 @@ cmp.setup({
     { name = 'nvim_lua' },
     { name = 'nvim_lsp' },
     { name = 'path' },
-    { name = 'buffer', keyword_length = 3 },
+    { name = 'buffer',  keyword_length = 3 },
   }),
   experimental = {
     native_menu = false,
@@ -236,7 +241,11 @@ lspconfig.gopls.setup({ capabilities = capabilities, on_attach = on_attach })
 
 lspconfig.pyright.setup({ capabilities = capabilities, on_attach = on_attach })
 
-lspconfig.rubocop.setup({ capabilities = capabilities, on_attach = on_attach, cmd = { "bundle", "exec", "rubocop", "--lsp" } })
+lspconfig.rubocop.setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+  cmd = { "bundle", "exec", "rubocop", "--lsp" }
+})
 lspconfig.solargraph.setup({ capabilities = capabilities, on_attach = on_attach })
 
 lspconfig.hls.setup({ capabilities = capabilities, on_attach = on_attach })
@@ -269,3 +278,17 @@ require('telescope').setup({
   },
 })
 require('telescope').load_extension('fzf')
+
+---- TREESITTER ----
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { "go", "rust", "ruby" },
+  auto_install = false,
+  sync_install = false,
+  ignore_install = { "" },
+  highlight = {
+    enable = true,
+    disable = { "" },
+    additional_vim_regex_highlighting = false,
+  },
+  indent = { enable = true },
+}
