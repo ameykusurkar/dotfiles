@@ -137,10 +137,6 @@ end)
 nnoremap("<C-J>", "ddp")
 nnoremap("<C-K>", "kddpk")
 
--- Insert a clear newline (if inside a comment, the editor might automatically
--- add the starting characters)
-nnoremap("<CR>", "o<Esc>D")
-
 ---- GITSIGNS ----
 require('gitsigns').setup({
   on_attach = function(bufnr)
