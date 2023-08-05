@@ -243,12 +243,16 @@ lspconfig.gopls.setup({ capabilities = capabilities, on_attach = on_attach })
 
 lspconfig.pyright.setup({ capabilities = capabilities, on_attach = on_attach })
 
-lspconfig.rubocop.setup({
+-- lspconfig.rubocop.setup({
+--   capabilities = capabilities,
+--   on_attach = on_attach,
+--   cmd = { "bundle", "exec", "rubocop", "--lsp" }
+-- })
+lspconfig.solargraph.setup({
   capabilities = capabilities,
   on_attach = on_attach,
-  cmd = { "bundle", "exec", "rubocop", "--lsp" }
+  cmd = { "bundle", "exec", "solargraph", "stdio" }
 })
-lspconfig.solargraph.setup({ capabilities = capabilities, on_attach = on_attach })
 
 lspconfig.hls.setup({ capabilities = capabilities, on_attach = on_attach })
 
