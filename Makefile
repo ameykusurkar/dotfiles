@@ -2,7 +2,7 @@ DIR=$(HOME)/dotfiles
 
 nvim-old:
 	mkdir -p ~/.config/nvim/plugin
-	ln -svf $(DIR)/nvim/init.lua ~/.config/nvim/init.lua
+	ln -svf $(DIR)/nvim/init.old.lua ~/.config/nvim/init.lua
 	ln -svf $(DIR)/nvim/plugin/luasnip.lua ~/.config/nvim/plugin/luasnip.lua
 
 nvim:
