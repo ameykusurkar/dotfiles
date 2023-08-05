@@ -29,6 +29,8 @@ require('packer').startup(function(use)
 
   --- LSP
   use 'neovim/nvim-lspconfig'
+
+  --- TREESITTER
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
@@ -182,7 +184,7 @@ cmp.setup({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }),
+    ['<C-y>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }),
   }),
   sources = cmp.config.sources({
     -- This determines the order in which sources appear in suggestions
@@ -281,7 +283,7 @@ require('telescope').load_extension('fzf')
 
 ---- TREESITTER ----
 require('nvim-treesitter.configs').setup {
-  ensure_installed = { "go", "rust", "ruby" },
+  ensure_installed = { "go", "rust", "ruby", "query" },
   auto_install = false,
   sync_install = false,
   ignore_install = { "" },
