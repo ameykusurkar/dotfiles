@@ -3,7 +3,7 @@ vim.opt.number = true     -- Show line numbers
 vim.opt.cursorline = true -- Highlights the line that the cursor is on
 vim.opt.timeoutlen = 300  -- How long to wait mid key sequence before timing out
 
-vim.g.mapleader = ","
+vim.g.mapleader = " "
 
 local function nnoremap(shortcut, command)
   vim.keymap.set("n", shortcut, command, { noremap = true })
@@ -90,7 +90,7 @@ end)
 ---- APPEARANCE ----
 vim.opt.termguicolors = true -- Enable 24-bit colors
 vim.opt.background = "dark"
-vim.api.nvim_command("colorscheme base16-gruvbox-dark-hard")
+vim.api.nvim_command("colorscheme base16-twilight")
 
 vim.opt.showmode = false -- Don't show mode in status line, as lightline does it
 vim.opt.laststatus = 2   -- Always show status line
