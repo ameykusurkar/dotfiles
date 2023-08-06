@@ -89,8 +89,9 @@ require('lazy').setup({
           { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
-        vim.keymap.set('n', '<leader>bl', function() require('gitsigns').blame_line({ full = true }) end,
-          { desc = 'Git [B]lame [L]line' })
+        vim.keymap.set('n', '<leader>bl', function()
+          require('gitsigns').blame_line({ full = true })
+        end, { desc = 'Git [B]lame [L]line' })
       end,
     },
   },
@@ -222,6 +223,9 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
+vim.keymap.set({ 'n', 'v' }, '<leader>go', ':GBrowse<CR>', { desc = '[G]ithub [O]pen' })
+vim.keymap.set('n', '<leader>fb', ':Format<CR>', { desc = '[F]ormat [B]uffer' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
