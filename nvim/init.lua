@@ -55,6 +55,15 @@ require('lazy').setup({
   },
 
   {
+    -- File browser
+    'nvim-tree/nvim-tree.lua',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require("nvim-tree").setup()
+    end,
+  },
+
+  {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
