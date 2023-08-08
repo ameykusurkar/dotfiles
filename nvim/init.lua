@@ -56,10 +56,12 @@ require('lazy').setup({
 
   {
     -- File browser
-    'nvim-tree/nvim-tree.lua',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    'nvim-telescope/telescope-file-browser.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim', 'nvim-tree/nvim-web-devicons' },
     config = function()
-      require("nvim-tree").setup()
+      require("telescope").setup()
+      require("telescope").load_extension("file_browser")
+      vim.keymap.set('n', '<leader>fb', ':Telescope file_browser theme=ivy<CR>', { desc = '[F]ile [B]rowser' })
     end,
   },
 
@@ -234,7 +236,7 @@ vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = tr
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 vim.keymap.set({ 'n', 'v' }, '<leader>go', ':GBrowse<CR>', { desc = '[G]ithub [O]pen' })
-vim.keymap.set('n', '<leader>fb', ':Format<CR>', { desc = '[F]ormat [B]uffer' })
+vim.keymap.set('n', '<leader>fm', ':Format<CR>', { desc = '[F]or[M]at Buffer' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
