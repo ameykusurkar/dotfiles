@@ -1,7 +1,7 @@
 # go binary needs to be available to set GOPATH
 fish_add_path -g /usr/local/go/bin
 
-set -gx DOTFILES $HOME/dotfiles
+set -gx DOTFILES $HOME/projects/dotfiles
 set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
 set -gx EDITOR nvim
 set -gx VISUAL $EDITOR
