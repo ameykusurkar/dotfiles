@@ -1,8 +1,6 @@
 # go binary needs to be available to set GOPATH
 fish_add_path -g /usr/local/go/bin
 
-set -gx DOTFILES $HOME/projects/dotfiles
-set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
 set -gx EDITOR nvim
 set -gx VISUAL $EDITOR
 set -gx GIT_EDITOR $EDITOR
@@ -40,18 +38,19 @@ abbr -a dcopa 'git diff origin/master --name-only --relative --diff-filter=ACMRT
 
 abbr -a fzfp fzf --preview 'bat -f {}'
 
+set -gx DOTFILES $HOME/projects/dotfiles
+
+# May override $DOTFILES
+[ -f ~/.private-env.fish ]; and source ~/.private-env.fish
+
+set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
+
 abbr -a sfish source ~/.config/fish/config.fish
 
 abbr -a vfish nvim ~/.config/fish/config.fish
 abbr -a vstar nvim $STARSHIP_CONFIG
-
-abbr -a vimrc vim ~/.vimrc
 abbr -a penv nvim ~/.private-env.fish
-abbr -a nvc nvim ~/dotfiles/nvim/init.lua
-abbr -a lsnips nvim ~/dotfiles/nvim/plugin/luasnip.lua
-
-abbr -a zshrc vim ~/.zshrc
-abbr -a penvz vim ~/.private-env
+abbr -a nvc nvim $DOTFILES/nvim/init.lua
 
 abbr -a k kubectl
 
@@ -59,8 +58,6 @@ abbr -a crr cargo run --release
 abbr -a cbr cargo build --release
 
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
-
-[ -f ~/.private-env.fish ]; and source ~/.private-env.fish
 
 # Set the greeting to be empty
 set fish_greeting
