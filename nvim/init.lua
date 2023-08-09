@@ -287,7 +287,7 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
 vim.keymap.set('n', '<leader>sp', function()
-  require("ameykusurkar").find_files_in_dirs({ "~/projects" })
+  require("ameykusurkar").find_files_in_dirs({ dirs = { "~/projects" }, mindepth = 1, maxdepth = 2 })
 end, { desc = '[S]earch in [P]rojects' })
 
 -- [[ Configure Treesitter ]]

@@ -12,13 +12,13 @@ end
 
 M = {}
 
-M.find_files_in_dirs = function(dirs)
-  local opts = {
+M.find_files_in_dirs = function(opts)
+  local ff_opts = {
     attach_mappings = find_files_for_selection,
-    find_command = { "find", ".", "-type", "d", "-maxdepth", "1", "-mindepth", "1" },
-    search_dirs = dirs,
+    find_command = { "find", ".", "-type", "d", "-maxdepth", opts.maxdepth, "-mindepth", opts.mindepth },
+    search_dirs = opts.dirs,
   }
-  require('telescope.builtin').find_files(opts)
+  require('telescope.builtin').find_files(ff_opts)
 end
 
 return M
