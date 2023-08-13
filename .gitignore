@@ -3,3 +3,4 @@ vim/plugged
 vim/autoload/plug.vim
 vim/autoload/plug.vim.old
 .luarc.json
+.DS_Store
