@@ -18,7 +18,6 @@ M.run = function(command, opts)
     col = ui.width - term_width - 3,
     row = 1,
     style = 'minimal',
-    border = 'rounded',
   })
 
   local close = function()
@@ -31,8 +30,12 @@ M.run = function(command, opts)
   end
 
   vim.fn.termopen(command, {
-    on_exit = function()
-      if opts.close_on_exit then
+    on_exit = function(_, exit_code, _)
+      if exit_code ~= 0 then
+        print('[ERROR] Exited with ' .. exit_code)
+      end
+
+      if opts.close_on_exit and exit_code == 0 then
         close()
       end
     end,
@@ -43,6 +46,10 @@ M.run = function(command, opts)
   else
     vim.cmd('norm G')
   end
+end
+
+M.fire = function(command)
+  M.run(command, { close_on_exit = true, interactive = false })
 end
 
 M.readonly = function(command)
