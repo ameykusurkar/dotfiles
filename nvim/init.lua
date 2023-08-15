@@ -417,7 +417,7 @@ end
 --  define the property 'filetypes' to the map in question.
 local servers = {
   gopls = {},
-  solargraph = {},
+  sorbet = {},
   rust_analyzer = {},
 
   lua_ls = {
