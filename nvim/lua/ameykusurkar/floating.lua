@@ -1,6 +1,13 @@
 M = {}
 
+local _window = nil
+
 M.run = function(command, opts)
+  if _window then
+    print("[ERROR] Floating window already open")
+    return
+  end
+
   opts = opts or {}
   opts.close_on_exit = opts.close_on_exit or false
   opts.interactive = opts.interactive or false
@@ -18,6 +25,16 @@ M.run = function(command, opts)
     col = ui.width - term_width - 3,
     row = 1,
     style = 'minimal',
+  })
+
+  _window = term_win
+
+  vim.api.nvim_create_autocmd("WinClosed", {
+    group = vim.api.nvim_create_augroup("floating", { clear = true }),
+    buffer = term_buf,
+    callback = function()
+      _window = nil
+    end,
   })
 
   local close = function()
