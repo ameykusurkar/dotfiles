@@ -46,6 +46,8 @@ set -gx DOTFILES $HOME/projects/ameykusurkar/dotfiles
 
 set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
 
+fish_add_path -g $DOTFILES/scripts
+
 abbr -a sfish source ~/.config/fish/config.fish
 
 abbr -a vfish nvim ~/.config/fish/config.fish

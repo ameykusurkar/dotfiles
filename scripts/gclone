@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+if ARGV.length != 1
+  puts "Usage: #{File.basename(__FILE__)} <foo>/<bar>"
+  exit 1
+end
+
+arg = ARGV.first
+parts = arg.split('/')
+
+if parts.size != 2 || parts.first.nil?
+  puts "Usage: #{File.basename(__FILE__)} <foo>/<bar>"
+  exit 1
+end
+
+`git clone git@github.com:#{arg}.git ~/projects/#{arg}`
