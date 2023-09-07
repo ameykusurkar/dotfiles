@@ -6,6 +6,7 @@ set -gx VISUAL $EDITOR
 set -gx GIT_EDITOR $EDITOR
 set -gx GOPATH (go env GOPATH)
 
+fish_add_path -g /opt/homebrew/bin
 fish_add_path -g $HOME/.cargo/bin
 fish_add_path -g $GOPATH/bin
 fish_add_path -g /usr/local/opt/openjdk/bin
