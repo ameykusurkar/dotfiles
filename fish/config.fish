@@ -66,7 +66,7 @@ abbr -a cbr cargo build --release
 # Set the greeting to be empty
 set fish_greeting
 
-[ -f /usr/local/opt/asdf/libexec/asdf.fish ]; and source /usr/local/opt/asdf/libexec/asdf.fish
+[ -f (brew --prefix asdf)/libexec/asdf.fish ]; and source (brew --prefix asdf)/libexec/asdf.fish
 
 # Needs to be the last line of the config
 starship init fish | source
