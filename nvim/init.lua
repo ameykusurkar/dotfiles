@@ -427,6 +427,7 @@ local servers = {
   sorbet = {},
   rust_analyzer = {},
   hls = {},
+  pyright = {},
 
   lua_ls = {
     Lua = {
