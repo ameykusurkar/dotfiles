@@ -66,7 +66,9 @@ abbr -a cbr cargo build --release
 # Set the greeting to be empty
 set fish_greeting
 
+if uname | string match -q -- "Darwin"
 [ -f (brew --prefix asdf)/libexec/asdf.fish ]; and source (brew --prefix asdf)/libexec/asdf.fish
+end
 
 # Needs to be the last line of the config
 starship init fish | source
