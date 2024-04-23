@@ -44,6 +44,7 @@ M.run = function(command, opts)
 
   if not (opts.close_on_exit or opts.interactive) then
     vim.keymap.set('n', '<ESC>', close, { buffer = term_buf })
+    vim.keymap.set('n', 'q', close, { buffer = term_buf })
   end
 
   vim.fn.termopen(command, {
