@@ -12,4 +12,7 @@ fish:
 clean-fish:
 	rm ~/.config/fish/config.fish
 
-.PHONY: nvim clean-nvim fish clean-fish
+starship:
+	curl -sS https://starship.rs/install.sh | sh
+
+.PHONY: nvim clean-nvim fish clean-fish starship

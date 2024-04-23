@@ -9,7 +9,7 @@ if command -v go > /dev/null
     set -gx GOPATH (go env GOPATH)
     fish_add_path -g $GOPATH/bin
 else
-    echo "warning: go binary is missing"
+    echo "warning: go not installed"
 end
 
 fish_add_path -g /opt/homebrew/bin
@@ -75,8 +75,11 @@ if uname | string match -q -- "Darwin"
 [ -f (brew --prefix asdf)/libexec/asdf.fish ]; and source (brew --prefix asdf)/libexec/asdf.fish
 end
 
-# Needs to be the last line of the config
-starship init fish | source
+if command -v starship > /dev/null
+    starship init fish | source
+else
+    echo "warning: starship not installed"
+end
 
 # Generated for envman. Do not edit.
 test -s "$HOME/.config/envman/load.fish"; and source "$HOME/.config/envman/load.fish"
