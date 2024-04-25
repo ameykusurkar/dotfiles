@@ -10,9 +10,6 @@ fish:
 	ln -sv $(DOTFILES)/fish/config.fish ~/.config/fish/config.fish
 
 clean-fish:
-	rm ~/.config/fish/config.fish
+	rm -f ~/.config/fish/config.fish
 
-starship:
-	curl -sS https://starship.rs/install.sh | sh
-
-.PHONY: nvim clean-nvim fish clean-fish starship
+.PHONY: nvim clean-nvim fish clean-fish
