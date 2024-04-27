@@ -22,6 +22,6 @@ end
 
 if not test (basename "$SHELL") = "fish"
         if gum confirm "Make fish default shell?"
-                sudo chsh -s (which fish)
+                chsh -s (which fish)
         end
 end
