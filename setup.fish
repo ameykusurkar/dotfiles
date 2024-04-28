@@ -1,5 +1,6 @@
 if not command -v gum > /dev/null
 	echo "Please install gum to continue!"
+        exit 1
 end
 
 if not command -v starship > /dev/null
