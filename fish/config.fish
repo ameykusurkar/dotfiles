@@ -12,10 +12,10 @@ else
     echo "warning: go not installed"
 end
 
-fish_add_path -g /opt/homebrew/bin
 fish_add_path -g $HOME/.cargo/bin
 fish_add_path -g /usr/local/opt/openjdk/bin
 fish_add_path -g $HOME/.poetry/bin
+fish_add_path -g $HOME/.local/bin
 
 abbr -a ga git add
 abbr -a gb git branch
@@ -72,7 +72,9 @@ abbr -a cbr cargo build --release
 set fish_greeting
 
 if uname | string match -q -- "Darwin"
-[ -f (brew --prefix asdf)/libexec/asdf.fish ]; and source (brew --prefix asdf)/libexec/asdf.fish
+    fish_add_path -g (brew --prefix)/bin
+    [ -f (brew --prefix asdf)/libexec/asdf.fish ]; and source (brew --prefix asdf)/libexec/asdf.fish
+    set LIBRARY_PATH (brew --prefix)/lib $LIBRARY_PATH
 end
 
 if command -v starship > /dev/null

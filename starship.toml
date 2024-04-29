@@ -1,5 +1,8 @@
 add_newline = false
 
+# It can take a while to find the number of lines in the git diff for large changes
+command_timeout = 1000
+
 aws.disabled = true
 c.disabled = true
 docker_context.disabled = true
