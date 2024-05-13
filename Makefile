@@ -12,4 +12,10 @@ fish:
 clean-fish:
 	rm -f ~/.config/fish/config.fish
 
-.PHONY: nvim clean-nvim fish clean-fish
+tmux:
+	ln -sv $(DOTFILES)/.tmux.conf ~/.tmux.conf
+
+clean-tmux:
+	rm -f ~/.tmux.conf
+
+.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux
