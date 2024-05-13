@@ -16,6 +16,7 @@ fish_add_path -g $HOME/.cargo/bin
 fish_add_path -g /usr/local/opt/openjdk/bin
 fish_add_path -g $HOME/.poetry/bin
 fish_add_path -g $HOME/.local/bin
+fish_add_path -g /opt/homebrew/bin
 
 abbr -a ga git add
 abbr -a gb git branch
