@@ -38,3 +38,6 @@ style = "grey"
 disabled = false
 added_style = "green"
 deleted_style = "red"
+
+[hostname]
+ssh_symbol = ""
