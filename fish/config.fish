@@ -2,6 +2,12 @@ set -gx EDITOR nvim
 set -gx VISUAL $EDITOR
 set -gx GIT_EDITOR $EDITOR
 
+if uname | string match -q -- "Darwin"
+    fish_add_path -g (brew --prefix)/bin
+    [ -f (brew --prefix asdf)/libexec/asdf.fish ]; and source (brew --prefix asdf)/libexec/asdf.fish
+    set LIBRARY_PATH (brew --prefix)/lib $LIBRARY_PATH
+end
+
 # go binary needs to be available to set GOPATH
 fish_add_path -g /usr/local/go/bin
 
@@ -71,12 +77,6 @@ abbr -a cbr cargo build --release
 
 # Set the greeting to be empty
 set fish_greeting
-
-if uname | string match -q -- "Darwin"
-    fish_add_path -g (brew --prefix)/bin
-    [ -f (brew --prefix asdf)/libexec/asdf.fish ]; and source (brew --prefix asdf)/libexec/asdf.fish
-    set LIBRARY_PATH (brew --prefix)/lib $LIBRARY_PATH
-end
 
 if command -v starship > /dev/null
     starship init fish | source
