@@ -114,10 +114,10 @@ require('lazy').setup({
   },
 
   {
-    'rebelot/kanagawa.nvim',
+    'catppuccin/nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'kanagawa'
+      vim.cmd.colorscheme 'catppuccin-mocha'
     end,
   },
 
@@ -128,7 +128,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'kanagawa',
+        theme = 'catppuccin-mocha',
         component_separators = '|',
         section_separators = '',
       },
@@ -138,14 +138,11 @@ require('lazy').setup({
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
+    tag = "v3.5.4", -- TODO: Remove when upgrading neovim to 0.10.0
     main = "ibl",
     -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
+    -- See `:help ibl`
     opts = {},
-    -- opts = {
-    --   char = '┊',
-    --   show_trailing_blankline_indent = false,
-    -- },
   },
 
   -- "gc" to comment visual regions/lines
