@@ -2,6 +2,8 @@ set -gx EDITOR nvim
 set -gx VISUAL $EDITOR
 set -gx GIT_EDITOR $EDITOR
 
+fish_add_path -g /opt/homebrew/bin
+
 if uname | string match -q -- "Darwin"
     fish_add_path -g (brew --prefix)/bin
     [ -f (brew --prefix asdf)/libexec/asdf.fish ]; and source (brew --prefix asdf)/libexec/asdf.fish
@@ -22,7 +24,6 @@ fish_add_path -g $HOME/.cargo/bin
 fish_add_path -g /usr/local/opt/openjdk/bin
 fish_add_path -g $HOME/.poetry/bin
 fish_add_path -g $HOME/.local/bin
-fish_add_path -g /opt/homebrew/bin
 
 abbr -a ga git add
 abbr -a gb git branch
