@@ -138,7 +138,6 @@ require('lazy').setup({
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
-    tag = "v3.5.4", -- TODO: Remove when upgrading neovim to 0.10.0
     main = "ibl",
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help ibl`
