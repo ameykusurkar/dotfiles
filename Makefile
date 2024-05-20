@@ -18,11 +18,15 @@ tmux:
 clean-tmux:
 	rm -f ~/.tmux.conf
 
-alacritty: 
+alacritty: $(HOME)/.config/alacritty/catppuccin-mocha.toml
 	mkdir -p ~/.config/alacritty
 	ln -sv $(DOTFILES)/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
 
 clean-alacritty:
 	rm -f ~/.config/alacritty/alacritty.toml
+
+$(HOME)/.config/alacritty/catppuccin-mocha.toml:
+	mkdir -p ~/.config/alacritty
+	curl -LO --output-dir ~/.config/alacritty https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
 
 .PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty
