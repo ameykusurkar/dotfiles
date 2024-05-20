@@ -9,8 +9,11 @@ program = "/opt/homebrew/bin/fish"
 SHELL = "/opt/homebrew/bin/fish"
 TERM = "xterm-256color"
 
+[selection]
+save_to_clipboard = true
+
 [font]
-size = 12.0
+size = 16
 
 [font.bold]
 family = "DroidSansM Nerd Font Propo"
