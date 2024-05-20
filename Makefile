@@ -18,4 +18,11 @@ tmux:
 clean-tmux:
 	rm -f ~/.tmux.conf
 
-.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux
+alacritty: 
+	mkdir -p ~/.config/alacritty
+	ln -sv $(DOTFILES)/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
+
+clean-alacritty:
+	rm -f ~/.config/alacritty/alacritty.toml
+
+.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty
