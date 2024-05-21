@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+CONFIGS = {
+  "alac" => "$HOME/.config/alacritty/alacritty.toml",
+  "alacritty" => "$HOME/.config/alacritty/alacritty.toml",
+
+  "f" => "$HOME/.config/fish/config.fish",
+  "fish" => "$HOME/.config/fish/config.fish",
+
+  "n" => "$HOME/.config/nvim/init.lua",
+  "nvim" => "$HOME/.config/nvim/init.lua",
+
+  "starship" => "$DOTFILES/starship.toml",
+
+  "t" => "$HOME/.tmux.conf",
+}
+
+if ARGV.length.zero?
+  puts "Usage: #{File.basename(__FILE__)} <config>"
+  puts "Must be one of: #{CONFIGS.keys.join(', ')}"
+  exit 1
+end
+
+arg = ARGV[0]
+cfg = CONFIGS.fetch(arg) do
+  puts "Invalid arg: #{arg}"
+  puts "Supported configs: #{CONFIGS.keys.join(', ')}"
+  exit 1
+end
+
+exec("nvim #{cfg}")
