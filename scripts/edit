@@ -8,16 +8,18 @@ CONFIG = {
   "tmux" => "$HOME/.tmux.conf",
 }
 
-arg = if ARGV.length.zero?
-        `gum filter --placeholder="Which config?" --reverse #{CONFIG.keys.join(" ")}`.chomp
-      else
-        ARGV[0]
-      end
+arg = ARGV[0] || ""
+candidates = CONFIG.keys.select { |c| c.start_with?(arg) }
 
-cfg = CONFIG.fetch(arg) do
-  puts "Invalid arg: #{arg}"
-  puts "Supported configs: #{CONFIG.keys.join(', ')}"
-  exit 1
-end
+selected = case candidates.size
+           when 0
+             puts "Invalid arg: #{arg}"
+             puts "Supported configs: #{CONFIG.keys.join(', ')}"
+             exit 1
+           when 1
+             candidates.first
+           else
+             `gum filter --placeholder="Which config?" --reverse #{candidates.join(" ")}`.chomp
+           end
 
-exec("$EDITOR #{cfg}")
+exec("$EDITOR #{CONFIG.fetch(selected)}")
