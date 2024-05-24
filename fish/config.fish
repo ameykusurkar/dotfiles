@@ -91,3 +91,9 @@ test -s "$HOME/.config/envman/load.fish"; and source "$HOME/.config/envman/load.
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 set --export --prepend PATH "/Users/ameykusurkar/.rd/bin"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+if command -v zoxide > /dev/null
+    zoxide init --cmd cd fish | source
+else
+    echo "warning: zoxide not installed, using regular cd"
+end
