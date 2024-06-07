@@ -20,6 +20,7 @@ else
     echo "warning: go not installed"
 end
 
+fish_add_path -g /opt/homebrew/opt/openjdk/bin
 fish_add_path -g $HOME/.cargo/bin
 fish_add_path -g /usr/local/opt/openjdk/bin
 fish_add_path -g $HOME/.poetry/bin
