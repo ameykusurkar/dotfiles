@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+DIR=$(gum choose --header "Backup which directory?" Imperial 'Life Admin' media archive)
+SIZE=$(du -sh "$HOME/$DIR" | cut -f1)
+
+if ! gum confirm "$DIR has size: $SIZE. Start backup?"; then
+  echo "Aborting backup."
+  exit 1
+fi
+
+DATE=$(date '+%Y-%m-%d')
+
+REMOTE_DIR="~/backups/Nocturne/$DATE"
+gum log --level=info "Creating $REMOTE_DIR"
+ssh hagrid "mkdir -p $REMOTE_DIR"
+
+gum log --level=info "Starting backup"
+rsync -avz "$HOME/$DIR" "amey@hagrid:$REMOTE_DIR" --progress
