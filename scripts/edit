@@ -4,6 +4,7 @@ CONFIG = {
   "alacritty" => "$HOME/.config/alacritty/alacritty.toml",
   "fish" => "$HOME/.config/fish/config.fish",
   "nvim" => "$HOME/.config/nvim/init.lua",
+  "private" => "$HOME/.private-env.fish",
   "starship" => "$DOTFILES/starship.toml",
   "tmux" => "$HOME/.tmux.conf",
 }

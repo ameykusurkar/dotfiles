@@ -65,10 +65,7 @@ fish_add_path -g $DOTFILES/scripts
 
 abbr -a sfish source ~/.config/fish/config.fish
 
-abbr -a vfish nvim ~/.config/fish/config.fish
-abbr -a vstar nvim $STARSHIP_CONFIG
 abbr -a penv nvim ~/.private-env.fish
-abbr -a nvc nvim $DOTFILES/nvim/init.lua
 
 abbr -a k kubectl
 
