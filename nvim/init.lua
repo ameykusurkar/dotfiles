@@ -39,7 +39,12 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
-  'google/vim-jsonnet',
+  {
+    'google/vim-jsonnet',
+    config = function()
+      vim.g.jsonnet_fmt_on_save = 0
+    end,
+  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.

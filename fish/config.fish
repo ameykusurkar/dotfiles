@@ -46,6 +46,9 @@ abbr -a gst git status
 abbr -a gcm "git checkout (basename (git symbolic-ref --short refs/remotes/origin/HEAD))"
 abbr -a grbim "git rebase -i (basename (git symbolic-ref --short refs/remotes/origin/HEAD))"
 
+abbr -a tree eza --tree --icons
+abbr -a ,tree tree
+
 abbr -a b bundle
 abbr -a be bundle exec
 abbr -a berc bundle exec rails console
