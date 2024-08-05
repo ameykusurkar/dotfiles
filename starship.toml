@@ -16,6 +16,7 @@ package.disabled = true
 python.disabled = true
 ruby.disabled = true
 rust.disabled = true
+zig.disabled = true
 
 [cmd_duration]
 style = "bold purple"
