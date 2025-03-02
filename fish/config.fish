@@ -4,11 +4,19 @@ set -gx GIT_EDITOR $EDITOR
 
 fish_add_path -g /opt/homebrew/bin
 
-if uname | string match -q -- "Darwin"
-    fish_add_path -g (brew --prefix)/bin
-    [ -f (brew --prefix asdf)/libexec/asdf.fish ]; and source (brew --prefix asdf)/libexec/asdf.fish
-    set LIBRARY_PATH (brew --prefix)/lib $LIBRARY_PATH
+# ASDF configuration code
+if test -z $ASDF_DATA_DIR
+    set _asdf_shims "$HOME/.asdf/shims"
+else
+    set _asdf_shims "$ASDF_DATA_DIR/shims"
 end
+
+# Do not use fish_add_path (added in Fish 3.2) because it
+# potentially changes the order of items in PATH
+if not contains $_asdf_shims $PATH
+    set -gx --prepend PATH $_asdf_shims
+end
+set --erase _asdf_shims
 
 # go binary needs to be available to set GOPATH
 fish_add_path -g /usr/local/go/bin
