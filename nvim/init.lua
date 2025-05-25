@@ -71,7 +71,7 @@ require('lazy').setup({
       'mason-org/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',    opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -83,7 +83,6 @@ require('lazy').setup({
     'nvim-telescope/telescope-file-browser.nvim',
     dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim', 'nvim-tree/nvim-web-devicons' },
     config = function()
-      require("telescope").setup()
       require("telescope").load_extension("file_browser")
       vim.keymap.set('n', '<leader>fb', ':Telescope file_browser theme=ivy<CR>', { desc = '[F]ile [B]rowser' })
     end,
@@ -203,18 +202,44 @@ require('lazy').setup({
   },
 
   -- Fuzzy Finder (files, lsp, etc)
-  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
-
-  -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-  -- Only load if `make` is available. Make sure you have the system
-  -- requirements installed.
   {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    -- NOTE: If you are having trouble with this installation,
-    --       refer to the README for telescope-fzf-native for more instructions.
-    build = 'make',
-    cond = function()
-      return vim.fn.executable 'make' == 1
+    'nvim-telescope/telescope.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-ui-select.nvim',
+
+      -- Fuzzy Finder Algorithm which requires local dependencies to be built.
+      -- Only load if `make` is available. Make sure you have the system
+      -- requirements installed.
+      {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        -- NOTE: If you are having trouble with this installation,
+        --       refer to the README for telescope-fzf-native for more instructions.
+        build = 'make',
+        cond = function()
+          return vim.fn.executable 'make' == 1
+        end,
+      },
+    },
+    config = function()
+      require("telescope").setup({
+        defaults = {
+          mappings = {
+            i = {
+              ['<C-u>'] = false,
+              ['<C-d>'] = false,
+            },
+          },
+        },
+        extensions = {
+          ['ui-select'] = {
+            require('telescope.themes').get_dropdown(),
+          },
+        },
+      })
+
+      pcall(require('telescope').load_extension, 'fzf')
+      pcall(require('telescope').load_extension, 'ui-select')
     end,
   },
 
@@ -306,22 +331,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
-
--- [[ Configure Telescope ]]
--- See `:help telescope` and `:help telescope.setup()`
-require('telescope').setup {
-  defaults = {
-    mappings = {
-      i = {
-        ['<C-u>'] = false,
-        ['<C-d>'] = false,
-      },
-    },
-  },
-}
-
--- Enable telescope fzf native, if installed
-pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -485,7 +494,7 @@ local servers = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
       diagnostics = {
-        globals = {'vim'}
+        globals = { 'vim' }
       },
     },
   },
