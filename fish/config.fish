@@ -83,6 +83,8 @@ abbr -a k kubectl
 abbr -a crr cargo run --release
 abbr -a cbr cargo build --release
 
+abbr -a bru "brew update && brew outdated | fzf -m --preview 'brew info {}' | xargs brew upgrade"
+
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 
 # Set the greeting to be empty
