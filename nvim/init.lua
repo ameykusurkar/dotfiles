@@ -515,6 +515,7 @@ local servers = {
     gofumpt = true,
   },
   sorbet = {},
+  tailwindcss = {},
   rust_analyzer = {},
   hls = {},
   pyright = {},
