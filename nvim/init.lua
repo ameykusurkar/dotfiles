@@ -516,6 +516,7 @@ local servers = {
   },
   sorbet = {},
   tailwindcss = {},
+  ts_ls = {},
   rust_analyzer = {},
   hls = {},
   pyright = {},
