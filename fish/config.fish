@@ -97,6 +97,12 @@ else
     echo "warning: starship not installed"
 end
 
+if command -v fzf > /dev/null
+    fzf --fish | source
+else
+    echo "warning: fzf not installed"
+end
+
 # Generated for envman. Do not edit.
 test -s "$HOME/.config/envman/load.fish"; and source "$HOME/.config/envman/load.fish"
 
