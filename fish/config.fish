@@ -51,6 +51,7 @@ abbr -a grba git rebase --abort
 abbr -a grbc git rebase --continue
 abbr -a grbi git rebase -i
 abbr -a gst git status
+abbr -a --command git cp cherry-pick
 abbr -a gcm "git checkout (basename (git symbolic-ref --short refs/remotes/origin/HEAD))"
 abbr -a grbim "git rebase -i (basename (git symbolic-ref --short refs/remotes/origin/HEAD))"
 
