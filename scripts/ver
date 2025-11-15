@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+COMMAND = {
+  "fish" => "fish --version",
+  "go" => "go version",
+  "nvim" => "nvim --version | head -1",
+  "parallel" => "parallel --version | head -1",
+  "postgres" => "postgres --version",
+  "ruby" => "ruby --version",
+  "rust" => "rustc --version",
+  "ysqlsh" => "ysqlsh --version",
+}
+
+arg = ARGV[0] || ""
+candidates = COMMAND.keys.select { |c| c.start_with?(arg) }
+just_val = candidates.map(&:size).max
+
+results = candidates.map do |c|
+  out = `#{COMMAND.fetch(c)}`
+  "#{c.ljust(just_val)}: #{out}"
+end.join
+
+puts results
