@@ -1,23 +1,47 @@
 #!/usr/bin/env ruby
 
+require "open3"
+
 COMMAND = {
   "fish" => "fish --version",
   "go" => "go version",
+  "node" => "node --version",
   "nvim" => "nvim --version | head -1",
   "parallel" => "parallel --version | head -1",
   "postgres" => "postgres --version",
+  "python" => "python --version",
   "ruby" => "ruby --version",
   "rust" => "rustc --version",
   "ysqlsh" => "ysqlsh --version",
 }
 
+def output(c)
+  command = COMMAND.fetch(c)
+  stdout, _stderr, status = Open3.capture3(command)
+
+  unless status.success?
+    return `gum style --foreground 8 N/A`.chomp
+  end
+
+  stdout.chomp
+rescue StandardError
+  `gum style --foreground 8 N/A`.chomp
+end
+
 arg = ARGV[0] || ""
 candidates = COMMAND.keys.select { |c| c.start_with?(arg) }
-just_val = candidates.map(&:size).max
+
+if candidates.size == 0
+  exit 1
+end
+
+just_val = candidates.map(&:size).max + 2
 
 results = candidates.map do |c|
-  out = `#{COMMAND.fetch(c)}`
-  "#{c.ljust(just_val)}: #{out}"
-end.join
+  out = output(c)
+  just_name = c.ljust(just_val)
+  name = `gum style --foreground 12 "#{just_name}"`.chomp
+  "#{name} #{out}"
+end.join("\n")
 
 puts results
