@@ -12,6 +12,7 @@ COMMAND = {
   "python" => "python --version",
   "ruby" => "ruby --version",
   "rust" => "rustc --version",
+  "tmux" => "tmux -V",
   "ysqlsh" => "ysqlsh --version",
 }
 
