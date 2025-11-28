@@ -1,7 +1,5 @@
-nvim:
-	mkdir -p ~/.config/nvim
-	ln -sv $(DOTFILES)/nvim/init.lua ~/.config/nvim/init.lua
-	ln -sv $(DOTFILES)/nvim/lua ~/.config/nvim/lua
+nvim: clean-nvim
+	ln -sv $(DOTFILES)/nvim ~/.config/nvim
 
 clean-nvim:
 	rm -rf ~/.config/nvim
