@@ -88,6 +88,7 @@ vim.o.confirm = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Diagnostic keymaps
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
@@ -237,7 +238,9 @@ require("lazy").setup({
 				map("n", "<leader>hu", gitsigns.stage_hunk, { desc = "git [u]ndo stage hunk" })
 				map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
 				map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
-				map("n", "<leader>hb", gitsigns.blame_line, { desc = "git [b]lame line" })
+				map("n", "<leader>hb", function()
+					gitsigns.blame_line({ full = true })
+				end, { desc = "git [b]lame line" })
 				map("n", "<leader>hd", gitsigns.diffthis, { desc = "git [d]iff against index" })
 				map("n", "<leader>hD", function()
 					gitsigns.diffthis("@")
@@ -247,6 +250,16 @@ require("lazy").setup({
 				map("n", "<leader>tD", gitsigns.preview_hunk_inline, { desc = "[T]oggle git show [D]eleted" })
 			end,
 		},
+	},
+
+	{
+		"tpope/vim-rhubarb",
+		dependencies = {
+			"tpope/vim-fugitive",
+		},
+		config = function()
+			vim.keymap.set({ "n", "v" }, "<leader>go", ":GBrowse<CR>", { desc = "[G]ithub [O]pen" })
+		end,
 	},
 
 	-- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -401,6 +414,12 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+			vim.keymap.set(
+				"n",
+				"<leader>sa",
+				require("telescope.builtin").git_status,
+				{ desc = "[S]earch Git st[A]tus" }
+			)
 
 			-- Slightly advanced example of overriding default behavior and theme
 			vim.keymap.set("n", "<leader>/", function()
