@@ -25,6 +25,7 @@ M.run = function(command, opts)
     col = ui.width - term_width - 3,
     row = 1,
     style = 'minimal',
+    border = 'rounded',
   })
 
   _window = term_win
