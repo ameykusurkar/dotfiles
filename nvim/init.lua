@@ -1039,5 +1039,9 @@ require("lazy").setup({
 	},
 })
 
+vim.keymap.set("n", "<leader>ls", function()
+	require("ameykusurkar.floating").shell()
+end, { desc = "Open f[L]oating shell" })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
