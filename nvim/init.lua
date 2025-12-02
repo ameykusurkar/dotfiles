@@ -738,12 +738,12 @@ require("lazy").setup({
 		cmd = { "ConformInfo" },
 		keys = {
 			{
-				"<leader>f",
+				"<leader>fm",
 				function()
 					require("conform").format({ async = true, lsp_format = "fallback" })
 				end,
 				mode = "",
-				desc = "[F]ormat buffer",
+				desc = "[F]or[M]at buffer",
 			},
 		},
 		opts = {
@@ -1039,9 +1039,9 @@ require("lazy").setup({
 	},
 })
 
-vim.keymap.set("n", "<leader>ls", function()
-	require("ameykusurkar.floating").shell()
-end, { desc = "Open f[L]oating shell" })
+vim.keymap.set("n", "<leader>fs", function()
+	require("ameykusurkar.floating").toggle()
+end, { desc = "Toggle [F]loating [S]hell" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

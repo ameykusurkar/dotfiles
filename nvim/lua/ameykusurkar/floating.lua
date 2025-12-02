@@ -1,100 +1,57 @@
 M = {}
 
-local _window = nil
+local state = {
+	window = -1,
+	buffer = -1,
+}
 
-M.run = function(command, opts)
-	if _window then
+local function create_floating_window(opts)
+	if vim.api.nvim_win_is_valid(state.window) then
 		print("[ERROR] Floating window already open")
 		return
 	end
 
 	opts = opts or {}
-	opts.close_on_exit = opts.close_on_exit or false
-	opts.interactive = opts.interactive or false
 
-	local term_buf = vim.api.nvim_create_buf(false, true)
-	local ui = vim.api.nvim_list_uis()[1]
+	local buffer = -1
+	if vim.api.nvim_buf_is_valid(opts.buffer) then
+		buffer = opts.buffer
+	else
+		buffer = vim.api.nvim_create_buf(false, true)
+	end
 
-	local term_width = math.floor(ui.width / 2)
-	local term_height = math.floor(ui.height * 0.9)
+	local term_width = math.floor(vim.o.columns / 2)
+	local term_height = vim.o.lines - 4
 
-	local term_win = vim.api.nvim_open_win(term_buf, true, {
+	local term_win = vim.api.nvim_open_win(buffer, true, {
 		relative = "editor",
 		width = term_width,
 		height = term_height,
-		col = ui.width - term_width - 3,
+		col = vim.o.columns - term_width - 3,
 		row = 0,
 		style = "minimal",
 		border = "rounded",
 	})
 
-	_window = term_win
+	return { buffer = buffer, window = term_win }
+end
 
-	vim.api.nvim_create_autocmd("WinClosed", {
-		group = vim.api.nvim_create_augroup("floating", { clear = true }),
-		buffer = term_buf,
-		callback = function()
-			_window = nil
-		end,
-	})
-
-	local close = function()
-		vim.api.nvim_win_close(term_win, true)
-		vim.api.nvim_buf_delete(term_buf, { force = true })
-	end
-
-	if not (opts.close_on_exit or opts.interactive) then
-		vim.keymap.set("n", "<ESC>", close, { buffer = term_buf })
-		vim.keymap.set("n", "q", close, { buffer = term_buf })
-	end
-
-	vim.fn.termopen(command, {
-		on_exit = function(_, exit_code, _)
-			if exit_code ~= 0 then
-				print("[ERROR] Exited with " .. exit_code)
-			end
-
-			if opts.close_on_exit and exit_code == 0 then
-				close()
-			end
-		end,
-	})
-
-	if opts.interactive then
-		vim.cmd("startinsert")
+M.toggle = function()
+	if vim.api.nvim_win_is_valid(state.window) then
+		vim.api.nvim_win_hide(state.window)
 	else
-		vim.cmd("norm G")
+		local new_state = create_floating_window({ buffer = state.buffer })
+		if not new_state then
+			return
+		end
+		if new_state.buffer ~= state.buffer then
+			vim.cmd.terminal()
+		end
+
+		vim.cmd.startinsert()
+
+		state = new_state
 	end
 end
-
-M.fire = function(command)
-	M.run(command, { close_on_exit = true, interactive = false })
-end
-
-M.readonly = function(command)
-	M.run(command, { close_on_exit = false, interactive = false })
-end
-
-M.console = function(command)
-	M.run(command, { close_on_exit = true, interactive = true })
-end
-
-M.shell = function()
-	M.console("$SHELL")
-end
-
-M.rspec_current_line = function()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local filename = vim.api.nvim_buf_get_name(bufnr)
-	local current_line_number = vim.fn.line(".")
-	local result = filename .. ":" .. current_line_number
-	M.readonly("bundle exec rspec " .. result)
-end
-
-M.rspec = function()
-	M.readonly("bundle exec rspec %")
-end
-
-vim.api.nvim_create_user_command("FloatingShell", M.shell, {})
 
 return M
