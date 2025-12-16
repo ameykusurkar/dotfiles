@@ -58,6 +58,12 @@ abbr -a grbim "git rebase -i (basename (git symbolic-ref --short refs/remotes/or
 abbr -a tree eza --tree --icons
 abbr -a ,tree tree
 
+abbr -a ls eza
+abbr -a ll eza -l
+abbr -a ,ls ls
+
+abbr -a bb "brew update && brew outdated"
+
 abbr -a b bundle
 abbr -a be bundle exec
 abbr -a berc bundle exec rails console
