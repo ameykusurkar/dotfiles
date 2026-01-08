@@ -134,6 +134,43 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+-- Toggle markdown checkboxes with Enter
+--
+-- Autocommands: run code automatically when an event occurs
+--   vim.api.nvim_create_autocmd(event, opts) - create an autocommand
+--     event     - the trigger (e.g., "FileType", "BufEnter", "TextYankPost")
+--     pattern   - filter for the event (here: only trigger for markdown files)
+--     callback  - function to run when the event fires
+--
+-- This autocmd fires when a markdown file is opened, setting up buffer-local keymaps.
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
+	callback = function()
+		-- vim.keymap.set(mode, lhs, rhs, opts) - create a keymap
+		--   mode   - "n" = normal, "v" = visual, "i" = insert, etc.
+		--   lhs    - the key(s) to press ("<CR>" = Enter key)
+		--   rhs    - function or string command to execute
+		--   opts:
+		--     buffer = true  - only active in current buffer (not global)
+		--     desc           - description shown in which-key and :map output
+		vim.keymap.set("n", "<CR>", function()
+			-- require("module") loads lua/module.lua and returns what it exports (the M table)
+			require("ameykusurkar").toggle_checkbox()
+		end, { buffer = true, desc = "Toggle markdown checkbox" })
+
+		vim.keymap.set("v", "<CR>", function()
+			-- When a mapping is triggered from visual mode, we're still in visual mode.
+			-- We need to exit visual mode first so Vim sets the '< and '> marks.
+			--
+			-- vim.cmd(s) executes s as a Vim command (like typing : in normal mode)
+			-- "normal!" executes normal mode keys (! means don't trigger other mappings)
+			-- \27 is the escape character (ASCII 27), same as pressing Escape
+			vim.cmd("normal! \27")
+			require("ameykusurkar").toggle_checkbox_visual()
+		end, { buffer = true, desc = "Toggle markdown checkboxes" })
+	end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
