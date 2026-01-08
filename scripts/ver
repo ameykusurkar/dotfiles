@@ -5,6 +5,7 @@ require "open3"
 COMMAND = {
   "fish" => "fish --version",
   "go" => "go version",
+  "haskell" => "ghci --version",
   "node" => "node --version",
   "nvim" => "nvim --version | head -1",
   "parallel" => "parallel --version | head -1",
