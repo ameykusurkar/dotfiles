@@ -1,6 +1,9 @@
 nvim: clean-nvim
 	ln -sv $(DOTFILES)/nvim ~/.config/nvim
 
+lazyvim: clean-nvim
+	ln -sv $(DOTFILES)/nvim-lazy ~/.config/nvim
+
 clean-nvim:
 	rm -rf ~/.config/nvim
 
@@ -27,4 +30,4 @@ $(HOME)/.config/alacritty/catppuccin-mocha.toml:
 	mkdir -p ~/.config/alacritty
 	curl -LO --output-dir ~/.config/alacritty https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
 
-.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty
+.PHONY: nvim nvim-lazy clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty
