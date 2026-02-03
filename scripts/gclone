@@ -13,4 +13,8 @@ if parts.size != 2 || parts.first.nil?
   exit 1
 end
 
-`git clone git@github.com:#{arg}.git ~/projects/#{arg}`
+if parts[0] == "intercom"
+  `git clone git@github.com:#{arg}.git ~/src/#{parts[1]}`
+else
+  `git clone git@github.com:#{arg}.git ~/projects/#{arg}`
+end

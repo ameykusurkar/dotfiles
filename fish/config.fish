@@ -69,7 +69,12 @@ abbr -a be bundle exec
 abbr -a berc bundle exec rails console
 abbr -a dcopa 'git diff origin/master --name-only --relative --diff-filter=ACMRTUXB | grep ".*.rb\$" | xargs bundle exec rubocop -a'
 
-abbr -a cdp 'cd (find ~/projects -mindepth 2 -maxdepth 2 -type d | fzf)'
+function cdp
+    cd (begin
+        find ~/projects -mindepth 2 -maxdepth 2 -type d
+        find ~/src -mindepth 1 -maxdepth 1 -type d
+    end | fzf)
+end
 abbr -a fzfp fzf --preview 'bat -f {}'
 
 set -gx DOTFILES $HOME/projects/ameykusurkar/dotfiles
