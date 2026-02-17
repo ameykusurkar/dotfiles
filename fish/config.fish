@@ -55,6 +55,8 @@ abbr -a --command git cp cherry-pick
 abbr -a gcm "git checkout (basename (git symbolic-ref --short refs/remotes/origin/HEAD))"
 abbr -a grbim "git rebase -i (basename (git symbolic-ref --short refs/remotes/origin/HEAD))"
 
+abbr -a tat tmux a -t
+
 abbr -a tree eza --tree --icons
 abbr -a ,tree tree
 
