@@ -92,6 +92,7 @@ set -gx STARSHIP_CONFIG $DOTFILES/starship.toml
 
 fish_add_path -g $DOTFILES/scripts
 
+abbr -a v version
 abbr -a sfish source ~/.config/fish/config.fish
 
 abbr -a penv nvim ~/.private-env.fish
