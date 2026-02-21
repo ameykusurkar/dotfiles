@@ -12,7 +12,7 @@ COMMAND = {
   "parallel" => "parallel --version | head -1 | grep .",
   "postgres" => "postgres --version",
   "python" => "python --version",
-  "ruby" => "ruby --version",
+  "ruby" => "sleep 2 && ruby --version",
   "rust" => "rustc --version",
   "tmux" => "tmux -V",
   "ysqlsh" => "ysqlsh --version",
@@ -49,6 +49,4 @@ threads = candidates.map do |c|
   end
 end
 
-results = threads.map(&:value).join("\n")
-
-puts results
+threads.each { |t| puts t.value }
