@@ -1,0 +1,247 @@
+#!/usr/bin/env ruby
+
+require "open3"
+require_relative "lib/session_data"
+
+def run(cmd)
+  stdout, _, _ = Open3.capture3(cmd)
+  stdout.chomp
+end
+
+def clear_screen
+  print "\e[2J\e[H"
+end
+
+def hide_cursor
+  print "\e[?25l"
+end
+
+def show_cursor
+  print "\e[?25h"
+end
+
+def inside_tmux?
+  ENV["TMUX"] && !ENV["TMUX"].empty?
+end
+
+def move_cursor(row, col)
+  print "\e[#{row};#{col}H"
+end
+
+def term_size
+  rows = `tput lines`.to_i
+  cols = `tput cols`.to_i
+  [rows, cols]
+end
+
+def styled(text, fg: nil, bold: false)
+  codes = []
+  codes << "1" if bold
+  case fg
+  when :cyan    then codes << "36"
+  when :green   then codes << "32"
+  when :red     then codes << "31"
+  when :yellow  then codes << "33"
+  when :blue    then codes << "34"
+  when :dim     then codes << "2"
+  end
+  return text if codes.empty?
+  "\e[#{codes.join(";")}m#{text}\e[0m"
+end
+
+def render_table(sessions, selected_idx)
+  cols = {
+    name:     { header: "Session",  width: 14 },
+    repo:     { header: "Repo",     width: 16 },
+    dir:      { header: "Dir",      width: 16 },
+    branch:   { header: "Branch",   width: 20 },
+    pr:       { header: "PR",       width: 14 },
+    ci:       { header: "CI",       width: 10 },
+    comments: { header: "Comments", width: 10 },
+    claude:   { header: "Claude",   width: 12 },
+  }
+
+  # Header
+  header = cols.map { |_, c| c[:header].ljust(c[:width]) }.join("  ")
+  puts styled("  #{header}", fg: :cyan, bold: true)
+
+  separator = cols.map { |_, c| "\u2500" * c[:width] }.join("  ")
+  puts styled("  #{separator}", fg: :dim)
+
+  # Rows
+  sessions.each_with_index do |s, idx|
+    name_col     = (s.name || "").ljust(cols[:name][:width])
+    repo_col     = truncate(s.repo ? File.basename(s.repo) : "\u2014", cols[:repo][:width]).ljust(cols[:repo][:width])
+    dir_display  = (s.dir && s.repo && s.dir != s.repo) ? File.basename(s.dir) : "\u2014"
+    dir_col      = truncate(dir_display, cols[:dir][:width]).ljust(cols[:dir][:width])
+    branch_col   = truncate(s.branch || "\u2014", cols[:branch][:width]).ljust(cols[:branch][:width])
+    pr_col       = SessionData.pr_icon(s.pr_status).ljust(cols[:pr][:width])
+    ci_col       = SessionData.ci_icon(s.ci_status).ljust(cols[:ci][:width])
+    comments_col = SessionData.comments_display(s.pr_comments).ljust(cols[:comments][:width])
+    claude_col   = SessionData.claude_icon(s.claude_status).ljust(cols[:claude][:width])
+
+    row = "#{name_col}  #{repo_col}  #{dir_col}  #{branch_col}  #{pr_col}  #{ci_col}  #{comments_col}  #{claude_col}"
+
+    if idx == selected_idx
+      puts styled("\u203A #{row}", fg: :green, bold: true)
+    else
+      puts "  #{row}"
+    end
+  end
+end
+
+def truncate(str, max)
+  str.length > max ? str[0...(max - 1)] + "\u2026" : str
+end
+
+def render_help
+  puts ""
+  help = [
+    "[enter] switch",
+    "[n] new session",
+    "[x] close session",
+    "[r] refresh",
+    "[q] quit",
+  ]
+  puts styled("  " + help.join("   "), fg: :dim)
+end
+
+def read_key
+  $stdin.raw do |io|
+    c = io.getc
+    if c == "\e"
+      # Read escape sequence
+      seq = ""
+      seq << io.read_nonblock(2) rescue nil
+      case seq
+      when "[A" then :up
+      when "[B" then :down
+      else :escape
+      end
+    else
+      c
+    end
+  end
+end
+
+def reset_terminal
+  show_cursor
+  system("stty sane 2>/dev/null")
+  clear_screen
+end
+
+def switch_session(name)
+  reset_terminal
+  if inside_tmux?
+    exec("tmux switch-client -t #{name}")
+  else
+    exec("tmux attach-session -t #{name}")
+  end
+end
+
+def new_session
+  reset_terminal
+  system("workon")
+  return unless $?.success?
+
+  unless inside_tmux?
+    latest = run("tmux list-sessions -F '\#{session_created} \#{session_name}' | sort -rn | head -1")
+    session_name = latest.split(" ", 2).last
+    exec("tmux attach-session -t #{session_name}") if session_name && !session_name.empty?
+  end
+end
+
+def close_session(name)
+  reset_terminal
+  system("wrapup", name)
+end
+
+# --- Main ---
+
+require "io/console"
+
+trap("INT") { show_cursor; exit 0 }
+trap("TERM") { show_cursor; exit 0 }
+
+sessions = SessionData.fetch_all
+if sessions.empty?
+  puts "No tmux sessions found."
+  print "Create a new session? [Y/n] "
+  answer = $stdin.gets&.chomp&.downcase
+  if answer.nil? || answer.empty? || answer == "y"
+    new_session
+  end
+  exit 0
+end
+
+selected = 0
+
+loop do
+  clear_screen
+  hide_cursor
+
+  puts ""
+  render_table(sessions, selected)
+  render_help
+
+  key = read_key
+
+  case key
+  when :up, "k"
+    selected = (selected - 1) % sessions.size
+  when :down, "j"
+    selected = (selected + 1) % sessions.size
+  when "\r" # enter
+    switch_session(sessions[selected].name)
+  when "n"
+    new_session
+    # Refresh after creating
+    sessions = SessionData.fetch_all
+    selected = [selected, sessions.size - 1].min
+  when "x"
+    close_session(sessions[selected].name)
+    sessions = SessionData.fetch_all
+    break if sessions.empty?
+    selected = [selected, sessions.size - 1].min
+  when "r"
+    sessions = SessionData.fetch_all
+    selected = [selected, sessions.size - 1].min
+  when "q", :escape
+    show_cursor
+    break
+  when "/"
+    # Filter mode: type to filter session names
+    show_cursor
+    move_cursor(term_size[0], 1)
+    print styled("filter: ", fg: :yellow)
+    filter = ""
+    loop do
+      fc = read_key
+      case fc
+      when :escape
+        break
+      when "\r"
+        break
+      when "\x7F" # backspace
+        filter = filter[0...-1]
+      when String
+        filter << fc
+      end
+
+      filtered = sessions.select { |s| s.name.include?(filter) }
+      clear_screen
+      puts ""
+      render_table(filtered.empty? ? sessions : filtered, 0)
+      move_cursor(term_size[0], 1)
+      print styled("filter: #{filter}", fg: :yellow)
+      hide_cursor
+    end
+
+    unless filter.empty?
+      filtered = sessions.select { |s| s.name.include?(filter) }
+      unless filtered.empty?
+        selected = sessions.index(filtered.first) || 0
+      end
+    end
+  end
+end
