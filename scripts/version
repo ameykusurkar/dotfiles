@@ -40,11 +40,15 @@ end
 
 just_val = candidates.map(&:size).max + 2
 
-results = candidates.map do |c|
-  out = output(c)
-  just_name = c.ljust(just_val)
-  name = `gum style --foreground 12 "#{just_name}"`.chomp
-  "#{name} #{out}"
-end.join("\n")
+threads = candidates.map do |c|
+  Thread.new do
+    out = output(c)
+    just_name = c.ljust(just_val)
+    name = `gum style --foreground 12 "#{just_name}"`.chomp
+    "#{name} #{out}"
+  end
+end
+
+results = threads.map(&:value).join("\n")
 
 puts results
