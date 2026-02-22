@@ -289,7 +289,7 @@ when :new_branch_no_worktree
   setup_args += ["--new-branch", Shellwords.escape(result[:branch]), Shellwords.escape(result[:base].to_s)]
 end
 
-system("gum spin --title 'Setting up session...' -- workon --setup #{setup_args.join(" ")}")
+system("gum spin --title 'Setting up session...' -- #{File.expand_path(__FILE__)} --setup #{setup_args.join(" ")}")
 unless $?.success?
   $stderr.puts "Setup failed."
   exit 1

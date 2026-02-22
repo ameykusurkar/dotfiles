@@ -7,10 +7,19 @@ mod ui;
 use app::{Action, App};
 use std::io;
 use std::os::unix::process::CommandExt;
+use std::path::PathBuf;
 use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{mpsc, Arc};
 use std::time::Duration;
+
+fn script_path(name: &str) -> PathBuf {
+    let exe_dir = std::env::current_exe()
+        .and_then(std::fs::canonicalize)
+        .expect("cannot resolve executable path");
+    // Binary: target/release/dashboard → scripts at ../../
+    exe_dir.with_file_name("").join("../../").join(name)
+}
 
 enum Event {
     Key(crossterm::event::KeyEvent),
@@ -33,7 +42,7 @@ fn main() -> io::Result<()> {
             io::stdin().read_line(&mut answer)?;
             let answer = answer.trim().to_lowercase();
             if answer.is_empty() || answer == "y" {
-                let err = Command::new("workon").exec();
+                let err = Command::new(script_path("workon")).exec();
                 eprintln!("Failed to exec workon: {}", err);
             }
             return Ok(());
@@ -118,7 +127,7 @@ fn run_event_loop(
                     }
                     Action::NewSession => {
                         ratatui::restore();
-                        let status = Command::new("workon").status();
+                        let status = Command::new(script_path("workon")).status();
                         if let Ok(s) = status {
                             if s.success() {
                                 let inside_tmux =
@@ -153,7 +162,7 @@ fn run_event_loop(
                     }
                     Action::CloseSession(name) => {
                         ratatui::restore();
-                        let _ = Command::new("wrapup").arg(&name).status();
+                        let _ = Command::new(script_path("wrapup")).arg(&name).status();
                         // Re-init terminal and force refresh
                         *terminal = ratatui::init();
                         force_refresh.store(true, Ordering::Relaxed);
