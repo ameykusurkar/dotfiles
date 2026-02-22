@@ -4,3 +4,4 @@ vim/autoload/plug.vim
 vim/autoload/plug.vim.old
 .luarc.json
 .DS_Store
+tools/dashboard/target/
