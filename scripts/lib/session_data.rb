@@ -139,36 +139,13 @@ module SessionData
   end
 
   def fetch_claude_status(session)
-    # Get pane PID of the "claude" window
-    pane_pid, _, status = run("tmux display-message -t #{session}:claude -p '\#{pane_pid}' 2>/dev/null")
-    return "off" unless status.success? && !pane_pid.empty?
+    status_file = "/tmp/claude-status-#{session}"
+    return "off" unless File.exist?(status_file)
 
-    # Find shell PID (direct child of pane), then check its children for claude
-    shell_pid, _, _ = run("pgrep -P #{pane_pid} 2>/dev/null")
-    return "off" if shell_pid.empty?
-
-    children, _, _ = run("pgrep -P #{shell_pid} -f claude 2>/dev/null")
-    return "off" if children.empty?
-
-    # Capture last 30 lines of the claude pane
-    pane_out, _, _ = run("tmux capture-pane -t #{session}:claude -p -S -30 2>/dev/null")
-    lines = strip_ansi(pane_out)
-
-    last_lines = lines.split("\n").last(10).join("\n")
-
-    if last_lines.match?(/[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏]|Thinking|thinking/)
-      "working"
-    elsif last_lines.match?(/^>\s*$/)
-      "waiting"
-    else
-      "idle"
-    end
+    status = File.read(status_file).strip
+    %w[working waiting idle].include?(status) ? status : "off"
   rescue
     "off"
-  end
-
-  def strip_ansi(str)
-    str.gsub(/\e\[[0-9;]*[a-zA-Z]/, "")
   end
 
   # Format helpers for display
