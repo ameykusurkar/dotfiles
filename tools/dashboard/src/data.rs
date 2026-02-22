@@ -5,9 +5,15 @@ use std::thread;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Session {
     pub name: String,
+    #[serde(default)]
+    pub repo_slug: Option<String>,
     pub dir: Option<String>,
     pub repo: Option<String>,
     pub branch: Option<String>,
+    #[serde(default)]
+    pub is_worktree: bool,
+    #[serde(default)]
+    pub pr_number: Option<u32>,
     pub pr_status: Option<PrStatus>,
     pub ci_status: Option<CiStatus>,
     pub pr_comments: Option<u32>,
@@ -93,36 +99,77 @@ fn fetch_branch(dir: &str) -> Option<String> {
     run_cmd("git", &["-C", dir, "rev-parse", "--abbrev-ref", "HEAD"])
 }
 
-fn fetch_pr_status(dir: &str, branch: &str) -> Option<PrStatus> {
-    let output = run_cmd_in_dir(
-        "gh",
-        &["pr", "view", branch, "--json", "state,isDraft,reviewDecision"],
-        dir,
-    )?;
-    let data: serde_json::Value = serde_json::from_str(&output).ok()?;
-    let state = data["state"].as_str()?;
-    let is_draft = data["isDraft"].as_bool().unwrap_or(false);
-    let decision = data["reviewDecision"].as_str().unwrap_or("");
-
-    Some(if state == "MERGED" {
-        PrStatus::Merged
-    } else if state == "CLOSED" {
-        PrStatus::Closed
-    } else if is_draft {
-        PrStatus::Draft
-    } else if decision == "APPROVED" {
-        PrStatus::Approved
-    } else if decision == "CHANGES_REQUESTED" {
-        PrStatus::Changes
-    } else if decision == "REVIEW_REQUIRED" {
-        PrStatus::Review
+fn fetch_repo_slug(dir: &str) -> Option<String> {
+    let url = run_cmd("git", &["-C", dir, "remote", "get-url", "origin"])?;
+    // Handle both https://github.com/org/repo.git and git@github.com:org/repo.git
+    let slug = if let Some(rest) = url.strip_prefix("git@github.com:") {
+        rest.trim_end_matches(".git").to_string()
+    } else if url.contains("github.com/") {
+        url.split("github.com/")
+            .nth(1)?
+            .trim_end_matches(".git")
+            .to_string()
     } else {
-        PrStatus::Open
-    })
+        return None;
+    };
+    Some(slug)
 }
 
-fn fetch_ci_status(dir: &str, branch: &str) -> Option<CiStatus> {
-    let output = run_cmd_in_dir("gh", &["pr", "checks", branch, "--json", "bucket"], dir)?;
+/// Fetches PR info using `gh pr list --head` to avoid branch names with `/`
+/// being misinterpreted as OWNER/REPO by `gh pr view`.
+fn fetch_pr_info(dir: &str, branch: &str) -> (Option<PrStatus>, Option<u32>) {
+    let output = match run_cmd_in_dir(
+        "gh",
+        &[
+            "pr", "list",
+            "--head", branch,
+            "--json", "number,state,isDraft,reviewDecision",
+            "--limit", "1",
+            "--state", "all",
+        ],
+        dir,
+    ) {
+        Some(o) => o,
+        None => return (None, None),
+    };
+    let items: Vec<serde_json::Value> = match serde_json::from_str(&output) {
+        Ok(d) => d,
+        Err(_) => return (None, None),
+    };
+    let data = match items.first() {
+        Some(d) => d,
+        None => return (None, None),
+    };
+
+    let number = data["number"].as_u64().map(|n| n as u32);
+
+    let status = (|| {
+        let state = data["state"].as_str()?;
+        let is_draft = data["isDraft"].as_bool().unwrap_or(false);
+        let decision = data["reviewDecision"].as_str().unwrap_or("");
+        Some(if state == "MERGED" {
+            PrStatus::Merged
+        } else if state == "CLOSED" {
+            PrStatus::Closed
+        } else if is_draft {
+            PrStatus::Draft
+        } else if decision == "APPROVED" {
+            PrStatus::Approved
+        } else if decision == "CHANGES_REQUESTED" {
+            PrStatus::Changes
+        } else if decision == "REVIEW_REQUIRED" {
+            PrStatus::Review
+        } else {
+            PrStatus::Open
+        })
+    })();
+
+    (status, number)
+}
+
+fn fetch_ci_status(dir: &str, pr_number: u32) -> Option<CiStatus> {
+    let num_str = pr_number.to_string();
+    let output = run_cmd_in_dir("gh", &["pr", "checks", &num_str, "--json", "bucket"], dir)?;
     let checks: Vec<serde_json::Value> = serde_json::from_str(&output).ok()?;
     if checks.is_empty() {
         return None;
@@ -138,21 +185,6 @@ fn fetch_ci_status(dir: &str, branch: &str) -> Option<CiStatus> {
     } else {
         CiStatus::Pass
     })
-}
-
-fn fetch_pr_comments(dir: &str, branch: &str) -> Option<u32> {
-    let output = run_cmd_in_dir(
-        "gh",
-        &["pr", "view", branch, "--json", "reviewThreads"],
-        dir,
-    )?;
-    let data: serde_json::Value = serde_json::from_str(&output).ok()?;
-    let threads = data["reviewThreads"].as_array()?;
-    let unresolved = threads
-        .iter()
-        .filter(|t| !t["isResolved"].as_bool().unwrap_or(true))
-        .count();
-    Some(unresolved as u32)
 }
 
 fn fetch_claude_status(session: &str) -> ClaudeStatus {
@@ -172,36 +204,35 @@ fn build_session(name: &str) -> Session {
     let dir = fetch_env(name, "SESSION_DIR").or_else(|| fetch_pane_path(name));
     let repo = fetch_env(name, "SESSION_REPO").or_else(|| dir.clone());
 
+    let is_worktree = match (&dir, &repo) {
+        (Some(d), Some(r)) => d != r,
+        _ => false,
+    };
+
     let claude_status = fetch_claude_status(name);
     let branch = dir.as_deref().and_then(fetch_branch);
+    let repo_slug = dir.as_deref().and_then(fetch_repo_slug);
 
-    let (pr_status, ci_status, pr_comments) = match (&dir, &branch) {
+    let (pr_status, pr_number, ci_status) = match (&dir, &branch) {
         (Some(d), Some(b)) => {
-            let d1 = d.clone();
-            let b1 = b.clone();
-            let d2 = d.clone();
-            let b2 = b.clone();
-            let d3 = d.clone();
-            let b3 = b.clone();
-
-            thread::scope(|s| {
-                let pr = s.spawn(move || fetch_pr_status(&d1, &b1));
-                let ci = s.spawn(move || fetch_ci_status(&d2, &b2));
-                let comments = s.spawn(move || fetch_pr_comments(&d3, &b3));
-                (pr.join().ok().flatten(), ci.join().ok().flatten(), comments.join().ok().flatten())
-            })
+            let (pr_status, pr_number) = fetch_pr_info(d, b);
+            let ci_status = pr_number.and_then(|n| fetch_ci_status(d, n));
+            (pr_status, pr_number, ci_status)
         }
         _ => (None, None, None),
     };
 
     Session {
         name: name.to_string(),
+        repo_slug,
         dir,
         repo,
         branch,
+        is_worktree,
+        pr_number,
         pr_status,
         ci_status,
-        pr_comments,
+        pr_comments: None,
         claude_status,
     }
 }

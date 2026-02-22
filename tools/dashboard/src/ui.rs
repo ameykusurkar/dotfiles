@@ -1,20 +1,10 @@
 use crate::app::{App, InputMode};
 use crate::icons;
 use ratatui::layout::{Constraint, Layout};
-use ratatui::style::{Color, Modifier, Style};
-use ratatui::text::{Line, Span};
+use ratatui::style::{Color, Style};
+use ratatui::text::{Line, Span, Text};
 use ratatui::widgets::{Cell, Row, Table};
 use ratatui::Frame;
-use std::path::Path;
-
-fn truncate(s: &str, max: usize) -> String {
-    if s.chars().count() > max {
-        let truncated: String = s.chars().take(max - 1).collect();
-        format!("{}…", truncated)
-    } else {
-        s.to_string()
-    }
-}
 
 pub fn draw(f: &mut Frame, app: &mut App) {
     let area = f.area();
@@ -30,70 +20,46 @@ pub fn draw(f: &mut Frame, app: &mut App) {
     // Table
     let filtered = app.filtered_sessions();
 
-    let header = Row::new(vec![
-        Cell::from("Session"),
-        Cell::from("Repo"),
-        Cell::from("Dir"),
-        Cell::from("Branch"),
-        Cell::from("PR"),
-        Cell::from("CI"),
-        Cell::from("Comments"),
-        Cell::from("Claude"),
-    ])
-    .style(
-        Style::default()
-            .fg(Color::Cyan)
-            .add_modifier(Modifier::BOLD),
-    );
-
     let rows: Vec<Row> = filtered
         .iter()
         .map(|s| {
-            let repo_display = s
-                .repo
-                .as_deref()
-                .map(|r| Path::new(r).file_name().unwrap_or_default().to_string_lossy().to_string())
-                .unwrap_or_else(|| "—".to_string());
+            // Col 1: Session name (row 1), empty (row 2)
+            let col1 = Cell::from(Text::from(vec![
+                Line::from(Span::raw(s.name.clone())),
+                Line::from(""),
+            ]));
 
-            let dir_display = match (&s.dir, &s.repo) {
-                (Some(d), Some(r)) if d != r => {
-                    Path::new(d).file_name().unwrap_or_default().to_string_lossy().to_string()
-                }
-                _ => "—".to_string(),
-            };
+            // Col 2: repo slug (row 1), branch (row 2)
+            let col2 = Cell::from(Text::from(vec![
+                Line::from(icons::repo_span(s.repo_slug.as_deref())),
+                Line::from(icons::branch_span(s.branch.as_deref())),
+            ]));
 
-            let branch_display = s.branch.as_deref().unwrap_or("—");
+            // Col 3: PR# + CI + approval inline (row 1), empty (row 2)
+            let col3 = Cell::from(Text::from(vec![
+                Line::from(icons::status_line_spans(s.pr_number, &s.pr_status, &s.ci_status)),
+                Line::from(""),
+            ]));
 
-            Row::new(vec![
-                Cell::from(truncate(&s.name, 20)),
-                Cell::from(truncate(&repo_display, 16)),
-                Cell::from(truncate(&dir_display, 16)),
-                Cell::from(truncate(branch_display, 20)),
-                Cell::from(icons::pr_span(&s.pr_status)),
-                Cell::from(icons::ci_span(&s.ci_status)),
-                Cell::from(icons::comments_span(&s.pr_comments)),
-                Cell::from(icons::claude_span(&s.claude_status)),
-            ])
+            // Col 4: Claude status (row 1), empty (row 2)
+            let col4 = Cell::from(Text::from(vec![
+                Line::from(icons::claude_span(&s.claude_status)),
+                Line::from(""),
+            ]));
+
+            Row::new(vec![col1, col2, col3, col4]).height(2)
         })
         .collect();
 
     let widths = [
-        Constraint::Length(20),
-        Constraint::Length(16),
-        Constraint::Length(16),
-        Constraint::Length(20),
-        Constraint::Length(14),
-        Constraint::Length(10),
-        Constraint::Length(10),
-        Constraint::Length(12),
+        Constraint::Length(22),
+        Constraint::Length(32),
+        Constraint::Length(34),
+        Constraint::Length(18),
     ];
 
     let table = Table::new(rows, widths)
-        .header(header)
-        .row_highlight_style(
-            Style::default()
-                .add_modifier(Modifier::BOLD),
-        )
+        .row_highlight_style(Style::default().bg(Color::Rgb(40, 40, 55)))
         .highlight_symbol("› ")
         .column_spacing(2);
 
