@@ -34,10 +34,10 @@ fn pr_number_spans(number: Option<u32>, status: &Option<PrStatus>) -> Vec<Span<'
             Span::styled("\u{EBDB} ", Style::default().fg(Color::DarkGray)),
             Span::styled(format!("#{}", n), Style::default().fg(Color::White)),
         ],
-        (Some(n), Some(PrStatus::Merged)) => vec![Span::styled(
-            format!("\u{E728} #{}", n),
-            Style::default().fg(Color::Magenta),
-        )],
+        (Some(n), Some(PrStatus::Merged)) => vec![
+            Span::styled("\u{EAFE} ", Style::default().fg(Color::Rgb(163, 113, 247))),
+            Span::styled(format!("#{}", n), Style::default().fg(Color::White)),
+        ],
         (Some(n), Some(PrStatus::Closed)) => vec![Span::styled(
             format!("\u{E728} #{}", n),
             Style::default().fg(Color::Red),
