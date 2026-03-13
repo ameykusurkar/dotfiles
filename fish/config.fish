@@ -85,6 +85,8 @@ function cdp
 end
 abbr -a fzfp fzf --preview 'bat -f {}'
 
+abbr -a cdw "cd (git worktree list --no-porcelain | awk '{print \$1}' | fzf)"
+
 set -gx DOTFILES $HOME/projects/ameykusurkar/dotfiles
 
 # May override $DOTFILES
