@@ -1,16 +1,51 @@
-#!/bin/sh
+#!/bin/bash
 
+# Read JSON input from stdin
 input=$(cat)
 
-model=$(echo "$input" | jq -r '.model.display_name // "Claude"')
-project_dir=$(echo "$input" | jq -r '.workspace.current_dir // ""')
-project=$(basename "$project_dir")
-used=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
+# Extract values from JSON
+current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
+model_name=$(echo "$input" | jq -r '.model.display_name')
+used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
+total_input=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
+total_output=$(echo "$input" | jq -r '.context_window.total_output_tokens // 0')
 
-branch=$(git -C "$project_dir" symbolic-ref --short HEAD 2>/dev/null)
+# Get git branch and lines changed (skip locks for performance)
+git_branch=""
+lines_changed=""
+if git -C "$current_dir" rev-parse --git-dir > /dev/null 2>&1; then
+  git_branch=$(git -C "$current_dir" --no-optional-locks symbolic-ref --short HEAD 2>/dev/null || echo "detached")
+  diff_stat=$(git -C "$current_dir" --no-optional-locks diff --numstat HEAD 2>/dev/null)
+  if [ -n "$diff_stat" ]; then
+    added=$(echo "$diff_stat" | awk '{s+=$1} END {print s+0}')
+    deleted=$(echo "$diff_stat" | awk '{s+=$2} END {print s+0}')
+    if [ "$added" -gt 0 ] || [ "$deleted" -gt 0 ]; then
+      green='\033[32m'
+      red='\033[31m'
+      reset='\033[0m'
+      lines_changed="${green}+${added}${reset} ${red}-${deleted}${reset}"
+    fi
+  fi
+fi
 
-if [ -n "$used" ]; then
-  used_int=$(printf "%.0f" "$used")
+# Calculate cost (approximate pricing for Claude)
+cost=""
+if [[ "$model_name" == *"Opus"* ]]; then
+  cost=$(echo "scale=3; ($total_input * 15 + $total_output * 75) / 1000000" | bc)
+elif [[ "$model_name" == *"Sonnet"* ]]; then
+  cost=$(echo "scale=3; ($total_input * 3 + $total_output * 15) / 1000000" | bc)
+fi
+
+# Model name (shortened)
+model_short=$(echo "$model_name" | sed 's/Claude //' | sed 's/ 20[0-9]*//')
+
+# Directory basename
+dir_name=$(basename "$current_dir")
+
+# Color-coded context usage
+context_str=""
+if [ -n "$used_pct" ]; then
+  used_int=$(printf "%.0f" "$used_pct")
   if [ "$used_int" -ge 70 ]; then
     context_str="\033[31m${used_int}%\033[0m"
   elif [ "$used_int" -ge 30 ]; then
@@ -18,12 +53,25 @@ if [ -n "$used" ]; then
   else
     context_str="\033[32m${used_int}%\033[0m"
   fi
-else
-  context_str="?"
 fi
 
-if [ -n "$branch" ]; then
-  echo "[${model}] ${project} | ${branch} | ${context_str}"
-else
-  echo "[${model}] ${project} | ${context_str}"
+# Build: [Opus 4.6] intercom | main | +23 -5 | 30% | $2.507
+output="[${model_short}] ${dir_name}"
+
+if [ -n "$git_branch" ]; then
+  output+=" | ${git_branch}"
 fi
+
+if [ -n "$lines_changed" ]; then
+  output+=" | ${lines_changed}"
+fi
+
+if [ -n "$context_str" ]; then
+  output+=" | ${context_str}"
+fi
+
+if [ -n "$cost" ] && [ "$cost" != "0" ]; then
+  output+=" | \$${cost}"
+fi
+
+printf "%b" "$output"
