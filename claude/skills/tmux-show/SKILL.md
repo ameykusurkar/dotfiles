@@ -70,6 +70,10 @@ Before creating a pane, ALWAYS run `tmux list-panes` to understand the current l
 - Don't clobber the user's existing panes that aren't yours
 - If the screen is already crowded (3+ panes), prefer reusing over splitting further
 
+## Cross-window and cross-session operations
+
+Read `references/cross-session.md` for moving panes between windows or sessions.
+
 ## REPL workflow
 
 When sending code to a REPL:
