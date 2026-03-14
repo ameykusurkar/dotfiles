@@ -30,4 +30,11 @@ $(HOME)/.config/alacritty/catppuccin-mocha.toml:
 	mkdir -p ~/.config/alacritty
 	curl -LO --output-dir ~/.config/alacritty https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
 
-.PHONY: nvim lazyvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty
+claude: clean-claude
+	mkdir -p ~/.claude
+	ln -sv $(DOTFILES)/claude/skills ~/.claude/skills
+
+clean-claude:
+	rm -rf ~/.claude/skills
+
+.PHONY: nvim lazyvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty claude clean-claude

@@ -1,0 +1,18 @@
+#!/bin/bash
+INPUT=$(cat)
+TYPE=$(echo "$INPUT" | jq -r '.notification_type')
+MESSAGE=$(echo "$INPUT" | jq -r '.message // "Needs attention"')
+
+case "$TYPE" in
+  permission_prompt)
+    terminal-notifier -title "Claude Code — Needs Permission" -message "$MESSAGE"
+    afplay /System/Library/Sounds/Ping.aiff &
+    ;;
+  idle_prompt)
+    terminal-notifier -title "Claude Code — Done" -message "$MESSAGE"
+    say 'I am done' &
+    ;;
+  *)
+    terminal-notifier -title "Claude Code" -message "$MESSAGE"
+    ;;
+esac
