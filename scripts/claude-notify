@@ -10,7 +10,6 @@ case "$TYPE" in
     ;;
   idle_prompt)
     terminal-notifier -title "Claude Code — Done" -message "$MESSAGE"
-    say 'I am done' &
     ;;
   *)
     terminal-notifier -title "Claude Code" -message "$MESSAGE"
