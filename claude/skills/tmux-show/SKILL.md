@@ -19,14 +19,19 @@ instead of (or in addition to) printing it inline in the conversation.
 ## Primitives
 
 ```bash
-# List current panes (ALWAYS do this before creating or killing panes)
+# List current panes (ALWAYS do this before ANY pane interaction)
 tmux list-panes -F '#{pane_index} #{pane_width}x#{pane_height} #{pane_current_command} #{pane_active}'
+# WARNING: pane_current_command is unreliable — it shows the top-level shell (e.g. fish)
+# even when a child process (e.g. cargo run via make server) is running.
+# Always capture-pane to verify what's actually happening.
 
-# Create a pane with a command (preferred — pane auto-closes when command exits)
+# Create a pane with a direct command (pane auto-closes when command exits —
+# the pane vanishes and indexes shift, so don't plan to send-keys to it later)
 tmux split-window -v -l 25% 'command here'      # bottom strip
 tmux split-window -h -l 50% 'nvim +42 foo.rs'   # right half with neovim
 
-# Create a pane with a shell (only when you need to send-keys interactively, e.g. REPLs)
+# Create a pane with a shell (persists until killed — use when you need to
+# interact with the pane later: servers you'll restart, REPLs, iterative work)
 tmux split-window -v -l 25%
 
 # Send commands to an existing pane (use pane index, not {bottom})
@@ -38,13 +43,35 @@ tmux capture-pane -t <pane_index> -p
 # Read scrollback (up to N lines back)
 tmux capture-pane -t <pane_index> -p -S -100
 
-# Close a pane (ALWAYS list-panes first to confirm the pane still exists)
+# Close a pane
 tmux kill-pane -t <pane_index>
 ```
 
-## Placement heuristics
+## Look before you act
 
-Before creating a pane, ALWAYS run `tmux list-panes` to understand the current layout.
+Before ANY pane interaction — `send-keys`, `capture-pane`, `kill-pane`, creating a new
+split — follow this loop:
+
+1. **`list-panes`** — confirm the target pane exists and get its current index. Indexes
+   shift when panes are created or destroyed, so never assume a previous index is still valid.
+2. **`capture-pane`** — read what's actually on screen. This is your eyes. Don't guess
+   state from `pane_current_command` — it shows the top-level shell even when a child process
+   is running (e.g. `make server` spawns `cargo run`, but `pane_current_command` says `fish`).
+3. **Act** — now that you know the pane exists and what it's showing, send keys / kill / split.
+
+### Pane lifecycle
+
+- **Direct-command panes** (`split-window ... 'command'`): auto-close when the command exits.
+  The pane vanishes, indexes shift, and any `send-keys` to that index will fail or hit the
+  wrong pane. Use these for fire-and-forget commands (tests, one-shot scripts, viewing files).
+- **Shell panes** (`split-window` with no command): persist until explicitly killed. Use these
+  when you need to interact after the initial command — servers you'll restart, REPLs, or
+  anything you might Ctrl-C and rerun.
+
+If you're about to `send-keys` to a pane and aren't sure it still exists — it probably doesn't.
+List panes first.
+
+## What to open and where
 
 **Viewing code / reading files / diffs / implementations:**
 - Use a vertical split (right half, `-h -l 50%`)
