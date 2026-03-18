@@ -1,17 +1,17 @@
 #!/bin/bash
 INPUT=$(cat)
-TYPE=$(echo "$INPUT" | jq -r '.notification_type')
-MESSAGE=$(echo "$INPUT" | jq -r '.message // "Needs attention"')
+EVENT=$(echo "$INPUT" | jq -r '.hook_event_name')
+PROJECT=$(echo "$INPUT" | jq -r '.cwd' | xargs basename)
 
-case "$TYPE" in
-  permission_prompt)
-    terminal-notifier -title "Claude Code — Needs Permission" -message "$MESSAGE"
+case "$EVENT" in
+  PermissionRequest)
+    TOOL=$(echo "$INPUT" | jq -r '.tool_name')
+    DETAIL=$(echo "$INPUT" | jq -r '.tool_input.command // .tool_input.file_path // ""' | head -c 100)
+    terminal-notifier -title "$PROJECT" -subtitle "Claude PermissionRequest" -message "$TOOL: $DETAIL"
     afplay /System/Library/Sounds/Ping.aiff &
     ;;
-  idle_prompt)
-    terminal-notifier -title "Claude Code — Done" -message "$MESSAGE"
-    ;;
-  *)
-    terminal-notifier -title "Claude Code" -message "$MESSAGE"
+  Stop)
+    MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // "Done"' | head -c 100)
+    terminal-notifier -title "$PROJECT" -subtitle "Claude Stop" -message "$MSG"
     ;;
 esac
