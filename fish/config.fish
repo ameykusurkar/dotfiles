@@ -69,6 +69,7 @@ abbr -a ll eza -l
 abbr -a ,ls ls
 
 abbr -a c claude
+abbr -a ccon "claude --continue"
 
 abbr -a bb "brew update && brew outdated"
 
