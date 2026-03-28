@@ -2,31 +2,43 @@
 
 require "open3"
 
+VER = /\d+\.\d+[\.\d]*\w*/
+
 COMMAND = {
-  "claude" => "claude --version",
-  "fish" => "fish --version",
-  "go" => "go version",
-  "haskell" => "ghci --version",
-  "node" => "node --version",
-  "nvim" => "nvim --version | head -1 | grep .",
-  "parallel" => "parallel --version | head -1 | grep .",
-  "postgres" => "postgres --version",
-  "python" => "python --version",
-  "ruby" => "ruby --version",
-  "rust" => "rustc --version",
-  "tmux" => "tmux -V",
-  "ysqlsh" => "ysqlsh --version",
+  "claude" => { bin: "claude", cmd: "claude --version", re: /(#{VER})/ },
+  "fish" => { bin: "fish", cmd: "fish --version", re: /(#{VER})/ },
+  "go" => { bin: "go", cmd: "go version", re: /(go#{VER})/ },
+  "haskell" => { bin: "ghci", cmd: "ghci --version", re: /(#{VER})/ },
+  "node" => { bin: "node", cmd: "node --version", re: /(v#{VER})/ },
+  "nvim" => { bin: "nvim", cmd: "nvim --version | head -1 | grep .", re: /(v#{VER})/ },
+  "parallel" => { bin: "parallel", cmd: "parallel --version | head -1 | grep .", re: /(\d{6,})/ },
+  "postgres" => { bin: "postgres", cmd: "postgres --version", re: /(#{VER})/ },
+  "python" => { bin: "python", cmd: "python --version", re: /(#{VER})/ },
+  "ruby" => { bin: "ruby", cmd: "ruby --version", re: /(#{VER})/ },
+  "rust" => { bin: "rustc", cmd: "rustc --version", re: /(#{VER})/ },
+  "tmux" => { bin: "tmux", cmd: "tmux -V", re: /(#{VER})/ },
+  "ysqlsh" => { bin: "ysqlsh", cmd: "ysqlsh --version", re: /(#{VER})/ },
 }
 
+def extract_version(str, re)
+  str[re, 1] || str
+end
+
+def which_path(c)
+  bin = COMMAND.fetch(c)[:bin]
+  stdout, _, status = Open3.capture3("which", bin)
+  status.success? ? stdout.chomp : nil
+end
+
 def output(c)
-  command = COMMAND.fetch(c)
-  stdout, _stderr, status = Open3.capture3(command)
+  entry = COMMAND.fetch(c)
+  stdout, _stderr, status = Open3.capture3(entry[:cmd])
 
   unless status.success?
     return `gum style --foreground 8 N/A`.chomp
   end
 
-  stdout.chomp
+  extract_version(stdout.chomp, entry[:re])
 rescue StandardError
   `gum style --foreground 8 N/A`.chomp
 end
@@ -40,13 +52,20 @@ end
 
 just_val = candidates.map(&:size).max + 2
 
-threads = candidates.map do |c|
+results = candidates.map do |c|
   Thread.new do
-    out = output(c)
+    ver = output(c)
+    path = which_path(c)
     just_name = c.ljust(just_val)
     name = `gum style --foreground 12 "#{just_name}"`.chomp
-    "#{name} #{out}"
+    dimmed_path = path ? `gum style --foreground 8 "#{path}"`.chomp : ""
+    { name: name, ver: ver, ver_len: ver.gsub(/\e\[[^m]*m/, "").size, path: dimmed_path }
   end
-end
+end.map(&:value)
 
-threads.each { |t| puts t.value }
+ver_width = results.map { |r| r[:ver_len] }.max + 2
+
+results.each do |r|
+  padded_ver = r[:ver] + " " * (ver_width - r[:ver_len])
+  puts "#{r[:name]} #{padded_ver}#{r[:path]}"
+end
