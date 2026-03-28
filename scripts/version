@@ -17,7 +17,6 @@ COMMAND = {
   "ruby" => { bin: "ruby", cmd: "ruby --version", re: /(#{VER})/ },
   "rust" => { bin: "rustc", cmd: "rustc --version", re: /(#{VER})/ },
   "tmux" => { bin: "tmux", cmd: "tmux -V", re: /(#{VER})/ },
-  "ysqlsh" => { bin: "ysqlsh", cmd: "ysqlsh --version", re: /(#{VER})/ },
 }
 
 def extract_version(str, re)
