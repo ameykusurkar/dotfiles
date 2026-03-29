@@ -1,0 +1,9 @@
+#!/bin/sh
+
+pct=$(pmset -g batt | grep -Eo '[0-9]+%' | head -1 | tr -d '%')
+
+if [ "$pct" -le 20 ] 2>/dev/null; then
+  printf '#[fg=#f38ba8]󰂃 %s%%#[fg=#cdd6f4]' "$pct"
+else
+  printf '󰁹 %s%%' "$pct"
+fi
