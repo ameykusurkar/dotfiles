@@ -1,9 +1,6 @@
 nvim: clean-nvim
 	ln -sv $(DOTFILES)/nvim ~/.config/nvim
 
-lazyvim: clean-nvim
-	ln -sv $(DOTFILES)/nvim-lazy ~/.config/nvim
-
 clean-nvim:
 	rm -rf ~/.config/nvim
 
@@ -37,4 +34,4 @@ claude: clean-claude
 clean-claude:
 	rm -rf ~/.claude/skills/tmux-show
 
-.PHONY: nvim lazyvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty claude clean-claude
+.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty claude clean-claude
