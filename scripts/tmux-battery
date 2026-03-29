@@ -1,9 +1,35 @@
 #!/bin/sh
 
-pct=$(pmset -g batt | grep -Eo '[0-9]+%' | head -1 | tr -d '%')
+batt_info=$(pmset -g batt)
+pct=$(echo "$batt_info" | grep -Eo '[0-9]+%' | head -1 | tr -d '%')
+charging=$(echo "$batt_info" | grep -q 'AC Power' && echo 1 || echo 0)
 
-if [ "$pct" -le 20 ] 2>/dev/null; then
-  printf '#[fg=#f38ba8]󰂃 %s%%#[fg=#cdd6f4]' "$pct"
+if [ "$charging" = 1 ]; then
+  icon="󰂄"
+elif [ "$pct" -le 10 ]; then
+  icon="󰁺"
+elif [ "$pct" -le 20 ]; then
+  icon="󰁻"
+elif [ "$pct" -le 30 ]; then
+  icon="󰁼"
+elif [ "$pct" -le 40 ]; then
+  icon="󰁽"
+elif [ "$pct" -le 50 ]; then
+  icon="󰁾"
+elif [ "$pct" -le 60 ]; then
+  icon="󰁿"
+elif [ "$pct" -le 70 ]; then
+  icon="󰂀"
+elif [ "$pct" -le 80 ]; then
+  icon="󰂁"
+elif [ "$pct" -le 90 ]; then
+  icon="󰂂"
 else
-  printf '󰁹 %s%%' "$pct"
+  icon="󰁹"
+fi
+
+if [ "$charging" != 1 ] && [ "$pct" -le 20 ] 2>/dev/null; then
+  printf '#[fg=#f38ba8]%s %s%%#[fg=#cdd6f4]' "$icon" "$pct"
+else
+  printf '%s %s%%' "$icon" "$pct"
 fi
