@@ -45,6 +45,9 @@ tmux capture-pane -t <pane_index> -p -S -100
 
 # Close a pane
 tmux kill-pane -t <pane_index>
+
+# Move a pane to its own window (-s = source pane, -d = don't switch to it)
+tmux break-pane -d -s <pane_index>
 ```
 
 ## Look before you act
