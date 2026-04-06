@@ -3,6 +3,19 @@
 # Read JSON input from stdin
 input=$(cat)
 
+# Color a percentage red/yellow/green based on thresholds
+color_pct() {
+  local pct=$1 suffix=$2
+  local int=$(printf "%.0f" "$pct")
+  if [ "$int" -ge 70 ]; then
+    printf "\033[31m%s%%%s\033[0m" "$int" "$suffix"
+  elif [ "$int" -ge 30 ]; then
+    printf "\033[33m%s%%%s\033[0m" "$int" "$suffix"
+  else
+    printf "\033[32m%s%%%s\033[0m" "$int" "$suffix"
+  fi
+}
+
 # Extract values from JSON
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
 model_name=$(echo "$input" | jq -r '.model.display_name')
@@ -45,14 +58,7 @@ dir_name=$(basename "$current_dir")
 # Color-coded context usage
 context_str=""
 if [ -n "$used_pct" ]; then
-  used_int=$(printf "%.0f" "$used_pct")
-  if [ "$used_int" -ge 70 ]; then
-    context_str="\033[31m${used_int}%\033[0m"
-  elif [ "$used_int" -ge 30 ]; then
-    context_str="\033[33m${used_int}%\033[0m"
-  else
-    context_str="\033[32m${used_int}%\033[0m"
-  fi
+  context_str=$(color_pct "$used_pct")
 fi
 
 # Build: [Opus 4.6] intercom | main | +23 -5 | 30% | $2.507
@@ -72,6 +78,16 @@ fi
 
 if [ -n "$cost" ] && [ "$cost" != "0" ]; then
   output+=" | \$${cost}"
+fi
+
+# 5-hour rate limit (Pro/Max only)
+read -r rate_5h resets_at < <(echo "$input" | jq -r '.rate_limits.five_hour | "\(.used_percentage // empty) \(.resets_at // empty)"')
+if [ -n "$rate_5h" ]; then
+  reset_str=""
+  if [ -n "$resets_at" ]; then
+    reset_str=", resets at $(date -r "$resets_at" '+%-I%p' | tr -d '.' | tr '[:upper:]' '[:lower:]')"
+  fi
+  output+=" | 5h Limit: $(color_pct "$rate_5h" "$reset_str")"
 fi
 
 printf "%b" "$output"
