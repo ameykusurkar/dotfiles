@@ -6,6 +6,11 @@ if ARGV.length != 1
 end
 
 arg = ARGV.first
+# Normalize to org/repo form, e.g. ameykusurkar/dotfiles
+# Accepts: ameykusurkar/dotfiles
+#          https://github.com/ameykusurkar/dotfiles
+#          https://github.com/ameykusurkar/dotfiles?tab=readme-ov-file
+arg = arg.sub(/\?.*/, '').sub(%r{^https?://github\.com/}, '').chomp('/')
 parts = arg.split('/')
 
 if parts.size != 2 || parts.first.nil?
