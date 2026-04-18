@@ -27,7 +27,15 @@ $(HOME)/.config/alacritty/catppuccin-mocha.toml:
 	mkdir -p ~/.config/alacritty
 	curl -LO --output-dir ~/.config/alacritty https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
 
+claude-skills:
+	mkdir -p ~/.claude/skills
+	ln -sv $(DOTFILES)/claude/me/skills/cmux ~/.claude/skills/cmux
+	ln -sv $(DOTFILES)/claude/me/skills/review-this ~/.claude/skills/review-this
+
+clean-claude-skills:
+	rm -rf ~/.claude/skills/cmux ~/.claude/skills/review-this
+
 clean-claude-deprecated:
 	rm -rf ~/.claude/skills/tmux-show
 
-.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty clean-claude-deprecated
+.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty claude-skills clean-claude-skills clean-claude-deprecated
