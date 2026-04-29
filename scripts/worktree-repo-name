@@ -1,0 +1,5 @@
+#!/bin/sh
+toplevel=$(git rev-parse --show-toplevel 2>/dev/null) || exit 1
+[ -f "$toplevel/.git" ] || exit 1
+path=$(sed 's/gitdir: //; s/\/.git\/.*//' "$toplevel/.git")
+basename "$path"
