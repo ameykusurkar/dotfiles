@@ -40,6 +40,12 @@ cmux new-surface --type terminal
 Use when: the user wants a parallel workspace without changing the layout — a REPL,
 a server, a log tail — something they'll switch between via tabs.
 
+`new-surface` opens a shell prompt — there is **no `--command` flag for terminal
+surfaces** (the only `new-surface` flags are `--type`, `--pane`, `--workspace`, and
+`--url` for browser surfaces). To launch a program in the new surface, capture the
+returned `surface:<n>` from the command output and follow up with `cmux send` +
+`cmux send-key Enter` (see "Interacting with surfaces" below).
+
 ### Horizontal split (top/bottom)
 
 Splits the current pane to create a new pane below (or above).
@@ -66,7 +72,8 @@ from vertical reading space.
 
 ### Interacting with surfaces
 
-After creating a split or surface, use `cmux tree` to find its surface ID, then:
+`cmux new-surface` and `cmux new-split` print the new `surface:<id>` to stdout — capture
+it from the output rather than running `cmux tree` again. Then:
 
 ```bash
 cmux send --surface surface:<id> 'command here'
@@ -75,6 +82,18 @@ cmux read-screen --surface surface:<id>
 ```
 
 Sending text and pressing Enter are separate steps — always follow `send` with `send-key Enter`.
+
+**Common pattern — open a file in nvim in a new surface:**
+
+```bash
+cmux new-surface --type terminal
+# → prints "OK surface:91 pane:55 workspace:44"
+cmux send --surface surface:91 'nvim /path/to/file.md'
+cmux send-key --surface surface:91 Enter
+```
+
+If the screen still shows the shell prompt after sending, `cmux read-screen` will reveal
+that — read it before assuming the command ran.
 
 ### When it's not obvious
 
