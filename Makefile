@@ -30,9 +30,11 @@ $(HOME)/.config/alacritty/catppuccin-mocha.toml:
 claude-skills:
 	mkdir -p ~/.claude/skills
 	ln -sv $(DOTFILES)/claude/me/skills/review-this ~/.claude/skills/review-this
+	ln -sv $(DOTFILES)/claude/me/skills/grill-me ~/.claude/skills/grill-me
 
 clean-claude-skills:
 	rm -rf ~/.claude/skills/review-this \
+		~/.claude/skills/grill-me \
 		~/.claude/skills/cmux \
 		~/.claude/skills/cmux-browser \
 		~/.claude/skills/cmux-debug-windows \
