@@ -29,13 +29,19 @@ $(HOME)/.config/alacritty/catppuccin-mocha.toml:
 
 claude-skills:
 	mkdir -p ~/.claude/skills
-	ln -sv $(DOTFILES)/claude/me/skills/cmux ~/.claude/skills/cmux
 	ln -sv $(DOTFILES)/claude/me/skills/review-this ~/.claude/skills/review-this
 
 clean-claude-skills:
-	rm -rf ~/.claude/skills/cmux ~/.claude/skills/review-this
+	rm -rf ~/.claude/skills/review-this \
+		~/.claude/skills/cmux \
+		~/.claude/skills/cmux-browser \
+		~/.claude/skills/cmux-debug-windows \
+		~/.claude/skills/cmux-markdown
 
 clean-claude-deprecated:
 	rm -rf ~/.claude/skills/tmux-show
 
-.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty claude-skills clean-claude-skills clean-claude-deprecated
+cmux-skills:
+	git -C $(HOME)/projects/manaflow-ai/cmux pull
+
+.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty claude-skills clean-claude-skills clean-claude-deprecated cmux-skills
