@@ -61,16 +61,8 @@ if [ -n "$used_pct" ]; then
   context_str=$(color_pct "$used_pct")
 fi
 
-# Build: [Opus 4.6] intercom | main | +23 -5 | 30% | $2.507
-output="[${model_short}] ${dir_name}"
-
-if [ -n "$git_branch" ]; then
-  output+=" | ${git_branch}"
-fi
-
-if [ -n "$lines_changed" ]; then
-  output+=" | ${lines_changed}"
-fi
+# Build: Opus 4.6 | 30% | $2.507 | intercom | main | +23 -5
+output="${model_short}"
 
 if [ -n "$context_str" ]; then
   output+=" | ${context_str}"
@@ -78,6 +70,16 @@ fi
 
 if [ -n "$cost" ] && [ "$cost" != "0" ]; then
   output+=" | \$${cost}"
+fi
+
+output+=" | ${dir_name}"
+
+if [ -n "$git_branch" ]; then
+  output+=" | ${git_branch}"
+fi
+
+if [ -n "$lines_changed" ]; then
+  output+=" | ${lines_changed}"
 fi
 
 # 5-hour rate limit (Pro/Max only)
