@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Rubik's Cube</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(circle at 50% 30%, #2a2f45 0%, #14151f 60%, #0c0d14 100%);
+    color: #e8ebf5;
+    user-select: none;
+    touch-action: none;
+  }
+  #scene { position: fixed; inset: 0; display: block; width: 100%; height: 100%; }
+
+  .panel {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: 18px; display: flex; gap: 10px; align-items: center;
+    padding: 10px 12px; border-radius: 14px;
+    background: rgba(20, 22, 34, 0.72);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    z-index: 10; flex-wrap: wrap; justify-content: center; max-width: 94vw;
+  }
+  button {
+    font: inherit; font-weight: 600; font-size: 14px;
+    color: #e8ebf5; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+    padding: 9px 14px; cursor: pointer; transition: background .15s, transform .05s;
+  }
+  button:hover { background: rgba(255,255,255,0.16); }
+  button:active { transform: translateY(1px); }
+  button.primary { background: #3b6cff; border-color: #5a82ff; }
+  button.primary:hover { background: #4f7bff; }
+
+  .stats {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 22px; align-items: center; z-index: 10;
+    padding: 8px 18px; border-radius: 12px;
+    background: rgba(20, 22, 34, 0.6);
+    border: 1px solid rgba(255,255,255,0.07);
+    backdrop-filter: blur(8px);
+  }
+  .stat { text-align: center; }
+  .stat .label { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; opacity: .55; }
+  .stat .value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  #help {
+    position: fixed; top: 16px; right: 16px; z-index: 10;
+    max-width: 280px; font-size: 12px; line-height: 1.55;
+    padding: 12px 14px; border-radius: 12px;
+    background: rgba(20, 22, 34, 0.6); border: 1px solid rgba(255,255,255,0.07);
+    backdrop-filter: blur(8px); opacity: .9;
+  }
+  #help h3 { margin: 0 0 6px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+  #help kbd {
+    background: rgba(255,255,255,0.12); border-radius: 5px; padding: 1px 6px;
+    font-family: ui-monospace, monospace; font-size: 11px;
+  }
+  #help .close { position: absolute; top: 8px; right: 10px; cursor: pointer; opacity: .5; }
+  #help .close:hover { opacity: 1; }
+
+  #banner {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(.8);
+    z-index: 20; padding: 22px 40px; border-radius: 18px; text-align: center;
+    background: linear-gradient(135deg, #2bd97c, #20b15f);
+    color: #06301a; font-weight: 800; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    opacity: 0; pointer-events: none; transition: opacity .35s, transform .35s;
+  }
+  #banner.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  #banner .big { font-size: 30px; }
+  #banner .sub { font-size: 14px; font-weight: 600; margin-top: 4px; opacity: .8; }
+
+  @media (max-width: 560px) {
+    #help { display: none; }
+    .stats { gap: 16px; padding: 6px 14px; }
+  }
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+
+<div class="stats">
+  <div class="stat"><div class="label">Time</div><div class="value" id="timer">0.0</div></div>
+  <div class="stat"><div class="label">Moves</div><div class="value" id="moves">0</div></div>
+  <div class="stat"><div class="label">Status</div><div class="value" id="status">Solved</div></div>
+</div>
+
+<div id="help">
+  <span class="close" id="helpClose">×</span>
+  <h3>How to play</h3>
+  <b>Drag a sticker</b> to turn that layer.<br>
+  <b>Drag the background</b> to orbit the whole cube.<br>
+  <b>Scroll</b> to zoom.<br>
+  Keys: <kbd>U</kbd> <kbd>D</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>F</kbd> <kbd>B</kbd> turn faces · hold <kbd>Shift</kbd> for reverse.
+</div>
+
+<div class="panel">
+  <button class="primary" id="scrambleBtn">Scramble</button>
+  <button id="resetBtn">Reset</button>
+  <button id="undoBtn">Undo</button>
+</div>
+
+<div id="banner"><div class="big">Solved! 🎉</div><div class="sub" id="bannerSub"></div></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+/* ===========================================================================
+   CUBE LOGIC MODEL  (mirror of cube.mjs — verified by Node unit tests)
+   =========================================================================== */
+const COLORS = {
+  '+x': '#b71234', '-x': '#ff5800',
+  '+y': '#ffffff', '-y': '#ffd500',
+  '+z': '#009b48', '-z': '#0046ad',
+};
+const AXIS_KEYS = [['-x','+x'],['-y','+y'],['-z','+z']];
+
+function solvedColor(u) {
+  for (let a = 0; a < 3; a++) {
+    if (u[a] === 1) return COLORS[AXIS_KEYS[a][1]];
+    if (u[a] === -1) return COLORS[AXIS_KEYS[a][0]];
+  }
+  throw new Error('unit axis expected');
+}
+function rot(v, axis, dir) {
+  const [x, y, z] = v;
+  if (axis === 0) return dir > 0 ? [x, -z, y] : [x, z, -y];
+  if (axis === 1) return dir > 0 ? [z, y, -x] : [-z, y, x];
+  return dir > 0 ? [-y, x, z] : [y, -x, z];
+}
+function makeCube() {
+  const cubies = [];
+  for (let x = -1; x <= 1; x++)
+    for (let y = -1; y <= 1; y++)
+      for (let z = -1; z <= 1; z++) {
+        const p0 = [x, y, z];
+        const stickers = [];
+        for (let a = 0; a < 3; a++)
+          if (p0[a] !== 0) {
+            const d = [0, 0, 0]; d[a] = p0[a];
+            stickers.push({ local: d.slice(), color: solvedColor(d) });
+          }
+        cubies.push({ pos: [x, y, z], cx: [1,0,0], cy: [0,1,0], cz: [0,0,1], stickers });
+      }
+  return { cubies };
+}
+function turnModel(cube, axis, value, dir) {
+  for (const c of cube.cubies) {
+    if (c.pos[axis] !== value) continue;
+    c.pos = rot(c.pos, axis, dir);
+    c.cx = rot(c.cx, axis, dir);
+    c.cy = rot(c.cy, axis, dir);
+    c.cz = rot(c.cz, axis, dir);
+  }
+}
+function applyOLocal(c, l) {
+  const [lx, ly, lz] = l;
+  return [
+    lx*c.cx[0] + ly*c.cy[0] + lz*c.cz[0],
+    lx*c.cx[1] + ly*c.cy[1] + lz*c.cz[1],
+    lx*c.cx[2] + ly*c.cy[2] + lz*c.cz[2],
+  ];
+}
+const UNIT_FACES = [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]];
+const vecEq = (a,b) => a[0]===b[0] && a[1]===b[1] && a[2]===b[2];
+function isSolved(cube) {
+  const faces = UNIT_FACES.map(() => []);
+  for (const c of cube.cubies)
+    for (const s of c.stickers) {
+      const f = applyOLocal(c, s.local);
+      faces[UNIT_FACES.findIndex(u => vecEq(u, f))].push(s.color);
+    }
+  return faces.every(col => col.length === 9 && col.every(x => x === col[0]));
+}
+const MOVES = {
+  U: { axis: 1, value: 1, dir: 1 },  D: { axis: 1, value: -1, dir: -1 },
+  R: { axis: 0, value: 1, dir: -1 }, L: { axis: 0, value: -1, dir: 1 },
+  F: { axis: 2, value: 1, dir: -1 }, B: { axis: 2, value: -1, dir: 1 },
+};
+const MOVE_NAMES = Object.keys(MOVES);
+function moveSpec(name) {
+  const m = MOVES[name[0].toUpperCase()];
+  const prime = name.includes("'");
+  return { axis: m.axis, value: m.value, dir: prime ? -m.dir : m.dir };
+}
+function randomScramble(n = 25) {
+  const out = []; let lastAxis = -1;
+  for (let i = 0; i < n; i++) {
+    let base, axis;
+    do { base = MOVE_NAMES[(Math.random()*6)|0]; axis = MOVES[base].axis; }
+    while (axis === lastAxis);
+    lastAxis = axis;
+    out.push(base + (Math.random() < 0.5 ? '' : "'"));
+  }
+  return out;
+}
+
+/* ===========================================================================
+   RENDERING + INTERACTION (Three.js)
+   =========================================================================== */
+const SIZE = 0.95;       // cubie body size
+const SPACING = 1.0;     // grid spacing
+const STICKER = 0.84;    // sticker tile size
+const GAP = SIZE / 2 + 0.002;
+const TURN_MS = 150;     // duration of one user turn
+const AXIS_LETTER = ['x', 'y', 'z'];
+
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+camera.position.set(4.2, 4.0, 6.0);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.12;
+controls.enablePan = false;
+controls.minDistance = 5;
+controls.maxDistance = 14;
+controls.rotateSpeed = 0.9;
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.78));
+const key = new THREE.DirectionalLight(0xffffff, 0.85);
+key.position.set(6, 9, 7); scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.35);
+fill.position.set(-6, -3, -5); scene.add(fill);
+
+// rounded-square geometry for stickers
+function roundedSquareGeo(s, r) {
+  const sh = new THREE.Shape();
+  const h = s / 2;
+  sh.moveTo(-h + r, -h);
+  sh.lineTo(h - r, -h); sh.quadraticCurveTo(h, -h, h, -h + r);
+  sh.lineTo(h, h - r);  sh.quadraticCurveTo(h, h, h - r, h);
+  sh.lineTo(-h + r, h); sh.quadraticCurveTo(-h, h, -h, h - r);
+  sh.lineTo(-h, -h + r);sh.quadraticCurveTo(-h, -h, -h + r, -h);
+  return new THREE.ShapeGeometry(sh);
+}
+const stickerGeo = roundedSquareGeo(STICKER, 0.12);
+const bodyGeo = new THREE.BoxGeometry(SIZE, SIZE, SIZE);
+const bodyMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0c, roughness: 0.85, metalness: 0.0 });
+
+// local face axis -> orientation for a sticker plane that faces outward
+const FACE_DEFS = [
+  { local: [ 1,0,0], rotY:  Math.PI/2 },
+  { local: [-1,0,0], rotY: -Math.PI/2 },
+  { local: [ 0,1,0], rotX: -Math.PI/2 },
+  { local: [ 0,-1,0],rotX:  Math.PI/2 },
+  { local: [ 0,0,1], rotY:  0 },
+  { local: [ 0,0,-1],rotY:  Math.PI },
+];
+
+const model = makeCube();
+const groups = [];          // THREE.Group per model cubie (same index order)
+const stickerMeshes = [];   // for raycasting
+
+model.cubies.forEach((cubie, idx) => {
+  const g = new THREE.Group();
+  g.userData.index = idx;
+  g.add(new THREE.Mesh(bodyGeo, bodyMat));
+  for (const s of cubie.stickers) {
+    const def = FACE_DEFS.find(d => vecEq(d.local, s.local));
+    const mat = new THREE.MeshStandardMaterial({ color: new THREE.Color(s.color), roughness: 0.45, metalness: 0.0 });
+    const tile = new THREE.Mesh(stickerGeo, mat);
+    tile.position.set(def.local[0]*GAP, def.local[1]*GAP, def.local[2]*GAP);
+    if (def.rotX) tile.rotation.x = def.rotX;
+    if (def.rotY) tile.rotation.y = def.rotY;
+    tile.userData = { group: g, normalLocal: s.local.slice() };
+    g.add(tile);
+    stickerMeshes.push(tile);
+  }
+  groups.push(g);
+  scene.add(g);
+});
+
+const _m4 = new THREE.Matrix4();
+const _vx = new THREE.Vector3(), _vy = new THREE.Vector3(), _vz = new THREE.Vector3();
+function syncMeshes() {
+  model.cubies.forEach((c, i) => {
+    const g = groups[i];
+    g.position.set(c.pos[0]*SPACING, c.pos[1]*SPACING, c.pos[2]*SPACING);
+    _vx.set(c.cx[0], c.cx[1], c.cx[2]);
+    _vy.set(c.cy[0], c.cy[1], c.cy[2]);
+    _vz.set(c.cz[0], c.cz[1], c.cz[2]);
+    _m4.makeBasis(_vx, _vy, _vz);
+    g.quaternion.setFromRotationMatrix(_m4);
+  });
+}
+syncMeshes();
+
+/* ---- turn queue + animation ---- */
+let turnState = null;
+const queue = [];
+let moveCount = 0;
+const history = [];        // for undo: {axis,value,dir,user}
+let timerRunning = false, startTime = 0, elapsed = 0;
+let solved = true;
+
+function enqueueTurn(axis, value, dir, opts = {}) {
+  queue.push({ axis, value, dir, user: opts.user !== false, ms: opts.ms || TURN_MS, record: opts.record !== false });
+  processQueue();
+}
+function processQueue() {
+  if (turnState || queue.length === 0) return;
+  const t = queue.shift();
+  const pivot = new THREE.Group();
+  scene.add(pivot);
+  const members = groups.filter(g => model.cubies[g.userData.index].pos[t.axis] === t.value);
+  members.forEach(g => pivot.attach(g));
+  turnState = { ...t, pivot, members, t0: performance.now() };
+}
+const easeInOut = x => x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2;
+
+function finishTurn() {
+  const ts = turnState;
+  ts.members.forEach(g => scene.attach(g));
+  scene.remove(ts.pivot);
+  turnModel(model, ts.axis, ts.value, ts.dir);
+  syncMeshes();
+  turnState = null;
+
+  if (ts.record) history.push({ axis: ts.axis, value: ts.value, dir: ts.dir });
+  if (ts.user) {
+    moveCount++;
+    movesEl.textContent = moveCount;
+    if (!timerRunning && !isSolved(model)) { timerRunning = true; startTime = performance.now() - elapsed; }
+  }
+  checkSolved();
+  processQueue();
+}
+
+function checkSolved() {
+  const now = isSolved(model);
+  if (now && !solved) {
+    timerRunning = false;
+    statusEl.textContent = 'Solved';
+    if (moveCount > 0) showBanner();
+  } else if (!now) {
+    statusEl.textContent = 'Scrambled';
+  }
+  solved = now;
+}
+
+/* ---- buttons / stats ---- */
+const movesEl = document.getElementById('moves');
+const timerEl = document.getElementById('timer');
+const statusEl = document.getElementById('status');
+const banner = document.getElementById('banner');
+const bannerSub = document.getElementById('bannerSub');
+
+function hideBanner() { banner.classList.remove('show'); }
+function showBanner() {
+  bannerSub.textContent = `${moveCount} moves · ${(elapsed/1000).toFixed(1)}s`;
+  banner.classList.add('show');
+  setTimeout(hideBanner, 3200);
+}
+function resetStats() {
+  moveCount = 0; movesEl.textContent = '0';
+  elapsed = 0; timerRunning = false; timerEl.textContent = '0.0';
+  history.length = 0;
+}
+
+document.getElementById('scrambleBtn').addEventListener('click', () => {
+  if (turnState || queue.length) return;
+  hideBanner(); resetStats();
+  const seq = randomScramble(25);
+  for (const name of seq) {
+    const m = moveSpec(name);
+    enqueueTurn(m.axis, m.value, m.dir, { user: false, ms: 95, record: false });
+  }
+});
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (turnState || queue.length) return;
+  hideBanner(); resetStats();
+  // rebuild from scratch to guarantee a solved state
+  const fresh = makeCube();
+  model.cubies.forEach((c, i) => {
+    c.pos = fresh.cubies[i].pos.slice();
+    c.cx = [1,0,0]; c.cy = [0,1,0]; c.cz = [0,0,1];
+  });
+  syncMeshes();
+  solved = true; statusEl.textContent = 'Solved';
+});
+document.getElementById('undoBtn').addEventListener('click', () => {
+  if (turnState || queue.length || history.length === 0) return;
+  const last = history.pop();
+  // enqueue inverse without re-recording, but count as a (user) move
+  enqueueTurn(last.axis, last.value, -last.dir, { user: true, record: false });
+});
+document.getElementById('helpClose').addEventListener('click', () => {
+  document.getElementById('help').style.display = 'none';
+});
+
+/* ---- keyboard moves ---- */
+window.addEventListener('keydown', (e) => {
+  const k = e.key.toUpperCase();
+  if (!'UDLRFB'.includes(k)) return;
+  if (turnState && queue.length > 2) return;
+  const m = moveSpec(k + (e.shiftKey ? "'" : ''));
+  hideBanner();
+  enqueueTurn(m.axis, m.value, m.dir, { user: true });
+});
+
+/* ---- drag-to-turn interaction ---- */
+const raycaster = new THREE.Raycaster();
+const ndc = new THREE.Vector2();
+let drag = null; // { startX, startY, normal:Vector3, cubieIdx }
+
+function pointerNDC(e) {
+  const r = canvas.getBoundingClientRect();
+  ndc.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  ndc.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+}
+const roundVec3 = v => new THREE.Vector3(Math.round(v.x), Math.round(v.y), Math.round(v.z));
+
+canvas.addEventListener('pointerdown', (e) => {
+  if (turnState) return;
+  pointerNDC(e);
+  raycaster.setFromCamera(ndc, camera);
+  const hits = raycaster.intersectObjects(stickerMeshes, false);
+  if (hits.length === 0) return; // background -> let OrbitControls handle
+  const tile = hits[0].object;
+  const g = tile.userData.group;
+  const local = new THREE.Vector3(...tile.userData.normalLocal);
+  const worldNormal = roundVec3(local.applyQuaternion(g.quaternion));
+  drag = {
+    startX: e.clientX, startY: e.clientY,
+    normal: worldNormal,
+    cubieIdx: g.userData.index,
+    id: e.pointerId,
+  };
+  controls.enabled = false; // suppress orbit while interacting with a sticker
+  canvas.setPointerCapture(e.pointerId);
+});
+
+canvas.addEventListener('pointermove', (e) => {
+  if (!drag || turnState) return;
+  const dx = e.clientX - drag.startX;
+  const dy = e.clientY - drag.startY;
+  if (Math.hypot(dx, dy) < 9) return; // wait for a clear drag
+
+  // world-space drag direction from camera basis
+  const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
+  const up = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1);
+  const worldDrag = new THREE.Vector3()
+    .addScaledVector(right, dx)
+    .addScaledVector(up, -dy);
+
+  const n = drag.normal.clone().normalize();
+  worldDrag.addScaledVector(n, -worldDrag.dot(n)); // project onto sticker plane
+
+  // snap drag to nearest cube axis
+  const axes = [
+    new THREE.Vector3(1,0,0), new THREE.Vector3(-1,0,0),
+    new THREE.Vector3(0,1,0), new THREE.Vector3(0,-1,0),
+    new THREE.Vector3(0,0,1), new THREE.Vector3(0,0,-1),
+  ];
+  let best = axes[0], bestDot = -Infinity;
+  const wd = worldDrag.clone().normalize();
+  for (const a of axes) { const d = a.dot(wd); if (d > bestDot) { bestDot = d; best = a; } }
+
+  // rotation axis A = normal x dragDir, rotate +90 about A
+  const A = roundVec3(new THREE.Vector3().crossVectors(drag.normal, best));
+  let axisIndex = -1, sign = 0;
+  if (Math.abs(A.x)) { axisIndex = 0; sign = Math.sign(A.x); }
+  else if (Math.abs(A.y)) { axisIndex = 1; sign = Math.sign(A.y); }
+  else if (Math.abs(A.z)) { axisIndex = 2; sign = Math.sign(A.z); }
+  if (axisIndex === -1) return;
+
+  const value = model.cubies[drag.cubieIdx].pos[axisIndex];
+  const dir = sign; // +90 about (sign*axis) == dir*90 about +axis
+  hideBanner();
+  enqueueTurn(axisIndex, value, dir, { user: true });
+  drag = null; // one turn per drag
+});
+
+function endDrag(e) {
+  if (drag && e.pointerId === drag.id) drag = null;
+  controls.enabled = true;
+  try { canvas.releasePointerCapture(e.pointerId); } catch {}
+}
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+
+/* ---- resize + render loop ---- */
+function resize() {
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+function animate() {
+  requestAnimationFrame(animate);
+  if (turnState) {
+    const p = Math.min(1, (performance.now() - turnState.t0) / turnState.ms);
+    const ang = turnState.dir * (Math.PI / 2) * easeInOut(p);
+    turnState.pivot.rotation[AXIS_LETTER[turnState.axis]] = ang;
+    if (p >= 1) finishTurn();
+  }
+  if (timerRunning) {
+    elapsed = performance.now() - startTime;
+    timerEl.textContent = (elapsed / 1000).toFixed(1);
+  }
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+/* ---- self-check on load (logic sanity, logged to console) ---- */
+(function selfTest() {
+  const c = makeCube();
+  const scr = randomScramble(30);
+  for (const nm of scr) { const m = moveSpec(nm); turnModel(c, m.axis, m.value, m.dir); }
+  const wasUnsolved = !isSolved(c);
+  for (const nm of scr.slice().reverse()) {
+    const inv = nm.includes("'") ? nm.replace("'", '') : nm + "'";
+    const m = moveSpec(inv); turnModel(c, m.axis, m.value, m.dir);
+  }
+  console.log('[cube self-test] scrambled:', wasUnsolved, '| solved after inverse:', isSolved(c));
+})();
+</script>
+</body>
+</html>
