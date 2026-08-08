@@ -30,18 +30,17 @@ $(HOME)/.config/alacritty/catppuccin-mocha.toml:
 claude-skills:
 	mkdir -p ~/.claude/skills
 	ln -sv $(DOTFILES)/claude/me/skills/review-this ~/.claude/skills/review-this
-	ln -sv $(DOTFILES)/claude/me/skills/grill-me ~/.claude/skills/grill-me
 
 clean-claude-skills:
 	rm -rf ~/.claude/skills/review-this \
-		~/.claude/skills/grill-me \
 		~/.claude/skills/cmux \
 		~/.claude/skills/cmux-browser \
 		~/.claude/skills/cmux-debug-windows \
 		~/.claude/skills/cmux-markdown
 
 clean-claude-deprecated:
-	rm -rf ~/.claude/skills/tmux-show
+	rm -rf ~/.claude/skills/tmux-show \
+		~/.claude/skills/grill-me
 
 cmux-skills:
 	git -C $(HOME)/projects/manaflow-ai/cmux pull
