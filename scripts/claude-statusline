@@ -20,8 +20,7 @@ color_pct() {
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
 model_name=$(echo "$input" | jq -r '.model.display_name')
 used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
-total_input=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
-total_output=$(echo "$input" | jq -r '.context_window.total_output_tokens // 0')
+cost_usd=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
 
 # Get git branch and lines changed (skip locks for performance)
 git_branch=""
@@ -41,12 +40,10 @@ if git -C "$current_dir" rev-parse --git-dir > /dev/null 2>&1; then
   fi
 fi
 
-# Calculate cost (approximate pricing for Claude)
+# Session cost, as reported by Claude Code
 cost=""
-if [[ "$model_name" == *"Opus"* ]]; then
-  cost=$(echo "scale=3; ($total_input * 15 + $total_output * 75) / 1000000" | bc)
-elif [[ "$model_name" == *"Sonnet"* ]]; then
-  cost=$(echo "scale=3; ($total_input * 3 + $total_output * 15) / 1000000" | bc)
+if [ "$(echo "$cost_usd >= 0.001" | bc -l)" = "1" ]; then
+  cost=$(printf "%.3f" "$cost_usd")
 fi
 
 # Model name (shortened)
@@ -68,7 +65,7 @@ if [ -n "$context_str" ]; then
   output+=" | ${context_str}"
 fi
 
-if [ -n "$cost" ] && [ "$cost" != "0" ]; then
+if [ -n "$cost" ]; then
   output+=" | \$${cost}"
 fi
 
