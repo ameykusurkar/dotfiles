@@ -69,7 +69,9 @@ abbr -a ll eza -l
 abbr -a ,ls ls
 
 abbr -a c claude
+abbr -a ca claude agents
 abbr -a ccon "claude --continue"
+abbr -a cmo "claude --model opus"
 
 abbr -a bb "brew update && brew outdated"
 
