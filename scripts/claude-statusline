@@ -20,12 +20,24 @@ color_pct() {
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
 model_name=$(echo "$input" | jq -r '.model.display_name')
 used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
+ctx_size=$(echo "$input" | jq -r '.context_window.context_window_size // empty')
 cost_usd=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
+repo_name=$(echo "$input" | jq -r '.workspace.repo.name // empty')
+worktree_name=$(echo "$input" | jq -r '.workspace.git_worktree // .worktree.name // empty')
 
-# Get git branch and lines changed (skip locks for performance)
+# Get repo layout, git branch and lines changed (skip locks for performance)
+git_toplevel=""
 git_branch=""
 lines_changed=""
-if git -C "$current_dir" rev-parse --git-dir > /dev/null 2>&1; then
+if rev_parse=$(git -C "$current_dir" rev-parse --path-format=absolute --show-toplevel --git-dir --git-common-dir 2>/dev/null); then
+  { read -r git_toplevel; read -r git_dir; read -r git_common_dir; } <<< "$rev_parse"
+  # Payload omits repo without an origin remote; fall back to the main checkout's name
+  if [ -z "$repo_name" ]; then
+    repo_name=$(basename "$(dirname "$git_common_dir")")
+  fi
+  if [ -z "$worktree_name" ] && [ "$git_dir" != "$git_common_dir" ]; then
+    worktree_name=$(basename "$git_toplevel")
+  fi
   git_branch=$(git -C "$current_dir" --no-optional-locks symbolic-ref --short HEAD 2>/dev/null || echo "detached")
   diff_stat=$(git -C "$current_dir" --no-optional-locks diff --numstat HEAD 2>/dev/null)
   if [ -n "$diff_stat" ]; then
@@ -49,30 +61,51 @@ fi
 # Model name (shortened)
 model_short=$(echo "$model_name" | sed 's/Claude //' | sed 's/ 20[0-9]*//')
 
-# Directory basename
-dir_name=$(basename "$current_dir")
+# Directory basename, only when away from the repo (or worktree) root
+dir_name=""
+if [ -z "$git_toplevel" ] || [ "$(cd "$current_dir" 2>/dev/null && pwd -P)" != "$git_toplevel" ]; then
+  dir_name=$(basename "$current_dir")
+fi
 
-# Color-coded context usage
-context_str=""
+# Color-coded context usage out of the window size, e.g. 5%/200k
+pct_str="(N/A)"
 if [ -n "$used_pct" ]; then
-  context_str=$(color_pct "$used_pct")
+  pct_str=$(color_pct "$used_pct")
 fi
-
-# Build: Opus 4.6 | 30% | $2.507 | intercom | main | +23 -5
-output="${model_short}"
-
-if [ -n "$context_str" ]; then
-  output+=" | ${context_str}"
+size_str="(N/A)"
+if [ -n "$ctx_size" ]; then
+  if [ $((ctx_size % 1000000)) -eq 0 ]; then
+    size_str="$((ctx_size / 1000000))M"
+  else
+    size_str="$((ctx_size / 1000))k"
+  fi
 fi
+context_str="${pct_str}/${size_str}"
+
+# Build: Opus 4.6 | 30%/200k | $2.507 | intercom | app | my-worktree | main | +23 -5
+output="${model_short} | ${context_str}"
 
 if [ -n "$cost" ]; then
   output+=" | \$${cost}"
 fi
 
-output+=" | ${dir_name}"
+if [ -n "$repo_name" ]; then
+  # U+F401 (Nerd Font repo)
+  output+=" | "$'\xef\x90\x81'" ${repo_name}"
+fi
+
+if [ -n "$dir_name" ]; then
+  # U+F413 (Nerd Font directory)
+  output+=" | "$'\xef\x90\x93'" ${dir_name}"
+fi
+
+if [ -n "$worktree_name" ]; then
+  output+=" | ${worktree_name}"
+fi
 
 if [ -n "$git_branch" ]; then
-  output+=" | ${git_branch}"
+  # U+F418 (Nerd Font git branch), as UTF-8 bytes since /bin/bash 3.2 lacks \u
+  output+=" | "$'\xef\x90\x98'" ${git_branch}"
 fi
 
 if [ -n "$lines_changed" ]; then
