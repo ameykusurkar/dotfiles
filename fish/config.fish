@@ -81,14 +81,18 @@ abbr -a berc bundle exec rails console
 abbr -a dcopa 'git diff origin/master --name-only --relative --diff-filter=ACMRTUXB | grep ".*.rb\$" | xargs bundle exec rubocop -a'
 
 function cdp
-    cd (begin
+    set -l dir (begin
         find ~/projects -mindepth 2 -maxdepth 2 -type d
-        find ~/src -mindepth 1 -maxdepth 1 -type d
+        test -d ~/src; and find ~/src -mindepth 1 -maxdepth 1 -type d
     end | fzf)
+    and cd $dir
 end
 abbr -a fzfp fzf --preview 'bat -f {}'
 
-abbr -a cdw "cd (git worktree list --no-porcelain | awk '{print \$1}' | fzf)"
+function cdw
+    set -l dir (git worktree list --no-porcelain | awk '{print $1}' | fzf)
+    and cd $dir
+end
 
 set -gx DOTFILES $HOME/projects/ameykusurkar/dotfiles
 
