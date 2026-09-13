@@ -8,7 +8,7 @@ description: >
   "side by side", "compare these files", "open lazygit".
   Also triggers when showing a diff, file, or code output would be more useful in a
   tmux pane than inline in the conversation.
-trigger: auto
+disable-model-invocation: true
 ---
 
 # tmux-show
