@@ -32,17 +32,29 @@ claude-skills:
 	ln -sv $(DOTFILES)/claude/me/skills/review-this ~/.claude/skills/review-this
 
 clean-claude-skills:
-	rm -rf ~/.claude/skills/review-this \
+	rm -rf ~/.claude/skills/review-this
+
+clean-claude-deprecated:
+	rm -rf ~/.claude/skills/tmux-show \
+		~/.claude/skills/grill-me \
 		~/.claude/skills/cmux \
 		~/.claude/skills/cmux-browser \
 		~/.claude/skills/cmux-debug-windows \
 		~/.claude/skills/cmux-markdown
 
-clean-claude-deprecated:
-	rm -rf ~/.claude/skills/tmux-show \
-		~/.claude/skills/grill-me
+CMUX_SKILLS_DIR := $(HOME)/projects/manaflow-ai/cmux-skills
 
-cmux-skills:
-	git -C $(HOME)/projects/manaflow-ai/cmux pull
+$(CMUX_SKILLS_DIR):
+	$(DOTFILES)/scripts/gclone manaflow-ai/cmux-skills
 
-.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty claude-skills clean-claude-skills clean-claude-deprecated cmux-skills
+cmux-skills: $(CMUX_SKILLS_DIR)
+	git -C $(CMUX_SKILLS_DIR) pull
+	mkdir -p ~/.claude/skills
+	ln -sfnv $(CMUX_SKILLS_DIR)/skills/cmux-cli ~/.claude/skills/cmux-cli
+	ln -sfnv $(CMUX_SKILLS_DIR)/skills/cmux-workspace ~/.claude/skills/cmux-workspace
+
+clean-cmux-skills:
+	rm -f ~/.claude/skills/cmux-cli \
+		~/.claude/skills/cmux-workspace
+
+.PHONY: nvim clean-nvim fish clean-fish tmux clean-tmux alacritty clean-alacritty claude-skills clean-claude-skills clean-claude-deprecated cmux-skills clean-cmux-skills
